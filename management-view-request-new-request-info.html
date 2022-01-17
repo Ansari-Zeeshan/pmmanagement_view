@@ -1,0 +1,1401 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- goole icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- fontawesom -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- bs-5 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.1/css/bootstrap.min.css"
+        integrity="sha512-6KY5s6UI5J7SVYuZB4S/CZMyPylqyyNZco376NM2Z8Sb8OxEdp02e1jkKk/wZxIEmjQ6DRCEBhni+gpr9c4tvA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- UIkit CSS -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.7.6/dist/css/uikit.min.css" />
+     -->
+    <!-- custom css -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/notification.css">
+    <!-- <link rel="stylesheet" href="css/mview.css"> -->
+    <title>Management View New Request Info</title>
+</head>
+
+<body>
+    <section class="manage_view proj_filter m_bg">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="myoverlay"></div>
+                <div class="menu_overlay"></div>
+                <div class="form_overlay"></div>
+                <div class="noti_overlay"></div>
+                <div class="addview_overlay"></div>
+                <div class="notification_div">
+                    <div class="col-md-12 d-flex justify-content-start">
+                        <img src="icons/arrowright.svg" class="backArrow" alt="">
+                        <h1>Notifications</h1>
+                    </div>
+                    <div class="nav_div">
+                        <div class="scroll_div">
+                            <ul>
+                                <li>All</li>
+                                <li class="active" data-target=".request" id="owntabs">New Request</li>
+                                <li data-target=".update" id="owntabs">Update Status</li>
+                                <li data-target=".activity" id="owntabs">Activity Log</li>
+                                <li data-target=".assigned" id="owntabs">Assigned to me</li>
+                                <li data-target=".mention" id="owntabs">at Mentions</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="noti_overflow">
+                        <!-- request content start -->
+                        <div class="request active tabnoti_con">
+                            <div class="noti_con">
+                                <div class="noti_inner">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Project Name:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p>Name of the Project</p>
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Request ID:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p>#000111222</p>
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Priority</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p class="high">High</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Project Owner:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <img src="icons/avatar1.svg" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Assigned to:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <img src="icons/avatr4.svg" alt="">
+                                                    <img src="icons/avtar6.svg" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Client Name:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p>Client Name X</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-10 justify-content-end d-flex sent_div">
+                                            <div class="d-flex">
+                                                <h5>Sent On:</h5>
+                                                <span>25 Nov,2021 at 10:00 AM</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- noti_con closed -->
+                            <div class="noti_con">
+                                <div class="noti_inner">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Project Name:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p>Name of the Project</p>
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Request ID:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p>#000111222</p>
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Priority</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p class="low">Low</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Project Owner:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <img src="icons/avatar1.svg" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Assigned to:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <img src="icons/avatr4.svg" alt="">
+                                                    <img src="icons/avtar6.svg" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Client Name:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p>Client Name X</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-10 justify-content-end d-flex sent_div">
+                                            <div class="d-flex">
+                                                <h5>Sent On:</h5>
+                                                <span>25 Nov,2021 at 10:00 AM</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- noti_con closed -->
+                            <div class="noti_con">
+                                <div class="noti_inner">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Project Name:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p>Name of the Project</p>
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Request ID:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p>#000111222</p>
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Priority</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p class="medium">Medium</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Project Owner:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <img src="icons/avatar1.svg" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Assigned to:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <img src="icons/avatr4.svg" alt="">
+                                                    <img src="icons/avtar6.svg" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Client Name:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p>Client Name X</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-10 justify-content-end d-flex sent_div">
+                                            <div class="d-flex">
+                                                <h5>Sent On:</h5>
+                                                <span>25 Nov,2021 at 10:00 AM</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- noti_con closed -->
+                            <div class="noti_con">
+                                <div class="noti_inner">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Project Name:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p>Name of the Project</p>
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Request ID:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p>#000111222</p>
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Priority</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p class="low">Low</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Project Owner:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <img src="icons/avatar1.svg" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Assigned to:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <img src="icons/avatr4.svg" alt="">
+                                                    <img src="icons/avtar6.svg" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="grid">
+                                                <div class="grid1">
+                                                    <h4>Client Name:</h4>
+                                                </div>
+                                                <div class="grid2">
+                                                    <p>Client Name X</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-10 justify-content-end d-flex sent_div">
+                                            <div class="d-flex">
+                                                <h5>Sent On:</h5>
+                                                <span>25 Nov,2021 at 10:00 AM</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- noti_con closed -->
+                        </div>
+                        <!-- request content closed -->
+                        <!-- update content start -->
+                        <div class="update tabnoti_con">
+                            <div class="pad-common">
+                                <div class="col-md-12">
+                                    <p>Project ABC changed it's status from <span class="track">Ontrack</span> to
+                                        <span class="done">Done!</span></p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 d-flex justify-content-between mheight_80">
+                                        <div class="d-flex avatar">
+                                            <p>Assignees:</p>
+                                            <img src="icons/avatar1.svg" alt="">
+                                            <img src="icons/avatar2.svg" alt="">
+                                        </div>
+                                        <div class="d-flex date">
+                                            <p>25 Nov, 2021 at 10:00 AM</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pad-common">
+                                <div class="col-md-12">
+                                    <p>Project ABC changed it's status from <span class="plan">Planned</span>
+                                        to <span class="risk">At Risk!</span></p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 d-flex justify-content-between mheight_80">
+                                        <div class="d-flex avatar">
+                                            <p>Assignees:</p>
+                                            <img src="icons/avatar1.svg" alt="">
+                                            <img src="icons/avatar2.svg" alt="">
+                                        </div>
+                                        <div class="d-flex date">
+                                            <p>25 Nov, 2021 at 10:00 AM</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- update content end -->
+                        <!-- activity content start -->
+                        <div class="activity tabnoti_con">
+                            <div class="pad-common">
+                                <div class="col-md-12">
+                                    <p>John has accepted your invitation the <span>Project 01</span></p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 d-flex justify-content-between">
+                                        <div class="d-flex avatar">
+                                            <img src="icons/avatar1.svg" alt="">
+                                        </div>
+                                        <div class="d-flex date">
+                                            <p>2 min ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pad-common">
+                                <div class="col-md-12">
+                                    <p>Jayson marked the <span class="marked">Project ABC</span> as task done</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 d-flex justify-content-between">
+                                        <div class="d-flex avatar">
+                                            <img src="icons/avatar1.svg" alt="">
+                                        </div>
+                                        <div class="d-flex date">
+                                            <p>22 Nov,2021 at 10:00 PM</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pad-common">
+                                <div class="row">
+                                    <div class="col-md-12 upLoad">
+                                        <p>Sherry added 2 files to <span class="marked">Project AB's </span>conversion
+                                        </p>
+                                        <div class="d-flex mt-4">
+                                            <div class="file_div">
+                                                <img src="icons/pdf.png" alt="">
+                                                <p>Name of the file</p>
+                                            </div>
+                                            <div class="file_div">
+                                                <img src="icons/pdf.png" alt="">
+                                                <p>Name of the file</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 d-flex justify-content-between">
+                                        <div class="d-flex avatar">
+                                            <img src="icons/avatar1.svg" alt="">
+                                        </div>
+                                        <div class="d-flex date">
+                                            <p>22 Nov,2021 at 10:00 PM</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- activity content end -->
+                        <!-- assigned content start -->
+                        <div class="assigned tabnoti_con">
+                            <div class="pad-common">
+                                <div class="col-md-12">
+                                    <p>Jeet has assigned Project ABC at <span
+                                            class="email">yourname@youroffcial.com</span></p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 d-flex justify-content-between">
+                                        <div class="d-flex avatar">
+                                            <img src="icons/avatar1.svg" alt="">
+                                        </div>
+                                        <div class="d-flex date">
+                                            <p>2 min ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pad-common">
+                                <div class="col-md-12">
+                                    <p>Rayon has assigned you an item ABC at <span
+                                            class="email">yourname@youroffcial.com</span></p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 d-flex justify-content-between">
+                                        <div class="d-flex avatar">
+                                            <img src="icons/avatar1.svg" alt="">
+                                        </div>
+                                        <div class="d-flex date">
+                                            <p>22 Nov,2021 at 10:00 PM</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- assigned content end -->
+                        <!-- mention content start -->
+                        <div class="mention tabnoti_con">
+                            <div class="pad-common">
+                                <div class="col-md-12">
+                                    <p>Jeet mentioned <span class="email">@youroffcial.com</span> in an update</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 d-flex justify-content-between">
+                                        <div class="d-flex avatar">
+                                            <img src="icons/avatar1.svg" alt="">
+                                        </div>
+                                        <div class="d-flex date">
+                                            <p>2 min ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pad-common">
+                                <div class="col-md-12">
+                                    <p>Rayon mentioned <span class="email">@youroffcial.com</span> in an update</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 d-flex justify-content-between">
+                                        <div class="d-flex avatar">
+                                            <img src="icons/avatar1.svg" alt="">
+                                        </div>
+                                        <div class="d-flex date">
+                                            <p>22 Nov,2021 at 10:00 PM</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- mention content end -->
+                    </div>
+                </div>
+                <!-- notification div closed -->
+                <!-- helpsupport div start -->
+                <div class="helpsupport_div">
+                    <div class="col-md-12 d-flex justify-content-start">
+                        <img src="icons/arrowright.svg" class="backArrow" alt="">
+                        <h1>Help</h1>
+                    </div>
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    <div class="grid">
+                                        <div class="grid1 mr-13">
+                                            <img src="icons/help/Pmconnect.svg" alt="">
+                                        </div>
+                                        <div class="grid2">
+                                            <h4>PM Connect Video Tutorials</h4>
+                                            <p>Tutorials, Guides, Live demos etc.</p>
+                                        </div>
+                                    </div>
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div class="my_body">
+                                        <div class="grid">
+                                            <div class="grid1">
+                                                <img src="icons/help/tutorial.svg" alt="">
+                                                <p>tutorial</p>
+                                            </div>
+                                            <div class="grid2">
+                                                <img src="icons/help/video.svg" alt="">
+                                                <p>Guide</p>
+                                            </div>
+                                            <div class="grid3">
+                                                <img src="icons/help/livedemo.svg" alt="">
+                                                <p>Live Demo</p>
+                                            </div>
+                                            <div class="grid4">
+                                                <img src="icons/help/community.svg" alt="">
+                                                <p>community</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <div class="grid">
+                                        <div class="grid1">
+                                            <img src="icons/help/FAQ.svg" alt="">
+                                        </div>
+                                        <div class="grid2">
+                                            <h4>Frequestly Asked Questions (FAQ)</h4>
+                                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                        </div>
+                                    </div>
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div class="faq mt-3">
+                                        <h4>What is the status</h4>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum expedita
+                                            corrupti culpa hic in accusantium</p>
+                                    </div>
+                                    <div class="faq">
+                                        <h4>What is the status</h4>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum expedita
+                                            corrupti culpa hic in accusantium</p>
+                                    </div>
+                                    <div class="faq">
+                                        <h4>What is the status</h4>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum expedita
+                                            corrupti culpa hic in accusantium</p>
+                                    </div>
+                                    <div class="faq">
+                                        <h4>What is the status</h4>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum expedita
+                                            corrupti culpa hic in accusantium</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    <div class="grid">
+                                        <div class="grid1">
+                                            <img src="icons/help/RaiseTicket.svg" alt="">
+                                        </div>
+                                        <div class="grid2">
+                                            <h4>Raise the Ticket</h4>
+                                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                        </div>
+                                    </div>
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                                data-bs-parent="#accordionExample">
+                                <form action="">
+                                    <div class="col-md-12 mt-4 pt-2">
+                                        <input type="text" placeholder="Your Question about ?">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <select name="" id="">
+                                            <option value="" selected disabled>Category</option>
+                                            <option value="">Option 1</option>
+                                            <option value="">Option 2</option>
+                                            <option value="">Option 3</option>
+                                            <option value="">Option 4</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="text" placeholder="Subject">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="textarea" name="" placeholder="Details">
+                                    </div>
+                                    <div class="d-flex justify-content-between bottom">
+                                        <button class="btn upload">Upload the file</button>
+                                        <button class="btn send">Send</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- helpsupport div end -->
+                <nav>
+                    <div class="div1">
+                        <h3>
+                            <div></div>
+                            <img class="d-none d-md-block" src="icons/logo.svg" alt="logo">
+                            <img class="d-block d-md-none" src="icons/HamburgerON.svg" width="38px" alt="">
+                        </h3>
+                        <ul>
+                            <li>
+                                <span class="tooltiptext"><a href="dashboard.html">Dashboard</a></span>
+                                <a href="dashboard.html" class="button1">
+                                    <img src="icons/dashboard.svg" alt="Image one" width="38" class="button__img1">
+                                    <img src="icons/dashboardwhite.svg" alt="Image two" class="button__img1">
+                                </a>
+                            </li>
+                            <li id="show_noti">
+                                <span class="tooltiptext">Notifications</span>
+                                <a href="#" class="button1">
+                                    <img src="icons/Notification-Blue1.svg" alt="Image one" width="38"
+                                        class="button__img1">
+                                    <img src="icons/notfiwhite.svg" alt="Image two" class="button__img1">
+                                </a>
+                            </li>
+                            <li>
+                                <span class="tooltiptext active"><a href="mview-request.html">Request</a></span>
+                                <a href="mview-request.html" class="button1">
+                                    <img src="icons/Request-Blue1.svg" alt="Image one" width="38"
+                                        class="button__img1 active">
+                                    <img src="icons/request-white.svg" alt="Image two" class="button__img1 deactive">
+                                </a>
+                            </li>
+                            <li>
+                                <span class="tooltiptext"><a href="management-view-project-list.html">Project</a></span>
+                                <a href="management-view-project-list.html" class="button1">
+                                    <img src="icons/project.svg" alt="Image one" width="38" class="button__img1 ">
+                                    <img src="icons/project-white.svg" alt="Image two" class="button__img1 ">
+                                </a>
+                            </li>
+                            <li>
+                                <span class="tooltiptext"><a href="usertask.html">View Progress</a></span>
+                                <a href="usertask.html" class="button1">
+                                    <img src="icons/Viewprogress-Blue.svg" alt="Image one" width="38"
+                                        class="button__img1">
+                                    <img src="icons/Progresslist-white.svg" alt="Image two" class="button__img1">
+                                </a>
+                            </li>
+                        </ul>
+
+                        <ul>
+                            <li>
+                                <span class="tooltiptext">Reports</span>
+                                <a href="#" class="button1">
+                                    <img src="icons/Reports.svg" alt="Image one" width="38" class="button__img1">
+                                    <img src="icons/reportwhite.svg" alt="Image two" class="button__img1">
+                                </a>
+                            </li>
+                            <li>
+                                <span class="tooltiptext"><a href="search.html">Search</a></span>
+                                <a href="search.html" class="button1">
+                                    <img src="icons/search.svg" alt="Image one" width="38" class="button__img1">
+                                    <img src="icons/searchwhite.svg" alt="Image two" class="button__img1">
+                                </a>
+                            </li>
+                            <li id="show_helpSupp">
+                                <span class="tooltiptext">Help & Support</span>
+                                <a href="#" class="button1">
+                                    <img src="icons/help.svg" alt="Image one" width="38" class="button__img1">
+                                    <img src="icons/helpwhite.svg" alt="Image two" class="button__img1">
+                                </a>
+                            </li>
+                            <li class="tooltip1">
+                                <p class="tooltiptext1">
+                                    <span class="">S</span>
+                                    <p class="tooltiptext tooltiptext1">
+                                        <a href="userprofile.html"><span class=""> My Profile</span></a>
+                                        <br>
+                                        <a href="signIn.html" class=""> <span> Log Out </span> </a>
+                                        <button class="btn">
+                                            <a href="signIn.html"><img src="icons/exit_icon.svg" alt=""> Logout</a>
+                                        </button> 
+                                    </p>
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <!--mobile header  -->
+                <div class="mobile-menuhead">
+                    <div class="hamberger-menu">
+                        <span><img src="icons/Hamburger.svg" alt=""></span>
+                    </div>
+                    <div class="logo_div">
+                        <h1>Emaar</h1>
+                    </div>
+                    <div></div>
+                </div>
+                <!--mobile header end  -->
+
+                <div class="div2">
+                    <div class="center_div">
+                        <ul class="stepper5">
+                            <li class="active">
+                                <div><span>1</span></div>
+                                <div class="mob_con">Project Information</div>
+                            </li>
+                            <li>
+                                <div><span>2</span></div>
+                                <div class="mob_con">Project Scope</div>
+                            </li>
+                            <li>
+                                <div><span>3</span></div>
+                                <div class="mob_con">Financial Information</div>
+                            </li>
+                            <li>
+                                <div><span>4</span></div>
+                                <div class="mob_con">Cost Details</div>
+                            </li>
+                            <li>
+                                <div><span>5</span></div>
+                                <div class="mob_con">Approvers</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="div3">
+                    <div class="step_wise">
+                        <div class="border_step"></div>
+                        <button class="btn" id="goback">Back</button>
+                        <div class="center_step">
+                            <h5 class="active">Step</h5><span class="active">1</span><span class="pie">/</span>
+                            <h5>Step 5</h5>
+                        </div>
+                        <button class="btn active">Next</button>
+                    </div>
+                    <div class="form_div">
+                        <form action="">
+                            <div class="con1 step_forward active">
+                                <h2>Project Info</h2>
+                                <p>Provide the Project Info details</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p>Request ID <span>*</span></p>
+                                        <input type="text" placeholder="Request Id *" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Project Name <span>*</span></p>
+                                        <input type="text" placeholder="Project Name *" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p>Program <span>*</span></p>
+
+                                        <div class="custom-select position-relative">
+                                            <div class="box11">
+                                                <p class="m-0">Program <span>*</span></p>
+                                                <img src="icons/arrowdown.svg" alt="">
+                                            </div>
+                                            <div class="option-container">
+                                                <div class="option">
+                                                    <p>Select the priority 1</p>
+                                                </div>
+                                                <div class="option">
+                                                   <p>Select the priority 2</p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 3 </p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 4</p>
+                                               </div>
+                                               <div class="option">
+                                                    <p>Select the priority 5</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 6</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 7</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      
+<!--                                         
+                                        	<div class="select customized-select">
+                                        	
+                                        		<div class="select-field">
+                                                
+                                        			<input type="radio" name="select" id="option-1" value="value-1">
+                                        			<label for="select-focus">Option 1</label>
+                                                
+                                        			<input type="radio" name="select" id="option-2" value="value-2">
+                                        			<label for="select-focus">Option 2</label>
+                                                
+                                        			<input type="radio" name="select" id="option-3" value="value-3">
+                                        			<label for="select-focus">Option 3</label>
+                                                
+                                        			<input type="radio" name="select" id="option-4" value="value-4">
+                                        			<label for="select-focus">Option 4</label>
+                                                
+                                        			<input type="radio" name="select" id="option-5" value="value-5">
+                                        			<label for="select-focus">Option 5</label>
+                                                
+                                        			<label class="select-placeholder" for="select-focus">Program <span>*</span></label>
+                                        		</div>
+                                            
+                                        		<input id="select-focus" readonly="" type="text" class="select-options-focus">
+                                            
+                                        		<div class="select-options">
+                                        			<label for="option-1">Option 1</label>
+                                        			<label for="option-2">Option 2</label>
+                                        			<label for="option-3">Option 3</label>
+                                        			<label for="option-4">Option 4</label>
+                                        			<label for="option-5">Option 5</label>
+                                        		</div>
+                                        	</div> -->
+                                    
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Category</p>
+
+                                        <div class="custom-select position-relative">
+                                            <div class="box11">
+                                                <p class="m-0">Select</p>
+                                                <img src="icons/arrowdown.svg" alt="">
+                                            </div>
+                                            <div class="option-container">
+                                                <div class="option">
+                                                    <p>Select the priority 1</p>
+                                                </div>
+                                                <div class="option">
+                                                   <p>Select the priority 2</p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 3 </p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 4</p>
+                                               </div>
+                                               <div class="option">
+                                                    <p>Select the priority 5</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 6</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 7</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="select customized-select">
+                                        	
+                                            <div class="select-field">
+                                            
+                                                <input type="radio" name="select" id="option-1" value="value-1">
+                                                <label for="select-focus">Option 1</label>
+                                            
+                                                <input type="radio" name="select" id="option-2" value="value-2">
+                                                <label for="select-focus">Option 2</label>
+                                            
+                                                <input type="radio" name="select" id="option-3" value="value-3">
+                                                <label for="select-focus">Option 3</label>
+                                            
+                                                <input type="radio" name="select" id="option-4" value="value-4">
+                                                <label for="select-focus">Option 4</label>
+                                            
+                                                <input type="radio" name="select" id="option-5" value="value-5">
+                                                <label for="select-focus">Option 5</label>
+                                            
+                                                <label class="select-placeholder" for="select-focus">Program <span>*</span></label>
+                                            </div>
+                                        
+                                            <input id="select-focus" readonly="" type="text" class="select-options-focus">
+                                        
+                                            <div class="select-options">
+                                                <label for="option-1">Option 1</label>
+                                                <label for="option-2">Option 2</label>
+                                                <label for="option-3">Option 3</label>
+                                                <label for="option-4">Option 4</label>
+                                                <label for="option-5">Option 5</label>
+                                            </div>
+                                        </div> -->
+                                    
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p>Priority</p>
+                                        <!-- <select name="" id="" required>
+                                            <option class="pt-3" value="Select" selected disabled>Select</option>
+                                            <option value="Option 1">Option 1</option>
+                                            <option value="Option 2">Option 2</option>
+                                            <option value="Option 3">Option 3</option>
+                                            <option value="Option 4">Option 4</option>
+                                        </select> -->
+                                      
+                                        <div class="custom-select position-relative">
+                                            <div class="box11">
+                                                <p class="m-0">Select The Priority</p>
+                                                <img src="icons/arrowdown.svg" alt="">
+                                            </div>
+                                            <div class="option-container">
+                                                <div class="option">
+                                                    <p>Select the priority 1</p>
+                                                </div>
+                                                <div class="option">
+                                                   <p>Select the priority 2</p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 3 </p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 4</p>
+                                               </div>
+                                               <div class="option">
+                                                    <p>Select the priority 5</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 6</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 7</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Client Name <span>*</span></p>
+
+                                        <input type="password" placeholder="Client Name" id="myInput">
+                                        <a class="eyes1" type="button"><i class="fas fa-eye"
+                                                onclick="myFunction()"></i></a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p>Project Owner <span>*</span></p>
+                                        <input type="text" placeholder="Search">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Assigned To <span>*</span></p>
+                                        <input type="text" placeholder="Search">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <p>Project Description</p>
+                                    <textarea type="textarea" class="text-decoration-none" name="" id="" cols="30" rows="7" placeholder="Project Description"></textarea>
+                                   
+                                </div>
+                                
+                            </div>
+                            <!--con1 closed-->
+                            <div class="con2 step_forward">
+                                <h2>Project Scope</h2>
+                                <p>Provide the project scope details</p>
+                                  <div class="row">
+                                    <div class="col-md-6">
+                                        <p>High Level Scope <span>*</span></p>
+                                        <textarea type="textarea" class="text-decoration-none" name="" id="" cols="30" rows="7" placeholder="Description"></textarea>
+                                   
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Business Justification <span>*</span></p>
+                                        <textarea type="textarea" class="text-decoration-none" name="" id="" cols="30" rows="7" placeholder="Description"></textarea>
+                                   
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p>Expected execution Timeline and Phases <span>*</span></p>
+                                        <textarea type="textarea" class="text-decoration-none" name="" id="" cols="30" rows="7" placeholder="Description"></textarea>
+                                   
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Comments </p>
+                                        <textarea type="textarea" class="text-decoration-none" name="" id="" cols="30" rows="7" placeholder="Description"></textarea>
+                                   
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p>Business Benifits <span>*</span></p>
+                                        <div class="custom-select position-relative">
+                                            <div class="box11">
+                                                <p class="m-0">Select</p>
+                                                <img src="icons/arrowdown.svg" alt="">
+                                            </div>
+                                            <div class="option-container">
+                                                <div class="option">
+                                                    <p>Select the priority 1</p>
+                                                </div>
+                                                <div class="option">
+                                                   <p>Select the priority 2</p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 3 </p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 4</p>
+                                               </div>
+                                               <div class="option">
+                                                    <p>Select the priority 5</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 6</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 7</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Business Priority <span>*</span></p>
+                                        <div class="custom-select position-relative">
+                                            <div class="box11">
+                                                <p class="m-0">Select</p>
+                                                <img src="icons/arrowdown.svg" alt="">
+                                            </div>
+                                            <div class="option-container">
+                                                <div class="option">
+                                                    <p>Select the priority 1</p>
+                                                </div>
+                                                <div class="option">
+                                                   <p>Select the priority 2</p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 3 </p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 4</p>
+                                               </div>
+                                               <div class="option">
+                                                    <p>Select the priority 5</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 6</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 7</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p>Business Impact <span>*</span></p>
+                                        <div class="custom-select position-relative">
+                                            <div class="box11">
+                                                <p class="m-0">Select The Priority</p>
+                                                <img src="icons/arrowdown.svg" alt="">
+                                            </div>
+                                            <div class="option-container">
+                                                <div class="option">
+                                                    <p>Select the priority 1</p>
+                                                </div>
+                                                <div class="option">
+                                                   <p>Select the priority 2</p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 3 </p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 4</p>
+                                               </div>
+                                               <div class="option">
+                                                    <p>Select the priority 5</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 6</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 7</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Planned Project Start Date <span>*</span></p>
+                                        <input type="date" placeholder="Select Date">
+                                        <!-- <input type="date" placeholder="Select Date" onfocus="(this.type='date')"
+                                            onblur="(this.type='text')"> -->
+                                        <!-- <a class="eyes1" type="button"><i class="fas fa-eye" ></i></a> -->
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p>Expected Project Completion Date <span>*</span></p>
+                                        <input type="date" placeholder="Select Date">
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Expected Man Days</p>
+                                        <input type="date" placeholder="Select Date">
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="con3 step_forward">
+                                <h2>Financial Information</h2>
+                                <p>Provide the financial information</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p>Estimated Cost <span>*</span></p>
+                                        <div class="custom-select position-relative">
+                                            <div class="box11">
+                                                <p class="m-0">Enter Amount</p>
+                                                <img src="icons/arrowdown.svg" alt="">
+                                            </div>
+                                            <div class="option-container">
+                                                <div class="option">
+                                                    <p>Select the priority 1</p>
+                                                </div>
+                                                <div class="option">
+                                                   <p>Select the priority 2</p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 3 </p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 4</p>
+                                               </div>
+                                               <div class="option">
+                                                    <p>Select the priority 5</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 6</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 7</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Changed Approved Budget<span>*</span></p>
+                                        <input type="text" placeholder="Enter Amount">
+                                    </div>
+
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <p>Actual Cost <span>*</span></p>
+                                        <input type="text" placeholder="Enter Amount">
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="con4 step_forward">
+                                <h2>Cost Details</h2>
+                                <p>Provide the cost details information</p>
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <p>Items Description <span>*</span></p>
+                                        <input type="text" placeholder="Enter Amount">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <p>Cost Type <span>*</span></p>
+                                        <div class="custom-select position-relative">
+                                            <div class="box11">
+                                                <p class="m-0">Enter Amount</p>
+                                                <img src="icons/arrowdown.svg" alt="">
+                                            </div>
+                                            <div class="option-container">
+                                                <div class="option">
+                                                    <p>Select the priority 1</p>
+                                                </div>
+                                                <div class="option">
+                                                   <p>Select the priority 2</p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 3 </p>
+                                               </div>
+                                               <div class="option">
+                                                   <p>Select the priority 4</p>
+                                               </div>
+                                               <div class="option">
+                                                    <p>Select the priority 5</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 6</p>
+                                                </div>
+                                                <div class="option">
+                                                    <p>Select the priority 7</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- cd -->
+                             
+                                <!-- cd -->
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <p>Year 1 (Cost AED) <span>*</span></p>
+                                        <input type="text" placeholder="Enter Amount">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Year 2 (Cost AED) <span>*</span></p>
+                                        <input type="text" placeholder="Enter Amount">
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <p>Year 3 (Cost AED) <span>*</span></p>
+                                        <input type="text" placeholder="Enter Amount">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Year 4 (Cost AED) <span>*</span></p>
+                                        <input type="text" placeholder="Enter Amount">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h5 class="up_head">Upload</h5>
+                                    </div>
+                                    <div class="col-md-8 support_div">
+                                        <p>(Supports pdf, doc, docx, xlsx, xls, jpg, png, tiff, bmp, txt, ppt, pptx, msg
+                                            files size should not exceed 30 MB.)</p>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="box">
+                                            <i class="material-icons">cloud_upload</i>
+                                            <p>Drag a file here or <span>Browse </span> for a file to upload.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- con5 start -->
+                            <div class="con5 step_forward">
+                                <h2>Approvers</h2>
+                                <p>Provide the Approvers information</p>
+                                <div class="col-md-6">
+                                    <input type="text" placeholder="Add Assignees" id="getdata">
+                                    <div class="highlight_div">
+
+                                    </div>
+                                    <div class="sep_div">
+                                        <div>
+                                            <p>Members</p>
+                                        </div>
+                                        <div>
+                                            <p><span></span> Members</p>
+                                        </div>
+                                    </div>
+                                    <div class="user-list">
+                                        <div class="hover_div">
+                                            <div class="row">
+                                                <div class="img-div">
+                                                    <img src="img/client1.jpg" alt="">
+                                                </div>
+                                                <div class="info-div">
+                                                    <div>
+                                                        <h6>Claire Bure</h6>
+                                                        <p>Clair@emaar.com</p>
+                                                    </div>
+                                                    <button class="btn">Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="hover_div">
+                                            <div class="row">
+                                                <div class="img-div">
+                                                    <img src="img/client2.jpg" alt="">
+                                                </div>
+                                                <div class="info-div">
+                                                    <div>
+                                                        <h6>Ajmal Khan</h6>
+                                                        <p>Ajmal@emaar.com</p>
+                                                    </div>
+                                                    <button class="btn">Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="hover_div">
+                                            <div class="row">
+                                                <div class="img-div">
+                                                    <img src="img/client3.jpg" alt="">
+                                                </div>
+                                                <div class="info-div">
+                                                    <div>
+                                                        <h6>Muhammad Ali</h6>
+                                                        <p>Ali@emaar.com</p>
+                                                    </div>
+                                                    <button class="btn">Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="hover_div">
+                                            <div class="row">
+                                                <div class="img-div">
+                                                    <img src="img/client4.jpg" alt="">
+                                                </div>
+                                                <div class="info-div">
+                                                    <div>
+                                                        <h6>Asif Khan</h6>
+                                                        <p>Asif@emaar.com</p>
+                                                    </div>
+                                                    <button class="btn">Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="hover_div">
+                                            <div class="row">
+                                                <div class="img-div">
+                                                    <img src="img/client5.jpg" alt="">
+                                                </div>
+                                                <div class="info-div">
+                                                    <div>
+                                                        <h6>John Smith</h6>
+                                                        <p>John@emaar.com</p>
+                                                    </div>
+                                                    <button class="btn">Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--con3 closed-->
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--row closed-->
+        </div>
+        <!--container closed-->
+    </section>
+    <!--section closed-->
+   
+
+    <script src="js/scriptnewinfo.js"></script>
+
+    <script src="js/script.js"></script>
+    <!-- UIkit JS -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/uikit@3.7.6/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.7.6/dist/js/uikit-icons.min.js"></script> -->
+    <!-- bs-5 js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+        <script src="js/menuscript.js"></script>
+        
+
+</body>
+
+</html>

@@ -1,0 +1,152 @@
+.mview_req .change-req {
+    flex: 0 0 94.5%;
+    max-width: 94.5%;
+    margin-left: 5.5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* height: 100vh; */
+}
+.mview_req .change-req .center{
+    width: 600px;
+    text-align: center;
+}
+.mview_req .change-req .center a
+{
+    text-decoration: none;
+    color: #171E48;
+}
+.mview_req .change-req .center>h1
+{
+    font-size: 3.2rem;
+    text-transform: capitalize;
+    letter-spacing: 0.3px;
+    word-spacing: 0.7px;
+    margin-block-end: 1.3rem;
+    color: #171E48;
+    font-family: var(--lato);
+    font-weight: 700;
+}
+.mview_req .change-req .center p
+{
+    color: #838485;
+    font-size: 15px;
+}
+.mview_req .change-req .center p.desc
+{
+    font-size: 16px;
+    margin-block-end: 4.5rem;
+    word-spacing: 0.7px;
+    width: 85%;
+    margin-left: 6%;
+}
+.mview_req .change-req .center .itproj_div
+{
+    display: flex;
+    border: 1px solid #dedede;
+    padding: 23px 27px 13px 20px;
+    border-radius: 15px;
+    margin-bottom: 2.2rem;
+    cursor: pointer;
+}
+.mview_req .change-req .center .itproj_div:hover 
+{
+    border: 1px solid #2D62ED;
+}
+.mview_req .change-req .center .itproj_div:hover .grid .grid1 span
+{
+    background: rgba(45, 98, 237, 0.15);
+}
+.mview_req .change-req .center .itproj_div:hover .grid .grid1 span i
+{
+    color: #2D62ED;
+}
+.mview_req .change-req .center .itproj_div:hover .grid .grid2 h2
+{
+    color: #2D62ED;
+}
+.mview_req .change-req .center .itproj_div:hover .grid .grid3 div
+{
+    visibility: visible;
+}
+.mview_req .change-req .center .itproj_div .grid
+{
+    display: grid;
+    grid-template-columns: 12% 70% 18%;
+}
+
+.mview_req .change-req .center .itproj_div .grid .grid1 span
+{
+    position: absolute;
+    width: 3.7rem;
+    height: 3.7rem;
+    border-radius: 30px;
+    display: grid;
+    place-content: center;
+    background-color: #ebebeb;
+}
+
+.mview_req .change-req .center .itproj_div .grid .grid1 span:first-child
+{
+    display:grid;
+}
+.mview_req .change-req .center .itproj_div .grid .grid1 span:last-child
+{
+    display: none;
+}
+
+.mview_req .change-req .center .itproj_div:hover span:last-child
+{
+    display:grid !important;
+}
+.mview_req .change-req .center .itproj_div:hover span:first-child
+{
+    display: none !important;
+}
+
+.mview_req .change-req .center .itproj_div .grid .grid1 span i
+{
+    width: 100%;
+    height: 100%;
+    font-size: 21px;
+    color: #171E48;
+}
+
+.mview_req .change-req .center .itproj_div .grid .grid2
+{
+    text-align: start;
+}
+.mview_req .change-req .center .itproj_div .grid .grid2 h2
+{
+    margin-block-end: 1rem;
+    margin-block-start: 0.7rem;
+    word-spacing: 0.8px;
+    letter-spacing: 0px;
+    font-family: var(--lato);
+    font-weight: 700;
+}
+
+.mview_req .change-req .center .itproj_div .grid .grid3
+{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.mview_req .change-req .center .itproj_div .grid .grid3 div
+{
+    width: 2.9rem;
+    height: 2.9rem;
+    background: #2d62ed;
+    color: #fff;
+    display: grid;
+    border-radius: 30px;
+    place-items: center;
+    visibility: hidden;
+}
+.mview_req .change-req .center .itproj_div .grid .grid3 div i
+{
+    font-size: 19px;
+    font-weight: 800;
+}
+
+ 

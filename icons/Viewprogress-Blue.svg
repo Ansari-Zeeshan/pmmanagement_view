@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <g id="Viewprogress-Blue" transform="translate(-759 -352)">
+    <rect id="Bg-white" width="40" height="40" rx="6" transform="translate(759 352)" fill="#fff"/>
+    <path id="Request-blue" d="M24710.607,17432.77v-17a.77.77,0,0,1,1.539,0v17a.77.77,0,0,1-1.539,0Zm-4.875,0v-12.75a.77.77,0,0,1,1.539,0v12.75a.77.77,0,0,1-1.539,0Zm-4.867,0v-8.5a.769.769,0,1,1,1.537,0v8.5a.769.769,0,1,1-1.537,0Zm-4.863,0v-4.248a.771.771,0,0,1,1.309-.551.8.8,0,0,1,.23.551v4.248a.77.77,0,0,1-1.539,0Z" transform="translate(-23925 -17052)" fill="#5e70ef"/>
+  </g>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="16.197" viewBox="0 0 18 16.197">
+  <g id="subitemlightgrey" transform="translate(-471.5 -232)">
+    <path id="Path_50852" data-name="Path 50852" d="M0-2V12" transform="translate(472 234)" fill="none" stroke="#bcc0c7" stroke-width="1"/>
+    <g id="Group_45820" data-name="Group 45820">
+      <g id="Rectangle_10992" data-name="Rectangle 10992" transform="translate(475.5 234.697)" fill="none" stroke="#bcc0c7" stroke-width="1">
+        <rect width="14" height="5" rx="1" stroke="none"/>
+        <rect x="0.5" y="0.5" width="13" height="4" rx="0.5" fill="none"/>
+      </g>
+      <g id="Rectangle_10993" data-name="Rectangle 10993" transform="translate(475.729 243.033)" fill="none" stroke="#bcc0c7" stroke-width="1">
+        <rect width="13.77" height="5.164" rx="1" stroke="none"/>
+        <rect x="0.5" y="0.5" width="12.77" height="4.164" rx="0.5" fill="none"/>
+      </g>
+      <line id="Line_958" data-name="Line 958" x2="4.016" transform="translate(472 237.016)" fill="none" stroke="#bcc0c7" stroke-width="1"/>
+      <line id="Line_959" data-name="Line 959" x2="4.016" transform="translate(472 245.615)" fill="none" stroke="#bcc0c7" stroke-width="1"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Sign In</title>
+</head>
+
+<body>
+    <section class="main signIn">
+        <div class="back_overlay"></div>
+        <div class="video_div">
+            <video autoplay muted loop>
+                <source src="video/hero-landscape.mp4" type="video/mp4">
+              </video>
+        </div>
+        <div class="container-fluid">
+            <div class="row">                
+                <div class="div-left">
+                    <h2> <img class="d-none d-md-block" src="icons/EmmarSignIn.svg" alt=""></h2>
+                    <center>   <img src="icons/Emarlogo_mobileversion.svg" class="d-md-none" alt="logo" ></center>
+                    <!-- <h2>Emaar </h2>
+                    <h2>pm Connect</h2> -->
+                    <div class="con_div">
+                        <img src="icons/BG-signup.svg" alt="">
+                        <div class="div_center">
+                            <p>Manage Your <span>Projects</span> Like Never before</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="div-right">
+                    <form action="">
+                        <h1>Sign In</h1>
+                        <p>Enter your details below</p>
+                        <p>Email address</p>
+                        <input type="email" placeholder="Companyname@info.com">
+                        <p>Password</p>
+                        <input type="password" id="myInput" placeholder="Password">
+                        <a class="eyes2" type="button">
+                            <!-- <i class="fas fa-eye" onclick="myFunction()"></i> -->
+                        <img src="icons/eyewhite.svg" alt="" onclick="myFunction()">
+                        </a>
+                        <div class="checkbox_div">
+                            <div class="align_check">
+                                <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+                                <label for="vehicle1"> Remember me</label>
+                            </div>
+                            <p><a href="#" >Forgot your Password?</a></p>
+                        </div>
+                        <button class="btn">Sign In</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="js/script.js"></script>
+</body>
+<style>
+ 
+</style>
+</html>

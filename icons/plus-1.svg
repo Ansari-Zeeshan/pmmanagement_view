@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
+  <g id="plus" transform="translate(-964.5 -295)">
+    <g id="Rectangle_5" data-name="Rectangle 5" transform="translate(964.5 295)" fill="none" stroke="#2d62ed" stroke-width="1" stroke-dasharray="3">
+      <rect width="22" height="22" rx="11" stroke="none"/>
+      <rect x="0.5" y="0.5" width="21" height="21" rx="10.5" fill="none"/>
+    </g>
+    <text id="_" data-name="+" transform="translate(972.5 309.172)" fill="#2d62ed" font-size="11" font-family="Roboto-Regular, Roboto"><tspan x="0" y="0">+</tspan></text>
+  </g>
+</svg>

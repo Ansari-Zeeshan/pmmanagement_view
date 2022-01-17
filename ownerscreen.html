@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- bs-5 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.1/css/bootstrap.min.css"
+    integrity="sha512-6KY5s6UI5J7SVYuZB4S/CZMyPylqyyNZco376NM2Z8Sb8OxEdp02e1jkKk/wZxIEmjQ6DRCEBhni+gpr9c4tvA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" /> <!-- UIkit CSS -->
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.7.6/dist/css/uikit.min.css" />
+     -->
+  <!-- custom css -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/notification.css">
+  <link rel="stylesheet" href="css/custom_drop_down_withclose.css">
+  <link rel="stylesheet" href="css/guage-style.css">
+  <link rel="stylesheet" href="css/ownerscreen.css">
+  <title>Project Owner Screen</title>
+</head>
+
+<body>
+  <section class="manage_view">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="myoverlay"></div>
+        <div class="menu_overlay"></div>
+        <div class="noti_overlay"></div>
+        <div class="notification_div">
+          <div class="col-md-12 d-flex justify-content-start"> <img src="icons/arrowright.svg" class="backArrow" alt="">
+            <h1>Notifications</h1>
+          </div>
+          <div class="nav_div">
+            <div class="scroll_div">
+              <ul>
+                <li>All</li>
+                <li class="active" data-target=".request" id="owntabs">New Request</li>
+                <li data-target=".update" id="owntabs">Update Status</li>
+                <li data-target=".activity" id="owntabs">Activity Log</li>
+                <li data-target=".assigned" id="owntabs">Assigned to me</li>
+                <li data-target=".mention" id="owntabs">at Mentions</li>
+              </ul>
+            </div>
+          </div>
+          <div class="noti_overflow">
+            <!-- request content start -->
+            <div class="request active tabnoti_con">
+              <div class="noti_con">
+                <div class="noti_inner">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Name of the Project</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Request ID:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>#000111222</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Priority</h4>
+                        </div>
+                        <div class="grid2">
+                          <p class="high">High</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Owner:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatar1.svg" alt=""> </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Assigned to:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatr4.svg" alt=""> <img src="icons/avtar6.svg" alt="">
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Client Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Client Name X</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-10 justify-content-end d-flex sent_div">
+                      <div class="d-flex">
+                        <h5>Sent On:</h5> <span>25 Nov,2021 at 10:00 AM</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- noti_con closed -->
+              <div class="noti_con">
+                <div class="noti_inner">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Name of the Project</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Request ID:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>#000111222</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Priority</h4>
+                        </div>
+                        <div class="grid2">
+                          <p class="low">Low</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Owner:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatar1.svg" alt=""> </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Assigned to:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatr4.svg" alt=""> <img src="icons/avtar6.svg" alt="">
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Client Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Client Name X</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-10 justify-content-end d-flex sent_div">
+                      <div class="d-flex">
+                        <h5>Sent On:</h5> <span>25 Nov,2021 at 10:00 AM</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- noti_con closed -->
+              <div class="noti_con">
+                <div class="noti_inner">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Name of the Project</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Request ID:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>#000111222</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Priority</h4>
+                        </div>
+                        <div class="grid2">
+                          <p class="medium">Medium</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Owner:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatar1.svg" alt=""> </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Assigned to:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatr4.svg" alt=""> <img src="icons/avtar6.svg" alt="">
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Client Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Client Name X</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-10 justify-content-end d-flex sent_div">
+                      <div class="d-flex">
+                        <h5>Sent On:</h5> <span>25 Nov,2021 at 10:00 AM</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- noti_con closed -->
+              <div class="noti_con">
+                <div class="noti_inner">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Name of the Project</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Request ID:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>#000111222</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Priority</h4>
+                        </div>
+                        <div class="grid2">
+                          <p class="low">Low</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Owner:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatar1.svg" alt=""> </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Assigned to:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatr4.svg" alt=""> <img src="icons/avtar6.svg" alt="">
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Client Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Client Name X</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-10 justify-content-end d-flex sent_div">
+                      <div class="d-flex">
+                        <h5>Sent On:</h5> <span>25 Nov,2021 at 10:00 AM</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- noti_con closed -->
+            </div> <!-- request content closed -->
+            <!-- update content start -->
+            <div class="update tabnoti_con">
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>Project ABC changed it's status from <span class="track">Ontrack</span> to <span
+                      class="done">Done!</span></p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between mheight_80">
+                    <div class="d-flex avatar">
+                      <p>Assignees:</p> <img src="icons/avatar1.svg" alt=""> <img src="icons/avatar2.svg" alt="">
+                    </div>
+                    <div class="d-flex date">
+                      <p>25 Nov, 2021 at 10:00 AM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>Project ABC changed it's status from <span class="plan">Planned</span> to <span class="risk">At
+                      Risk!</span></p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between mheight_80">
+                    <div class="d-flex avatar">
+                      <p>Assignees:</p> <img src="icons/avatar1.svg" alt=""> <img src="icons/avatar2.svg" alt="">
+                    </div>
+                    <div class="d-flex date">
+                      <p>25 Nov, 2021 at 10:00 AM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- update content end -->
+            <!-- activity content start -->
+            <div class="activity tabnoti_con">
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>John has accepted your invitation the <span>Project 01</span></p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between">
+                    <div class="d-flex avatar"> <img src="icons/avatar1.svg" alt=""> </div>
+                    <div class="d-flex date">
+                      <p>2 min ago</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>Jayson marked the <span class="marked">Project ABC</span> as task done</p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between">
+                    <div class="d-flex avatar"> <img src="icons/avatar1.svg" alt=""> </div>
+                    <div class="d-flex date">
+                      <p>22 Nov,2021 at 10:00 PM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="pad-common">
+                <div class="row">
+                  <div class="col-md-12 upLoad">
+                    <p>Sherry added 2 files to <span class="marked">Project AB's </span>conversion </p>
+                    <div class="d-flex mt-4">
+                      <div class="file_div"> <img src="icons/pdf.png" alt="">
+                        <p>Name of the file</p>
+                      </div>
+                      <div class="file_div"> <img src="icons/pdf.png" alt="">
+                        <p>Name of the file</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between">
+                    <div class="d-flex avatar"> <img src="icons/avatar1.svg" alt=""> </div>
+                    <div class="d-flex date">
+                      <p>22 Nov,2021 at 10:00 PM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- activity content end -->
+            <!-- assigned content start -->
+            <div class="assigned tabnoti_con">
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>Jeet has assigned Project ABC at <span class="email">yourname@youroffcial.com</span></p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between">
+                    <div class="d-flex avatar"> <img src="icons/avatar1.svg" alt=""> </div>
+                    <div class="d-flex date">
+                      <p>2 min ago</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>Rayon has assigned you an item ABC at <span class="email">yourname@youroffcial.com</span></p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between">
+                    <div class="d-flex avatar"> <img src="icons/avatar1.svg" alt=""> </div>
+                    <div class="d-flex date">
+                      <p>22 Nov,2021 at 10:00 PM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- assigned content end -->
+            <!-- mention content start -->
+            <div class="mention tabnoti_con">
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>Jeet mentioned <span class="email">@youroffcial.com</span> in an update</p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between">
+                    <div class="d-flex avatar"> <img src="icons/avatar1.svg" alt=""> </div>
+                    <div class="d-flex date">
+                      <p>2 min ago</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>Rayon mentioned <span class="email">@youroffcial.com</span> in an update</p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between">
+                    <div class="d-flex avatar"> <img src="icons/avatar1.svg" alt=""> </div>
+                    <div class="d-flex date">
+                      <p>22 Nov,2021 at 10:00 PM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- mention content end -->
+          </div>
+        </div> <!-- notification div closed -->
+        <!-- helpsupport div start -->
+        <div class="helpsupport_div">
+          <div class="col-md-12 d-flex justify-content-start"> <img src="icons/arrowright.svg" class="backArrow" alt="">
+            <h1>Help</h1>
+          </div>
+          <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne"> <button class="accordion-button" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false"
+                  aria-controls="collapseOne">
+                  <div class="grid">
+                    <div class="grid1 mr-13"> <img src="icons/help/Pmconnect.svg" alt=""> </div>
+                    <div class="grid2">
+                      <h4>PM Connect Video Tutorials</h4>
+                      <p>Tutorials, Guides, Live demos etc.</p>
+                    </div>
+                  </div>
+                </button> </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <div class="my_body">
+                    <div class="grid">
+                      <div class="grid1"> <img src="icons/help/tutorial.svg" alt="">
+                        <p>tutorial</p>
+                      </div>
+                      <div class="grid2"> <img src="icons/help/video.svg" alt="">
+                        <p>Guide</p>
+                      </div>
+                      <div class="grid3"> <img src="icons/help/livedemo.svg" alt="">
+                        <p>Live Demo</p>
+                      </div>
+                      <div class="grid4"> <img src="icons/help/community.svg" alt="">
+                        <p>community</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingTwo"> <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false"
+                  aria-controls="collapseTwo">
+                  <div class="grid">
+                    <div class="grid1"> <img src="icons/help/FAQ.svg" alt=""> </div>
+                    <div class="grid2">
+                      <h4>Frequestly Asked Questions (FAQ)</h4>
+                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    </div>
+                  </div>
+                </button> </h2>
+              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <div class="faq mt-3">
+                    <h4>What is the status</h4>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum expedita corrupti culpa hic in
+                      accusantium</p>
+                  </div>
+                  <div class="faq">
+                    <h4>What is the status</h4>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum expedita corrupti culpa hic in
+                      accusantium</p>
+                  </div>
+                  <div class="faq">
+                    <h4>What is the status</h4>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum expedita corrupti culpa hic in
+                      accusantium</p>
+                  </div>
+                  <div class="faq">
+                    <h4>What is the status</h4>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum expedita corrupti culpa hic in
+                      accusantium</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree"> <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false"
+                  aria-controls="collapseThree">
+                  <div class="grid">
+                    <div class="grid1"> <img src="icons/help/RaiseTicket.svg" alt=""> </div>
+                    <div class="grid2">
+                      <h4>Raise the Ticket</h4>
+                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    </div>
+                  </div>
+                </button> </h2>
+              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                data-bs-parent="#accordionExample">
+                <form action="">
+                  <div class="col-md-12 mt-4 pt-2"> <input type="text" placeholder="Your Question about ?"> </div>
+                  <div class="col-md-12"> <select name="" id="">
+                      <option value="" selected disabled>Category</option>
+                      <option value="">Option 1</option>
+                      <option value="">Option 2</option>
+                      <option value="">Option 3</option>
+                      <option value="">Option 4</option>
+                    </select> </div>
+                  <div class="col-md-12"> <input type="text" placeholder="Subject"> </div>
+                  <div class="col-md-12"> <input type="textarea" name="" placeholder="Details"> </div>
+                  <div class="d-flex justify-content-between bottom"> <button class="btn upload">Upload the
+                      file</button> <button class="btn send">Send</button> </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div> <!-- helpsupport div end -->
+        <nav>
+          <div class="div1">
+            <h3>
+              <div></div> <img class="d-none d-md-block" src="icons/logo.svg" alt="logo"> <img class="d-block d-md-none"
+                src="icons/HamburgerON.svg" width="38px" alt="">
+            </h3>
+            <ul>
+              <li> 
+                  <span class="tooltiptext active"><a href="dashboard.html">Dashboard</a></span> <a href="dashboard.html" class="button1"> <img
+                  src="icons/dashboard.svg" alt="Image one" width="38" class="button__img1 active"> <img
+                  src="icons/dashboardwhite.svg" alt="Image two" class="button__img1 deactive"> </a> 
+              </li>
+              <li id="show_noti"> <span class="tooltiptext">Notifications</span> <a href="#" class="button1"> <img
+                    src="icons/Notification-Blue1.svg" alt="Image one" width="38" class="button__img1"> <img
+                    src="icons/notfiwhite.svg" alt="Image two" class="button__img1"> </a> </li>
+              <li> <span class="tooltiptext"><a href="mview-request.html">Request</a></span> <a href="mview-request.html" class="button1">
+                  <img src="icons/Request-Blue1.svg" alt="Image one" width="38" class="button__img1"> <img
+                    src="icons/request-white.svg" alt="Image two" class="button__img1"> </a> </li>
+              <li> <span class="tooltiptext"><a href="management-view-project-list.html">Project</a></span> <a href="management-view-project-list.html" class="button1">
+                  <img src="icons/project.svg" alt="Image one" width="38" class="button__img1 "> <img
+                    src="icons/project-white.svg" alt="Image two" class="button__img1 "> </a> </li>
+              <li> <span class="tooltiptext"><a href="usertask.html">View Progress</a></span> <a href="usertask.html" class="button1"> <img
+                    src="icons/Viewprogress-Blue.svg" alt="Image one" width="38" class="button__img1"> <img
+                    src="icons/Progresslist-white.svg" alt="Image two" class="button__img1"> </a> </li>
+            </ul>
+            <ul>
+              <li> <span class="tooltiptext">Reports</span> <a href="#" class="button1"> <img src="icons/Reports.svg"
+                    alt="Image one" width="38" class="button__img1"> <img src="icons/reportwhite.svg" alt="Image two"
+                    class="button__img1"> </a> </li>
+              <li> <span class="tooltiptext"><a href="search.html">Search</a></span> <a href="search.html" class="button1"> <img
+                    src="icons/search.svg" alt="Image one" width="38" class="button__img1"> <img
+                    src="icons/searchwhite.svg" alt="Image two" class="button__img1"> </a> </li>
+              <li id="show_helpSupp"> <span class="tooltiptext">Help & Support</span> <a href="#" class="button1"> <img
+                    src="icons/help.svg" alt="Image one" width="38" class="button__img1"> <img src="icons/helpwhite.svg"
+                    alt="Image two" class="button__img1"> </a> </li>
+              <li class="tooltip1">
+                <p class="tooltiptext1"> <span class="">S</span>
+                  <p class="tooltiptext tooltiptext1"> <a href="userprofile.html"><span class=""> My Profile</span></a>
+                    <br> <a href="signIn.html" class=""> <span> Log Out </span> </a> 
+                    <button class="btn">
+                      <a href="signIn.html"><img src="icons/exit_icon.svg" alt=""> Logout</a>
+                    </button> 
+                  </p>
+                </p>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <div class="mobile-menuhead">
+          <div class="hamberger-menu"> <span><img src="icons/Hamburger.svg" alt=""></span> </div>
+          <div class="logo_div">
+            <h1>Emaar</h1>
+          </div>
+          <div></div>
+        </div>
+        <div class="div-dashboard">
+          <div class="row top_row">
+            <div class="col-md-6 col-6 d-flex div-title">
+              <a href="dashboard.html" class="d-flex"><img src="icons/arrowright.svg" alt=""></a>
+              <span><img src="img/client1.jpg" alt="Owner"></span>
+              <h1>Project Owner 03</h1>
+            </div>
+            <div class="col-md-6 col-6 d-flex align-items-center div-titleright justify-content-end">
+              <p>Team Members</p>
+              <h1>12</h1>
+            </div>
+          </div>
+          <div class="div-card pt-5 pb-5">
+            <div class="row">
+              <div class="col-xs-12 col-md-3">
+                <div class="card border-0 no_mar">
+                  <div class="card-text">
+                    <h1>20</h1>
+                    <p>Total Projects</p>
+                  </div>
+                  <div class="img-total"> <img src="icons/total-project.svg" class="img-fluid" alt=""> </div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-md-3">
+                <div class="card border-0">
+                  <div class="card-text">
+                    <h1>5</h1>
+                    <p>Completed Projects</p>
+                  </div>
+                  <div class="img-total"> <img src="icons/current-project.svg" class="img-fluid" alt=""> </div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-md-3">
+                <div class="card border-0">
+                  <div class="card-text">
+                    <h1>10</h1>
+                    <p>Pending Projects</p>
+                  </div>
+                  <div class="img-total"> <img src="icons/completed-project.svg" class="img-fluid" alt=""> </div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-md-3">
+                <div class="card border-0">
+                  <div class="card-text">
+                    <h1>5</h1>
+                    <p>Approved Projects</p>
+                  </div>
+                  <div class="img-total"> <img src="icons/aproval.svg" class="img-fluid" alt=""> </div>
+                </div>
+              </div>
+              <style> </style>
+            </div>
+            <div class="rpr">
+              <!-- 2nd row start -->
+              <div class="row pt-5">
+                <div class="col-md-5">
+                  <div class="card1 no-pad border-0">
+                    <div class="head-div2 border-bottom">
+                      <h3>Activity</h3>
+                    </div>
+                    <div class="linechart_row">
+                      <div class="linechart__container">
+                        <canvas id="linechart" height="184"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-7">
+                  <div class="card1 border-0 no-pad">
+                    <div class="head-div">
+                      <h3>Project overview</h3>
+                    </div>
+                    <div class="overview1">
+                      <div class="row">
+                        <div class="col-md-6 d-flex flex-column">
+                          <div class="d-flex">
+                            <h4>RuddyRex</h4>
+                            <span class="atrisk">At risk</span>
+                          </div>
+                          <span class="edited">Last edited 2 hours ago</span>
+                        </div>
+                        <div class="col-md-6 justify-content-end d-flex">
+                          <span>
+                            <img src="img/client1.jpg" alt="">
+                            <div class="mytooltip">
+                              <div class="maintooltip">
+                                <p>Jana</p>
+                              </div>
+                            </div>
+                          </span>
+                          <span>
+                            <img src="img/client2.jpg" alt="">
+                            <div class="mytooltip">
+                              <div class="maintooltip">
+                                <p>James</p>
+                              </div>
+                            </div>
+                          </span>
+                          <span class="last">
+                            <p>+2</p>
+                            <div class="userTooltip">
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span><img src="img/client1.jpg" alt="client1"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p>Jana</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span><img src="img/client2.jpg" alt="client1"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p>James</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span><img src="img/client3.jpg" alt="client1"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p>Holder</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span><img src="img/client4.jpg" alt="client1"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p>Rupert</p>
+                                </div>
+                              </div>
+                            </div>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="overview1">
+                      <div class="row">
+                        <div class="col-md-6 d-flex flex-column">
+                          <div class="d-flex">
+                            <h4>Software Chasers</h4>
+                            <span class="ontrack">On Track</span>
+                          </div>
+                          <span class="edited">Last edited 8 hours ago</span>
+                        </div>
+                        <div class="col-md-6 justify-content-end d-flex">
+                          <span>
+                            <img src="img/client1.jpg" alt="">
+                            <div class="mytooltip">
+                              <div class="maintooltip">
+                                <p>Jana</p>
+                              </div>
+                            </div>
+                          </span>
+                          <span>
+                            <img src="img/client2.jpg" alt="">
+                            <div class="mytooltip">
+                              <div class="maintooltip">
+                                <p>James</p>
+                              </div>
+                            </div>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="overview1">
+                      <div class="row">
+                        <div class="col-md-6 d-flex flex-column">
+                          <div class="d-flex">
+                            <h4>Sunergy</h4>
+                            <span class="approved">Approved</span>
+                          </div>
+                          <span class="edited">Last edited yesterday</span>
+                        </div>
+                        <div class="col-md-6 justify-content-end d-flex">
+                          <span>
+                            <img src="img/client1.jpg" alt="">
+                            <div class="mytooltip">
+                              <div class="maintooltip">
+                                <p>Jana</p>
+                              </div>
+                            </div>
+                          </span>
+                          <span>
+                            <img src="img/client2.jpg" alt="">
+                            <div class="mytooltip">
+                              <div class="maintooltip">
+                                <p>James</p>
+                              </div>
+                            </div>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12 d-flex justify-content-end align-items-center seeMore">
+                      <p>See more</p>
+                      <img src="icons/plusblack.png" alt="">
+                    </div>
+                  </div>
+                </div>
+                <!-- 2nd row end -->
+
+                <div class="col-md-5 pt-4 nopad_right">
+                  <div class="card1 border-0 p-0 h-342">
+                    <div class="head-div2">
+                      <h3>Team Task</h3>
+                    </div>
+                    <div class="chart doughnut">
+                      <div class="canvas-container position-relative">
+                        <canvas id="myCanvas"></canvas>
+                        <div class="text-inside position-absolute text-center">
+                          <p>Total Task</p>
+                          <h1>85</h1>
+                        </div>
+                      </div>
+                      <ul>
+                        <li><data value="0.85" data-color="#1FC875" data-color="#F6BE75">Completed</data></li>
+                        <li><data value="0.55" data-color="#2D62ED">In Progress</data></li>
+                        <li><data value="0.45" data-color="#F6BE75">To Do</data></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-7 project_view nopad_right pt-4">
+                  <div class="card1 border-0">
+                    <div class="row justify-content-between top d-flex">
+                      <div class="col-6">
+                        <h2>Projects</h2>
+                      </div>
+                      <div class="right col-6 justify-content-end d-flex">
+                        <p>View all</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="view1">
+                          <div class="col-md-12 d-flex ruddy align-items-center">
+                            <span>R</span>
+                            <p>RuddyRex</p>
+                          </div>
+                          <div class="col-md-11 d-flex done flex-column">
+                            <p>Task Done: 12/20</p>
+                            <div class="progress">
+                              <div class="progress_meter"></div>
+                            </div>
+                          </div>
+                          <div class="row justify-content-between">
+                            <div class="col-6">
+                              <div class="date">
+                                <p>30/11/2021</p>
+                              </div>
+                            </div>
+                            <div class="col-6">
+                              <div class="member justify-content-end d-flex align-items-center">
+                                <span><img src="img/client1.jpg" alt=""></span>
+                                <span><img src="img/client2.jpg" alt=""></span>
+                                <span class="last">+2</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="view1">
+                          <div class="col-md-12 d-flex ruddy align-items-center">
+                            <span>R</span>
+                            <p>RuddyRex</p>
+                          </div>
+                          <div class="col-md-11 d-flex done flex-column">
+                            <p>Task Done: 12/20</p>
+                            <div class="progress">
+                              <div class="progress_meter"></div>
+                            </div>
+                          </div>
+                          <div class="row justify-content-between">
+                            <div class="col-6">
+                              <div class="date">
+                                <p>30/11/2021</p>
+                              </div>
+                            </div>
+                            <div class="col-6">
+                              <div class="member justify-content-end d-flex align-items-center">
+                                <span><img src="img/client1.jpg" alt=""></span>
+                                <span><img src="img/client2.jpg" alt=""></span>
+                                <span class="last">+2</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <!-- card1 closed -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--row closed-->
+        </div>
+        <!--container closed-->
+  </section>
+  <!--section closed-->
+  <!-- custom js -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js'></script> <!-- chartjs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js'></script>
+  <script src="js/script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+  </script>
+  <script src="js/menuscript.js"></script> <!-- kanbanjs -->
+  <script src="js/dropdown.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+  <script src="js/guage-script.js"></script>
+  <script src="js/linechart.js"></script>
+</body>
+<!--ramyachart-->
+<script>
+  $(document).ready(function () {
+
+    $('.chart.doughnut').each(function () {
+      type: 'doughnut';
+      var chartID = $(this).find('canvas').attr('id');
+      var c = document.getElementById(chartID);
+      var width = $('#' + chartID).width();
+      var height = width;
+      var linewidth = width / 8;
+      c.setAttribute('width', width * 2);
+      c.setAttribute('height', height * 2);
+      var ctx = c.getContext('2d');
+      var startingPoint = -0.5;
+      ctx.scale(2, 2);
+      ctx.beginPath();
+      ctx.arc(height / 2, height / 2, width / 3, 0 * Math.PI, 1 * Math.PI);
+      ctx.lineWidth = linewidth;
+      ctx.stroke();
+
+      $(this).find('li').each(function () {
+
+        var start = startingPoint;
+        var dataValue = $(this).find('data').attr('value');
+        var end = startingPoint + (2.5 * dataValue);
+        var color = $(this).find('data').data('color');
+        ctx.beginPath();
+        ctx.arc(height / 2, height / 2, width / 3, startingPoint * Math.PI, end * Math.PI);
+        ctx.lineWidth = linewidth;
+        ctx.strokeStyle = color;
+        ctx.stroke();
+        $(this).css('color', color);
+      });
+    });
+
+    data = {
+      datasets: [{
+        data: [10, 20, 30]
+      }],
+
+      // These labels appear in the legend and in the tooltips when hovering different arcs
+      labels: [
+        'Red',
+        'Yellow',
+        'Blue'
+      ]
+    };
+  });
+</script>
+<!--endramyachart-->
+
+</html>

@@ -1,0 +1,14 @@
+.fc-button-month.fc-state-default, .fc-button-agendaWeek.fc-state-default, .fc-button-agendaDay.fc-state-default {
+    min-width: 67px;
+    text-align: center;
+    transition: all 0.2s;
+    -webkit-transition: all 0.2s;
+    border-radius: 1px !important;
+    margin: 5px;
+    /* border: 1px solid; */
+}
+body{
+}
+#wrap{
+  background-color:#FCFDFE !important;
+}

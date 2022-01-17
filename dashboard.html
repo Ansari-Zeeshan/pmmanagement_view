@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- bs-5 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.1/css/bootstrap.min.css" integrity="sha512-6KY5s6UI5J7SVYuZB4S/CZMyPylqyyNZco376NM2Z8Sb8OxEdp02e1jkKk/wZxIEmjQ6DRCEBhni+gpr9c4tvA==" crossorigin="anonymous" referrerpolicy="no-referrer" /> <!-- custom css -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/notification.css">
+  <link rel="stylesheet" href="css/custom_drop_down_withclose.css">
+  <link rel="stylesheet" href="css/guage-style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <title>Dashboard Management</title>
+</head>
+
+<body>
+  <section class="manage_view">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="myoverlay"></div>
+        <div class="menu_overlay"></div>
+        <div class="noti_overlay"></div>
+        <div class="notification_div">
+          <div class="col-md-12 d-flex justify-content-start"> <img src="icons/arrowright.svg" class="backArrow" alt="">
+            <h1>Notifications</h1>
+          </div>
+          <div class="nav_div">
+            <div class="scroll_div">
+              <ul>
+                <li>All</li>
+                <li class="active" data-target=".request" id="owntabs">New Request</li>
+                <li data-target=".update" id="owntabs">Update Status</li>
+                <li data-target=".activity" id="owntabs">Activity Log</li>
+                <li data-target=".assigned" id="owntabs">Assigned to me</li>
+                <li data-target=".mention" id="owntabs">at Mentions</li>
+              </ul>
+            </div>
+          </div>
+          <div class="noti_overflow">
+            <!-- request content start -->
+            <div class="request active tabnoti_con">
+              <div class="noti_con">
+                <div class="noti_inner">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Name of the Project</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Request ID:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>#000111222</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Priority</h4>
+                        </div>
+                        <div class="grid2">
+                          <p class="high">High</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Owner:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatar1.svg" alt=""> </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Assigned to:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatr4.svg" alt=""> <img src="icons/avtar6.svg" alt=""> </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Client Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Client Name X</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-10 justify-content-end d-flex sent_div">
+                      <div class="d-flex">
+                        <h5>Sent On:</h5> <span>25 Nov,2021 at 10:00 AM</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- noti_con closed -->
+              <div class="noti_con">
+                <div class="noti_inner">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Name of the Project</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Request ID:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>#000111222</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Priority</h4>
+                        </div>
+                        <div class="grid2">
+                          <p class="low">Low</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Owner:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatar1.svg" alt=""> </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Assigned to:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatr4.svg" alt=""> <img src="icons/avtar6.svg" alt=""> </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Client Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Client Name X</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-10 justify-content-end d-flex sent_div">
+                      <div class="d-flex">
+                        <h5>Sent On:</h5> <span>25 Nov,2021 at 10:00 AM</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- noti_con closed -->
+              <div class="noti_con">
+                <div class="noti_inner">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Name of the Project</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Request ID:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>#000111222</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Priority</h4>
+                        </div>
+                        <div class="grid2">
+                          <p class="medium">Medium</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Owner:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatar1.svg" alt=""> </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Assigned to:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatr4.svg" alt=""> <img src="icons/avtar6.svg" alt=""> </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Client Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Client Name X</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-10 justify-content-end d-flex sent_div">
+                      <div class="d-flex">
+                        <h5>Sent On:</h5> <span>25 Nov,2021 at 10:00 AM</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- noti_con closed -->
+              <div class="noti_con">
+                <div class="noti_inner">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Name of the Project</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Request ID:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>#000111222</p>
+                        </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Priority</h4>
+                        </div>
+                        <div class="grid2">
+                          <p class="low">Low</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Project Owner:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatar1.svg" alt=""> </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Assigned to:</h4>
+                        </div>
+                        <div class="grid2"> <img src="icons/avatr4.svg" alt=""> <img src="icons/avtar6.svg" alt=""> </div>
+                      </div>
+                      <div class="grid">
+                        <div class="grid1">
+                          <h4>Client Name:</h4>
+                        </div>
+                        <div class="grid2">
+                          <p>Client Name X</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-10 justify-content-end d-flex sent_div">
+                      <div class="d-flex">
+                        <h5>Sent On:</h5> <span>25 Nov,2021 at 10:00 AM</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- noti_con closed -->
+            </div> <!-- request content closed -->
+            <!-- update content start -->
+            <div class="update tabnoti_con">
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>Project ABC changed it's status from <span class="track">Ontrack</span> to <span class="done">Done!</span></p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between mheight_80">
+                    <div class="d-flex avatar">
+                      <p>Assignees:</p> <img src="icons/avatar1.svg" alt=""> <img src="icons/avatar2.svg" alt="">
+                    </div>
+                    <div class="d-flex date">
+                      <p>25 Nov, 2021 at 10:00 AM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>Project ABC changed it's status from <span class="plan">Planned</span> to <span class="risk">At Risk!</span></p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between mheight_80">
+                    <div class="d-flex avatar">
+                      <p>Assignees:</p> <img src="icons/avatar1.svg" alt=""> <img src="icons/avatar2.svg" alt="">
+                    </div>
+                    <div class="d-flex date">
+                      <p>25 Nov, 2021 at 10:00 AM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- update content end -->
+            <!-- activity content start -->
+            <div class="activity tabnoti_con">
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>John has accepted your invitation the <span>Project 01</span></p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between">
+                    <div class="d-flex avatar"> <img src="icons/avatar1.svg" alt=""> </div>
+                    <div class="d-flex date">
+                      <p>2 min ago</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>Jayson marked the <span class="marked">Project ABC</span> as task done</p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between">
+                    <div class="d-flex avatar"> <img src="icons/avatar1.svg" alt=""> </div>
+                    <div class="d-flex date">
+                      <p>22 Nov,2021 at 10:00 PM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="pad-common">
+                <div class="row">
+                  <div class="col-md-12 upLoad">
+                    <p>Sherry added 2 files to <span class="marked">Project AB's </span>conversion </p>
+                    <div class="d-flex mt-4">
+                      <div class="file_div"> <img src="icons/pdf.png" alt="">
+                        <p>Name of the file</p>
+                      </div>
+                      <div class="file_div"> <img src="icons/pdf.png" alt="">
+                        <p>Name of the file</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between">
+                    <div class="d-flex avatar"> <img src="icons/avatar1.svg" alt=""> </div>
+                    <div class="d-flex date">
+                      <p>22 Nov,2021 at 10:00 PM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- activity content end -->
+            <!-- assigned content start -->
+            <div class="assigned tabnoti_con">
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>Jeet has assigned Project ABC at <span class="email">yourname@youroffcial.com</span></p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between">
+                    <div class="d-flex avatar"> <img src="icons/avatar1.svg" alt=""> </div>
+                    <div class="d-flex date">
+                      <p>2 min ago</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>Rayon has assigned you an item ABC at <span class="email">yourname@youroffcial.com</span></p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between">
+                    <div class="d-flex avatar"> <img src="icons/avatar1.svg" alt=""> </div>
+                    <div class="d-flex date">
+                      <p>22 Nov,2021 at 10:00 PM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- assigned content end -->
+            <!-- mention content start -->
+            <div class="mention tabnoti_con">
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>Jeet mentioned <span class="email">@youroffcial.com</span> in an update</p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between">
+                    <div class="d-flex avatar"> <img src="icons/avatar1.svg" alt=""> </div>
+                    <div class="d-flex date">
+                      <p>2 min ago</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="pad-common">
+                <div class="col-md-12">
+                  <p>Rayon mentioned <span class="email">@youroffcial.com</span> in an update</p>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 d-flex justify-content-between">
+                    <div class="d-flex avatar"> <img src="icons/avatar1.svg" alt=""> </div>
+                    <div class="d-flex date">
+                      <p>22 Nov,2021 at 10:00 PM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- mention content end -->
+          </div>
+        </div> <!-- notification div closed -->
+        <!-- helpsupport div start -->
+        <div class="helpsupport_div">
+          <div class="col-md-12 d-flex justify-content-start"> <img src="icons/arrowright.svg" class="backArrow" alt="">
+            <h1>Help</h1>
+          </div>
+          <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne"> <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                  <div class="grid">
+                    <div class="grid1 mr-13"> <img src="icons/help/Pmconnect.svg" alt=""> </div>
+                    <div class="grid2">
+                      <h4>PM Connect Video Tutorials</h4>
+                      <p>Tutorials, Guides, Live demos etc.</p>
+                    </div>
+                  </div>
+                </button> </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <div class="my_body">
+                    <div class="grid">
+                      <div class="grid1"> <img src="icons/help/tutorial.svg" alt="">
+                        <p>tutorial</p>
+                      </div>
+                      <div class="grid2"> <img src="icons/help/video.svg" alt="">
+                        <p>Guide</p>
+                      </div>
+                      <div class="grid3"> <img src="icons/help/livedemo.svg" alt="">
+                        <p>Live Demo</p>
+                      </div>
+                      <div class="grid4"> <img src="icons/help/community.svg" alt="">
+                        <p>community</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingTwo"> <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  <div class="grid">
+                    <div class="grid1"> <img src="icons/help/FAQ.svg" alt=""> </div>
+                    <div class="grid2">
+                      <h4>Frequestly Asked Questions (FAQ)</h4>
+                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    </div>
+                  </div>
+                </button> </h2>
+              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <div class="faq mt-3">
+                    <h4>What is the status</h4>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum expedita corrupti culpa hic in accusantium</p>
+                  </div>
+                  <div class="faq">
+                    <h4>What is the status</h4>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum expedita corrupti culpa hic in accusantium</p>
+                  </div>
+                  <div class="faq">
+                    <h4>What is the status</h4>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum expedita corrupti culpa hic in accusantium</p>
+                  </div>
+                  <div class="faq">
+                    <h4>What is the status</h4>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum expedita corrupti culpa hic in accusantium</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree"> <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  <div class="grid">
+                    <div class="grid1"> <img src="icons/help/RaiseTicket.svg" alt=""> </div>
+                    <div class="grid2">
+                      <h4>Raise the Ticket</h4>
+                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    </div>
+                  </div>
+                </button> </h2>
+              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                <form action="">
+                  <div class="col-md-12 mt-4 pt-2"> <input type="text" placeholder="Your Question about ?"> </div>
+                  <div class="col-md-12"> <select name="" id="">
+                      <option value="" selected disabled>Category</option>
+                      <option value="">Option 1</option>
+                      <option value="">Option 2</option>
+                      <option value="">Option 3</option>
+                      <option value="">Option 4</option>
+                    </select> </div>
+                  <div class="col-md-12"> <input type="text" placeholder="Subject"> </div>
+                  <div class="col-md-12"> <input type="textarea" name="" placeholder="Details"> </div>
+                  <div class="d-flex justify-content-between bottom"> <button class="btn upload">Upload the file</button> <button class="btn send">Send</button> </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div> <!-- helpsupport div end -->
+        <nav>
+          <div class="div1">
+            <h3>
+              <div></div> <img class="d-none d-md-block" src="icons/logo.svg" alt="logo"> <img class="d-block d-md-none" src="icons/HamburgerON.svg" width="38px" alt="">
+            </h3>
+            <ul>
+              <li> <span class="tooltiptext active"><a href="dashboard.html">Dashboard</a></span> <a href="dashboard.html" class="button1"> <img src="icons/dashboard.svg" alt="Image one" width="38" class="button__img1 active"> <img src="icons/dashboardwhite.svg" alt="Image two" class="button__img1 deactive"> </a> </li>
+              <li id="show_noti"> <span class="tooltiptext">Notifications</span> <a href="#" class="button1"> <img src="icons/Notification-Blue1.svg" alt="Image one" width="38" class="button__img1"> <img src="icons/notfiwhite.svg" alt="Image two" class="button__img1"> </a> </li>
+              <li> <span class="tooltiptext"><a href="mview-request.html">Request</a></span> <a href="mview-request.html" class="button1"> <img src="icons/Request-Blue1.svg" alt="Image one" width="38" class="button__img1"> <img src="icons/request-white.svg" alt="Image two" class="button__img1"> </a> </li>
+              <li> <span class="tooltiptext"><a href="management-view-project-list.html">Project</a></span> <a href="management-view-project-list.html" class="button1"> <img src="icons/project.svg" alt="Image one" width="38" class="button__img1 "> <img src="icons/project-white.svg" alt="Image two" class="button__img1 "> </a> </li>
+              <li> <span class="tooltiptext"><a href="usertask.html">View Progress</a></span> <a href="usertask.html" class="button1"> <img src="icons/Viewprogress-Blue.svg" alt="Image one" width="38" class="button__img1"> <img src="icons/Progresslist-white.svg" alt="Image two" class="button__img1"> </a> </li>
+            </ul>
+            <ul>
+              <li> <span class="tooltiptext">Reports</span> <a href="#" class="button1"> <img src="icons/Reports.svg" alt="Image one" width="38" class="button__img1"> <img src="icons/reportwhite.svg" alt="Image two" class="button__img1"> </a> </li>
+              <li> <span class="tooltiptext"><a href="search.html">Search</a></span> <a href="search.html" class="button1"> <img src="icons/search.svg" alt="Image one" width="38" class="button__img1"> <img src="icons/searchwhite.svg" alt="Image two" class="button__img1"> </a> </li>
+              <li id="show_helpSupp"> <span class="tooltiptext">Help & Support</span> <a href="#" class="button1"> <img src="icons/help.svg" alt="Image one" width="38" class="button__img1"> <img src="icons/helpwhite.svg" alt="Image two" class="button__img1"> </a> </li>
+              <li class="tooltip1">
+                <p class="tooltiptext1"> <span class="">S</span>
+                <p class="tooltiptext tooltiptext1"> <a href="userprofile.html"><span class=""> My Profile</span></a> <br> <a href="signIn.html" class=""> <span> Log Out </span> </a> 
+                  <button class="btn">
+                    <a href="signIn.html"><img src="icons/exit_icon.svg" alt=""> Logout</a>
+                  </button> 
+                </p>
+                </p>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <div class="mobile-menuhead">
+          <div class="hamberger-menu"> <span><img src="icons/Hamburger.svg" alt=""></span> </div>
+          <div class="logo_div">
+            <h1>Emaar</h1>
+          </div>
+          <div></div>
+        </div>
+        <div class="div-dashboard">
+          <div class="row top_row">
+            <div class="col-md-6 col-6">
+              <div class="div-title">
+                <h4>Over View</h4>
+                <h1>Dashboard</h1>
+              </div>
+            </div>
+            <div class="col-md-6 col-6 justify-content-end pe-5 nopad_right">
+              <div class="w-50 searchdiv position-relative ms-auto">
+                <div class="searchhover position-relative">
+                  <div class="position-relative searchbox"> <span><img src="icons/search-1.svg" class="img-search" width="15" alt=""></span> <input type="text" class="form-control" placeholder="Search by project owner"> <span>
+                      <div class="pipe m-none"></div><img src="icons/chevdownblue.png" class="img-last m-none" alt="">
+                    </span> 
+                  </div>
+                  <div class="card">
+                    <ul class="search-list">
+                      <div class="owner">Project Owners</div>
+                      <li><a href="ownerscreen.html"><span><img src="icons/avatar1.svg" class="me-4" width="27" alt=""></span> Project Owner 01</a></li>
+                      <li><a href="ownerscreen.html"><span><img src="icons/avatar1.svg" class="me-4" width="27" alt=""></span> Project Owner 02</a></li>
+                      <li><a href="ownerscreen.html"><span><img src="icons/avatar1.svg" class="me-4" width="27" alt=""></span> Project Owner 03</a></li>
+                      <li><a href="ownerscreen.html"><span><img src="icons/avatar1.svg" class="me-4" width="27" alt=""></span> Project Owner 04</a></li>
+                      <li><a href="ownerscreen.html"><span><img src="icons/avatar1.svg" class="me-4" width="27" alt=""></span> Project Owner 05</a></li>
+                      <li><a href="ownerscreen.html"><span><img src="icons/avatar1.svg" class="me-4" width="27" alt=""></span> Project Owner 06</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="div-card pt-5 pb-5">
+            <div class="row">
+              <div class="col-xs-12 col-md-3">
+                <div class="card border-0 no_mar">
+                  <div class="card-text">
+                    <h1>50</h1>
+                    <p>Total Projects</p>
+                    <span>+10%</span>
+                  </div>
+                  <div class="img-total"> <img src="icons/total-project.svg" class="img-fluid" alt=""> </div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-md-3">
+                <div class="card border-0">
+                  <div class="card-text">
+                    <h1>15</h1>
+                    <p>Completed Projects</p>
+                    <span class="redText">-12%</span>
+                  </div>
+                  <div class="img-total"> <img src="icons/current-project.svg" class="img-fluid" alt=""> </div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-md-3">
+                <div class="card border-0">
+                  <div class="card-text">
+                    <h1>30</h1>
+                    <p>Pending Projects</p>
+                    <span class="redText">-16%</span>
+                  </div>
+                  <div class="img-total"> <img src="icons/completed-project.svg" class="img-fluid" alt=""> </div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-md-3">
+                <div class="card border-0">
+                  <div class="card-text">
+                    <h1>5</h1>
+                    <p>Approved Projects</p>
+                    <span>+5%</span>
+                  </div>
+                  <div class="img-total"> <img src="icons/aproval.svg" class="img-fluid" alt=""> </div>
+                </div>
+              </div>
+              <style> </style>
+            </div>
+            <div class="rpr">
+              <div class="row pt-5">
+                <div class="col-md-5">
+                  <div class="card1 pb-0 ps-0 border-0">
+                    <h3 class="ps-5">Projects Overview</h3>
+                    <div class="chart doughnut">
+                      <div class="canvas-container position-relative"> <canvas id="myCanvas"></canvas>
+                        <div class="text-inside position-absolute">
+                          <h6 class="fs-2 text-center">Projects <br> Status</h6>
+                        </div> <!-- <h3>vbbh</h3> -->
+                      </div>
+                      <ul>
+                        <li><data value="0.80" data-color="#FF5454">Planned Projects</data> <span>10%</span></li>
+                        <li><data value="0.65" data-color="#1FC875" data-color="#F6BE75">Completed Projects</data> <span>60%</span></li>
+                        <li><data value="0.55" data-color="#2D62ED">Projects on Task</data> <span>35%</span></li>
+                        <li><data value="0.45" data-color="#F6BE75">Projects at Risk</data> <span>5%</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-7 budgetSection">
+                  <div class="card1 border-0">
+                    <div class="d-flex nomob_flex justify-content-between">
+                      <h3>Budget Insight</h3>
+                      <div class="d-flex budget-insight1">
+                        <div class="text-center me-3">
+                          <p class="fs-5 fw-bolder mt-0">$104,43,00 </p>
+                          <h6>Total</h6>
+                        </div>
+                        <div class="text-center border2 me-3">
+                          <p class="fs-5 fw-bolder mt-0">$104,43,00 </p>
+                          <h6>Total</h6>
+                        </div>
+                        <div class="text-center border3">
+                          <p class="fs-5 fw-bolder mt-0">$104,43,00 </p>
+                          <h6>Total</h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="budget-insight"> <span><i class="dot"></i> Planned Budget</span> <span class="ml-5"><i class="dot dot2"></i> Actual Budget</span> <span class="ml-5"><i class="dot dot3"></i> Total Spent Amount</span> </div> <!-- bar chart -->
+                    <div id="bar-chart">
+                      <div class="graph">
+                        <ul class="x-axis">
+                          <li><span>Major work permit</span></li>
+                          <li><span>RDT - Fitout Process</span></li>
+                          <li><span>Insurance</span></li>
+                          <li><span>Trade License</span></li>
+                          <li><span>Event proposal</span></li>
+                          <li><span>Raise Ticket</span></li>
+                        </ul>
+                        <ul class="y-axis">
+                          <li><span>$100</span></li>
+                          <li><span>$80</span></li>
+                          <li><span>$60</span></li>
+                          <li><span>$40</span></li>
+                          <li><span>$20</span></li>
+                          <li><span>$0</span></li>
+                        </ul>
+                        <div class="bars">
+                          <div class="bar-group">
+                            <div class="bar bar-1 stat-1" style="height: 51%;"> <span>4080</span> </div>
+                            <div class="bar bar-2 stat-2" style="height: 100%;"> <span>5680</span> </div>
+                            <div class="bar bar-3 stat-3" style="height: 13%;"> <span>1040</span> </div>
+                            <div class="bartooltip">
+                              <p>Project Name 01</p>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc1"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Total Spent <br> AED 1800</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc2"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p>Actual Budget <br> AED 900</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc3"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Planned Budget <br> AED 1700</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="bar-group">
+                            <div class="bar bar-1 stat-1" style="height: 51%;"> <span>4080</span> </div>
+                            <div class="bar bar-2 stat-2" style="height: 100%;"> <span>5680</span> </div>
+                            <div class="bar bar-3 stat-3" style="height: 13%;"> <span>1040</span> </div>
+                            <div class="bartooltip">
+                              <p>Project Name 01</p>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc1"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Total Spent <br> AED 1800</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc2"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p>Actual Budget <br> AED 900</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc3"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Planned Budget <br> AED 1700</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="bar-group">
+                            <div class="bar bar-1 stat-1" style="height: 51%;"> <span>4080</span> </div>
+                            <div class="bar bar-2 stat-2" style="height: 100%;"> <span>5680</span> </div>
+                            <div class="bar bar-3 stat-3" style="height: 13%;"> <span>1040</span> </div>
+                            <div class="bartooltip">
+                              <p>Project Name 01</p>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc1"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Total Spent <br> AED 1800</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc2"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p>Actual Budget <br> AED 900</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc3"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Planned Budget <br> AED 1700</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="bar-group">
+                            <div class="bar bar-1 stat-1" style="height: 51%;"> <span>4080</span> </div>
+                            <div class="bar bar-2 stat-2" style="height: 100%;"> <span>5680</span> </div>
+                            <div class="bar bar-3 stat-3" style="height: 13%;"> <span>1040</span> </div>
+                            <div class="bartooltip">
+                              <p>Project Name 01</p>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc1"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Total Spent <br> AED 1800</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc2"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p>Actual Budget <br> AED 900</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc3"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Planned Budget <br> AED 1700</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="bar-group">
+                            <div class="bar bar-1 stat-1" style="height: 51%;"> <span>4080</span> </div>
+                            <div class="bar bar-2 stat-2" style="height: 100%;"> <span>5680</span> </div>
+                            <div class="bar bar-3 stat-3" style="height: 13%;"> <span>1040</span> </div>
+                            <div class="bartooltip">
+                              <p>Project Name 01</p>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc1"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Total Spent <br> AED 1800</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc2"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p>Actual Budget <br> AED 900</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc3"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Planned Budget <br> AED 1700</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="bar-group">
+                            <div class="bar bar-4 stat-1" style="height: 76%;"> <span>6080</span> </div>
+                            <div class="bar bar-5 stat-2" style="height: 86%;"> <span>6880</span> </div>
+                            <div class="bar bar-6 stat-3" style="height: 22%;"> <span>1760</span> </div>
+                            <div class="bartooltip">
+                              <p>Project Name 01</p>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc1"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Total Spent <br> AED 1800</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc2"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p>Actual Budget <br> AED 900</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc3"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Planned Budget <br> AED 1700</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="bar-group">
+                            <div class="bar bar-7 stat-1" style="height: 78%;"> <span>6240</span> </div>
+                            <div class="bar bar-8 stat-2" style="height: 72%;"> <span>5760</span> </div>
+                            <div class="bar bar-9 stat-3" style="height: 36%;"> <span>2880</span> </div>
+                            <div class="bartooltip">
+                              <p>Project Name 01</p>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc1"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Total Spent <br> AED 1800</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc2"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p>Actual Budget <br> AED 900</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc3"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Planned Budget <br> AED 1700</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="bar-group">
+                            <div class="bar bar-10 stat-1" style="height: 44%;"> <span>3520</span> </div>
+                            <div class="bar bar-11 stat-2" style="height: 64%;"> <span>5120</span> </div>
+                            <div class="bar bar-12 stat-3" style="height: 59%"> <span>4720</span> </div>
+                            <div class="bartooltip">
+                              <p>Project Name 01</p>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc1"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Total Spent <br> AED 1800</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc2"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p>Actual Budget <br> AED 900</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc3"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Planned Budget <br> AED 1700</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="bar-group">
+                            <div class="bar bar-13 stat-1" style="height: 28%;"> <span>2240</span> </div>
+                            <div class="bar bar-14 stat-2" style="height: 33%;"> <span>2640</span> </div>
+                            <div class="bar bar-15 stat-3" style="height: 94%;"> <span>7520</span> </div>
+                            <div class="bartooltip">
+                              <p>Project Name 01</p>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc1"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Total Spent <br> AED 1800</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc2"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p>Actual Budget <br> AED 900</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc3"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Planned Budget <br> AED 1700</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="bar-group">
+                            <div class="bar bar-13 stat-1" style="height: 28%;"> <span>2240</span> </div>
+                            <div class="bar bar-14 stat-2" style="height: 33%;"> <span>2640</span> </div>
+                            <div class="bar bar-15 stat-3" style="height: 94%;"> <span>7520</span> </div>
+                            <div class="bartooltip">
+                              <p>Project Name 01</p>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc1"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Total Spent <br> AED 1800</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc2"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p>Actual Budget <br> AED 900</p>
+                                </div>
+                              </div>
+                              <div class="grid">
+                                <div class="grid1">
+                                  <span class="bc3"></span>
+                                </div>
+                                <div class="grid2">
+                                  <p> Planned Budget <br> AED 1700</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="bar-more"> <a href="#" class="text-decoration-none text-end text-dark">
+                                <p class="fs-4">More +</p>
+                              </a> </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div> <!-- bar chart end -->
+                  </div>
+                </div>
+              </div>
+              <div class="row pt-5">
+                <div class="col-md-4">
+                  <div class="card1 recent-task border-0">
+                    <h3>Recent Project</h3>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Product Name</th>
+                            <th>Date</th>
+                            <th>Members</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Project 01</td>
+                            <td>22/11/2021</td>
+                            <td><img src="icons/avatar1.svg" width="17" alt=""> <img src="icons/aprrover1.svg" width="17" alt=""> <span class="dot1">
+                                <p>+2</p>
+                              </span> </td>
+                            <td>
+                              <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%"> </div>
+                              </div> <a>50%</a>
+                              <div class="statusTooltip">
+                                <div class="ontrack">
+                                  <p>On Track</p>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Project 02</td>
+                            <td>22/11/2021</td>
+                            <td><img src="icons/avatar1.svg" width="17" alt=""> <img src="icons/aprrover1.svg" width="17" alt=""> <span class="dot1">
+                                <p>+2</p>
+                              </span> </td>
+                            <td>
+                              <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%">
+                                  <!-- 70% -->
+                                </div>
+                              </div> <a>70%</a>
+                              <div class="statusTooltip">
+                                <div class="atrisk">
+                                  <p>At Risk</p>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Project 03</td>
+                            <td>22/11/2021</td>
+                            <td><img src="icons/avatar1.svg" width="17" alt=""> <img src="icons/aprrover1.svg" width="17" alt=""> <span class="dot1">
+                                <p>+2</p>
+                              </span> </td>
+                            <td>
+                              <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width:20%"> </div>
+                              </div> <a>20%</a>
+                              <div class="statusTooltip">
+                                <div class="ontrack">
+                                  <p>On Track</p>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Project 04</td>
+                            <td>22/11/2021</td>
+                            <td><img src="icons/avatar1.svg" width="17" alt=""> <img src="icons/aprrover1.svg" width="17" alt=""> <span class="dot1">
+                                <p>+2</p>
+                              </span> </td>
+                            <td>
+                              <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width:20%"> </div>
+                              </div> <a>20%</a>
+                              <div class="statusTooltip">
+                                <div class="atrisk">
+                                  <p>At Risk</p>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Project 05</td>
+                            <td>22/11/2021</td>
+                            <td><img src="icons/avatar1.svg" width="17" alt=""> <img src="icons/aprrover1.svg" width="17" alt=""> <span class="dot1">
+                                <p>+2</p>
+                              </span> </td>
+                            <td>
+                              <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width:20%"> </div>
+                              </div> <a>20%</a>
+                              <div class="statusTooltip">
+                                <div class="approved">
+                                  <p>Approved</p>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Project 06</td>
+                            <td>22/11/2021</td>
+                            <td><img src="icons/avatar1.svg" width="17" alt=""> <img src="icons/aprrover1.svg" width="17" alt=""> <span class="dot1">
+                                <p>+2</p>
+                              </span> </td>
+                            <td>
+                              <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width:20%"> </div>
+                              </div> <a>20%</a>
+                              <div class="statusTooltip">
+                                <div class="planned">
+                                  <p>Planned</p>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Project 07</td>
+                            <td>22/11/2021</td>
+                            <td><img src="icons/avatar1.svg" width="17" alt=""> <img src="icons/aprrover1.svg" width="17" alt=""> <span class="dot1">
+                                <p>+2</p>
+                              </span> </td>
+                            <td>
+                              <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width:20%"> </div>
+                              </div> <a>20%</a>
+                              <div class="statusTooltip">
+                                <div class="onholdstatus">
+                                  <p>On Hold</p>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Project 08</td>
+                            <td>22/11/2021</td>
+                            <td><img src="icons/avatar1.svg" width="17" alt=""> <img src="icons/aprrover1.svg" width="17" alt=""> <span class="dot1">
+                                <p>+2</p>
+                              </span> </td>
+                            <td>
+                              <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width:20%"> </div>
+                              </div> <a>20%</a>
+                              <div class="statusTooltip">
+                                <div class="ontrack">
+                                  <p>On Track</p>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Project 08</td>
+                            <td>22/11/2021</td>
+                            <td><img src="icons/avatar1.svg" width="17" alt=""> <img src="icons/aprrover1.svg" width="17" alt=""> <span class="dot1">
+                                <p>+2</p>
+                              </span> </td>
+                            <td>
+                              <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width:20%"> </div>
+                              </div> <a>20%</a>
+                              <div class="statusTooltip">
+                                <div class="offtrack">
+                                  <p>Off Track</p>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card1 pending-task border-0">
+                    <h3>Pending Approvals <span>9</span></h3>
+                    <div class="table-responsive">
+                      <table class="table mb-5">
+                        <thead>
+                          <tr>
+                            <!-- <th>Task Name</th> -->
+                            <th>Project Name</th>
+                            <th>Status</th>
+                            <th>Submitted on</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Project 01 <img src="icons/right_aero.svg" class="mb-2 ms-1" alt=""></td>
+                            <td>
+                              <div class=" me-5">In Review</div>
+                            </td>
+                            <td class="ms-5"> 22/11/2021 </td>
+                          </tr>
+                          <tr>
+                            <td>Project 01 <img src="icons/right_aero.svg" class="mb-1 ms-1" alt=""><span class="fs-6 text-primary"> New</span></td>
+                            <td>
+                              <div class="">In Review</div>
+                            </td>
+                            <td>22/11/2021</td>
+                          </tr>
+                          <tr>
+                            <td>Project 01 <img src="icons/right_aero.svg" class="mb-1 ms-1" alt=""><span class="fs-6 text-primary"> Deligate</span></td>
+                            <td>
+                              <div class="">In Review</div>
+                            </td>
+                            <td>22/11/2021</td>
+                          </tr>
+                          <tr>
+                            <td>Project 01 <img src="icons/right_aero.svg" class="mb-1 ms-1" alt=""></td>
+                            <td>
+                              <div class=" ">In Review</div>
+                            </td>
+                            <td>22/11/2021</td>
+                          </tr>
+                          <tr>
+                            <td>Project 01 <img src="icons/right_aero.svg" class="mb-1 ms-1" alt=""></td>
+                            <td>
+                              <div class=" ">In Review</div>
+                            </td>
+                            <td>22/11/2021</td>
+                          </tr>
+                          <tr>
+                            <td>Project 01 <img src="icons/right_aero.svg" class="mb-1 ms-1" alt=""></td>
+                            <td>
+                              <div class="">In Review</div>
+                            </td>
+                            <td>22/11/2021</td>
+                          </tr>
+                          <tr>
+                            <td>Project 01 <img src="icons/right_aero.svg" class="mb-1 ms-1" alt=""></td>
+                            <td>
+                              <div class="">In Review</div>
+                            </td>
+                            <td>22/11/2021</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 milestone">
+                  <div class="card1 milestone1 pb-0 ps-0 border-0">
+                    <h3>Milestone</h3>
+                    <div class="chart doughnut">
+                      <ul>
+                        <li><data value="0.80" data-color="#2D62ED">5 In progress</data></li>
+                        <li><data value="0.65" data-color="#E2445B" data-color="#F6BE75">3 Completed</data></li>
+                        <li><data value="0.40" data-color="#1CA9ED">3 At Risk</data></li>
+                        <li><data value="" data-color="#000000">11 Total Milestone</data></li>
+                      </ul>
+                      <div class="canvas-container position-relative"> <canvas class="canvas2" id="myCanvas2"></canvas>
+                        <div class="text-inside2 position-absolute">
+                          <h6 class="fs-6 text-center">11 <br> Total Milestone</h6>
+                        </div> <!-- <h3>vbbh</h3> -->
+                      </div>
+                    </div>
+                    <div class="text-end pb-4"> <a href="#" class="text-decoration-none text-dark">
+                        <p class="fs-4">See more +</p>
+                      </a> </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--row closed-->
+    </div>
+    <!--container closed-->
+  </section>
+  <!--section closed-->
+  <!-- custom js -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js'></script> <!-- chartjs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
+  <script src="js/script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"> </script>
+  <script src="js/menuscript.js"></script> <!-- kanbanjs -->
+  <script src="js/dropdown.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+  <script src="js/guage-script.js"></script>
+  <script src="js/dashboard.js"></script>
+
+</body>
+</html>
