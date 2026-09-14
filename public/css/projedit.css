@@ -1,0 +1,699 @@
+.mysticky2 span{
+    cursor: pointer;
+}
+
+
+.manage_view .proj_edit
+{
+position: fixed;
+right: 0;
+top: 0;
+height: 100%;
+overflow-y: auto;
+width: 66vw;
+z-index: 50;
+background: #fff;
+padding: 25px;
+transform: translateX(100%);
+animation: slideRight 0.5s ease-in-out;
+box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.manage_view .proj_edit::-webkit-scrollbar-track
+{
+border: 1px solid #fff;
+padding: 2px 0;
+background-color: #fff;
+}
+.manage_view .proj_edit::-webkit-scrollbar
+{
+width: 10px;
+}
+.manage_view .proj_edit::-webkit-scrollbar-thumb
+{
+border-radius: 15px;
+box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+background-color: #e8e9ed;
+border: 1px solid #fff;
+}
+@keyframes slideRight
+{
+    0%
+    {
+        transform: translateX(0%);
+    }
+    100%
+    {
+        transform: translateX(100%);
+    }
+}
+.manage_view .proj_edit.active
+{
+    transform: translateX(0%);
+    animation: slideLeft 0.5s ease-in-out;
+}
+@keyframes slideLeft
+{
+    0%
+    {
+        transform: translateX(100%);
+    }
+    100%
+    {
+        transform: translateX(0%);
+    }
+}
+.manage_view .proj_overlay
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  z-index: 30;
+  display: none;
+}
+.manage_view .proj_overlay.active
+{
+  display: block;
+}
+.manage_view .proj_edit .col-md-3 span
+{
+width: 31px;
+height: 31px;
+border-radius: 30px;
+border: 1px solid gray;
+text-align: center;
+line-height: 39px;
+cursor: pointer;
+display: block;
+}
+.manage_view .proj_edit .col-md-3 span i
+{
+font-size: 20px;
+color: gray;
+font-weight: 200;
+}
+.manage_view .proj_edit .align-self-end div.user_img
+{
+width: 29px;
+height: 29px;
+border-radius: 30px;
+margin-right: 1.3rem;
+}
+.manage_view .proj_edit .align-self-end div img
+{
+width: 100%;
+height: 100%;
+border-radius: 30px;
+object-fit: cover;
+}
+.manage_view .proj_edit .align-self-end span:nth-child(4)
+{
+border: 2px dotted #2D62ED;
+display: flex;
+justify-content: center;
+align-items: center;
+border-radius: 30px;
+width: 29px;
+height: 29px;
+margin-right: 4rem;
+}
+.manage_view .proj_edit .align-self-end span:nth-child(4) i
+{
+color: #2D62ED;
+font-size: 15px;
+font-weight: 500;
+}
+.manage_view .proj_edit .align-self-end span:nth-child(5)
+{
+width: 3px;
+height: 3px;
+background-color: gray;
+color: gray;
+position: relative;
+}
+.manage_view .proj_edit .align-self-end span:nth-child(5)::after,
+.manage_view .proj_edit .align-self-end span:nth-child(5)::before
+{
+content: '';
+position: absolute;
+background-color: inherit;
+width: inherit;
+height: inherit;
+}
+.manage_view .proj_edit .align-self-end span:nth-child(5)::after
+{
+left: -4px;
+top: 0;
+}
+.manage_view .proj_edit .align-self-end span:nth-child(5)::before
+{
+right: -4px;
+top: 0;
+}
+.manage_view .proj_edit .proj_content {
+    padding-left: 45px;
+    margin-top: 10px;
+}
+.manage_view .proj_edit .proj_content >h1
+{
+    margin-bottom: 2rem;
+    font-size: 2.4rem;
+}
+.manage_view .proj_edit .proj_content span i
+{
+    font-size: 15px;
+    color: grey;
+}
+.note-toolbar {
+    background-color: #fff;
+}
+
+.note-editor.note-airframe .note-statusbar, .note-editor.note-frame .note-statusbar {
+    background-color:#fff; 
+    border-top: 0px solid rgba(0,0,0,0.1);
+}
+.note-editor.note-airframe .note-statusbar .note-resizebar, .note-editor.note-frame .note-statusbar .note-resizebar {
+    height: 4px;
+}
+.note-editor.note-airframe .note-statusbar .note-resizebar .note-icon-bar, .note-editor.note-frame .note-statusbar .note-resizebar .note-icon-bar {
+    width: 0px; 
+    margin: 0px auto;
+    border-top: 1px solid rgba(0,0,0,0.08); 
+}
+/* .note-editor.note-airframe .note-editing-area .note-editable, .note-editor.note-frame .note-editing-area .note-editable {
+    height: 245px !important;
+} */
+.note-editor .note-toolbar, .note-popover .popover-content {
+    padding: 15px;
+}
+.note-frame {
+    color: #212529;
+    font-family: var(--heebo);
+    border-radius: 0px;
+}
+.note-btn.active, .note-btn.focus, .note-btn:active, .note-btn:focus, .note-btn:hover {
+    color: #585858;
+    text-decoration: none;
+    border: 1px solid #dae0e5;
+    background-color: #ebebeb;
+    outline: 0;
+    border-radius: 1px;
+}
+.note-btn {
+    color: #424242;
+    background-color: #fff;
+    border: 1px solid #fff;
+    padding: 5px 18px 5px 11px;
+    font-size: 13px;
+}
+.note-editor.note-airframe .note-editing-area, .note-editor.note-frame .note-editing-area {
+    padding-left: 16px;
+    font-size: 14px;
+}
+.note-editor.note-airframe .note-editing-area .note-editable, .note-editor.note-frame .note-editing-area .note-editable {
+    padding: 10px 12px;
+    overflow: visible;
+}
+.note-btn-group.note-style .dropdown-toggle span::before,
+.note-btn-group.note-style  .dropdown-toggle::after,
+.note-btn-group.note-para .dropdown-toggle span::before,
+.note-btn-group.note-para  .dropdown-toggle::after,
+.note-btn-group.note-table  .dropdown-toggle span::before,
+.note-btn-group.note-table .dropdown-toggle::after,
+.note-btn-group.note-color .dropdown-toggle::after
+{
+    content: none;
+}
+
+.note-btn>span.note-icon-caret:nth-child(2) {
+    padding-left: 0px;
+    margin-right: 0px;
+}
+.note-editor .note-toolbar>.note-btn-group.note-insert button:nth-child(2),
+.note-editor .note-toolbar>.note-btn-group.note-insert button:nth-child(3)
+{
+    display: none;
+}
+
+.note-icon-bold:before,
+.note-icon-underline:before,
+.note-icon-eraser:before,
+.note-icon-font:before {
+    content: "B";
+    font-family: var(--heebo);
+    font-size: 14px;
+    font-weight: 500;
+}
+.note-icon-underline:before
+{
+    content: 'U';
+    text-decoration: underline;
+}
+.note-icon-eraser:before
+{
+    content: '/';
+}
+.note-icon-font:before {
+    content: "A";
+}
+.note-icon-arrows-alt:before {
+    content: "";
+    width: 19px;
+    height: 2px;
+    background-color: #212529;
+}
+.manage_view .proj_edit .proj_content .attach_div
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    border-left: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+    border-right: 1px solid #dbdbdb;
+}
+.note-editor.note-airframe, .note-editor.note-frame {
+    border: 1px solid #dbdbdb;
+}
+.note-color-all > button > i
+{
+    background-color: #fff !important;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1,
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div
+{
+    display: flex;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div
+{
+    margin-right: 3.2rem;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div i
+{
+    font-size: 17px;
+    color: #2D62ED;
+    margin-right: 0.3rem;margin-top: 1px;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div p
+{
+    font-size: 14px;
+    color: #2D62ED;
+    cursor: pointer;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2)
+{
+    position: relative;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) .giflist
+{
+    position: absolute;
+    top: 27px;
+    left: -170%;
+    width: 250px;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    padding: 15px;
+    display: none;
+    z-index: 75;
+    background-color: #fff;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) .giflist.active
+{
+    display: block;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) .giflist input[type="text"]
+{
+    border: 1px solid #dbdbdb;
+    background-color: #fff;
+    padding: 5px 10px;
+    height: 38px;
+    width: 100%;
+    font-size: 13px;
+    outline: none;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) .giflist .gifin {
+    display: grid;
+    grid-template-columns: 50px 50px 50px 50px;
+    grid-gap: 0px;
+    grid-auto-rows: 50px;
+    margin-top: 1rem;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) .giflist .gifin figure
+{
+    cursor: pointer;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) .giflist .gifin img
+{
+    width: 50px;
+    height: 50px;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) .giflist .gifin figcaption
+{
+    font-size: 12px;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile2 button
+{
+    border-radius: 4px;
+    background-color: #2D62ED;
+    color: #fff;
+    font-size: 13px;
+    width: 118px;
+    height: 42px;
+    letter-spacing: 0.4px;
+}
+.manage_view .proj_edit .proj_content .no_update p
+{
+    font-size: 14px;
+    color: #3d3d3d;
+}
+.manage_view .proj_edit .proj_content .no_update p i
+{
+    vertical-align: top;
+    font-size: 21px;
+    margin-right: 3px;
+}
+.manage_view .proj_edit .proj_content .tab-btn .btn
+{
+    padding: 0 32px;
+    height: 50px;
+    font-size: 16px;
+    font-weight: 400;
+    margin-right: 2.3rem;    
+}
+.manage_view .proj_edit .proj_content .tab-btn .btn.active
+{
+    border-bottom: 2px solid #2D62ED;
+    color: #2D62ED;
+    font-weight: 500;
+    position: relative;
+}
+.manage_view .proj_edit .proj_content .tab-btn .btn.active::before
+{
+    position: absolute;
+    content: '...';
+    top: 9px;
+    right: 8%;
+    color: #2D62ED;
+}
+.manage_view .proj_edit .proj_content .tabproj_con
+{
+    display: none;
+}
+.manage_view .proj_edit .proj_content .tabproj_con.active
+{
+    display: block;
+}
+.manage_view .proj_edit .update .update_con
+{
+   border: 1px solid #dbdbdb;
+   margin-top: 3.4rem;
+}
+.manage_view .proj_edit .update .update_con >.has_pad
+{
+    padding: 25px 25px 10px;
+}
+.manage_view .proj_edit .update .update_con .no_margin
+{
+    margin: 0;
+}
+.manage_view .proj_edit .update .update_con  .useractive_div
+{
+    display: flex;
+}
+.manage_view .proj_edit .update .update_con  .useractive_div div
+{
+width: 22px;
+height: 22px;
+border-radius: 30px;
+margin-right: 8px;
+}
+.manage_view .proj_edit .update .update_con  .useractive_div img
+{
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+}
+.manage_view .proj_edit .update .update_con  .useractive_div p
+{
+    margin-top: 3px;
+    margin-right: 6px;
+    font-size: 15px;
+    font-weight: 500;
+}
+.manage_view .proj_edit .update .update_con  .useractive_div span
+{
+    background: #22E636;
+    width: 12px;
+    height: 12px;
+    border-radius: 30px;
+    margin-top: 3px;
+}
+.manage_view .proj_edit .update .update_con .seen_div p
+{
+    font-size: 13px;
+    font-weight: 500;
+}
+.manage_view .proj_edit .update .update_con .row .noti_div p
+{
+    margin-right: 2.2rem;
+    font-size: 14px;
+    font-weight: 500;
+}
+.manage_view .proj_edit .update .update_con .row .noti_div i
+{
+    color: #707070;
+    margin-top: -2px;
+}
+.manage_view .proj_edit .update .update_con .text_div
+{
+    font-size: 14px;
+    color: #707070;
+    word-break: break-word;
+}
+.manage_view .proj_edit .update .update_con .like_div
+{
+    border-top: 1px solid #dbdbdb;
+    border-right: 1px solid #dbdbdb;
+    height: 64px;
+}
+.manage_view .proj_edit .update .update_con .like_div img,
+.manage_view .proj_edit .update .update_con .replay_div img
+{
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+}
+.manage_view .proj_edit .update .update_con .replay_div img
+{
+    width: 21px;
+    height: 21px;
+}
+.manage_view .proj_edit .update .update_con .like_div p,
+.manage_view .proj_edit .update .update_con .replay_div p
+{
+    margin-top: 2px;
+    font-size: 14px;
+}
+.manage_view .proj_edit .update .update_con .replay_div
+{
+    border-top: 1px solid #dbdbdb;
+    height: 64px;
+}
+
+
+/* responsive css */
+
+@media(max-width:849px)
+{
+    .manage_view .proj_overlay {
+        z-index: 60;
+    }
+    .manage_view .proj_edit {
+        width: 100vw;
+        transform: translateX(100%) !important;
+        animation: none;
+        animation: fadeOut 0.3s ease-in-out;
+        top: 51px;
+        z-index: 65;
+    }
+    @keyframes fadeOut
+    {
+        0%
+        {
+            opacity: 1;
+        }
+        100%
+        {
+            opacity: 0;
+        }
+    }
+    .manage_view .proj_edit.active
+    {
+        transform: translateX(0%) !important;
+        animation: none;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn
+    {
+        0%
+        {
+            opacity: 0;
+        }
+        100%
+        {
+            opacity: 1;
+        }
+    }
+    .manage_view .proj_edit .col-md-3 span {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2.1rem;
+        margin-left: -7px;
+    }
+    .manage_view .proj_edit .col-md-3 span i {
+        font-size: 16px;
+        font-weight: 200;
+    }
+    .manage_view .proj_edit .align-self-end div.user_img {
+        width: 25px;
+        height: 25px;
+        margin-right: 0.5rem;
+    }
+    .manage_view .proj_edit .align-self-end span:nth-child(3) {
+        width: 25px;
+        height: 25px;
+        margin-right: 2.1rem;
+    }
+    .manage_view .proj_edit .proj_content {
+        padding-left: 0px;
+        margin-top: 10px;
+    }
+    .manage_view .proj_edit .proj_content >h1 {
+        margin-bottom: 2.3rem;
+        font-size: 1.8rem;
+        margin-top: -2.8rem;
+        margin-left: 1px;
+    }
+    .manage_view .proj_edit .proj_content span i {
+        font-size: 13px;
+    }
+    
+    .manage_view .proj_edit .proj_content .tab-btn .btn {
+        padding: 0 16px;
+        height: 43px;
+        font-size: 15px;
+        margin-right: 1.3rem;
+    }
+    .note-editor .note-toolbar, .note-popover .popover-content {
+        padding: 0px 0px 0 9px;
+    }
+    .note-btn {
+        color: #424242;
+        background-color: #fff;
+        border: 1px solid #fff;
+        padding: 5px 12px 5px 8px;
+        font-size: 11px;
+    }
+    .note-editor.note-airframe .note-editing-area, .note-editor.note-frame .note-editing-area {
+        padding-left: 6px;
+        font-size: 13px;
+    }
+    .manage_view .proj_edit .proj_content .attach_div {
+        padding: 12px;
+    }
+    .manage_view .proj_edit .proj_content .attach_div .divfile1
+    {
+        flex: 0 0 65%;
+        max-width: 65%;
+        flex-wrap: wrap;
+    }
+    .manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div {
+        margin-right: 1.6rem;
+    }
+    .manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(1),
+    .manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) {
+        margin-bottom: 0.85rem;
+    }
+    .manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div i {
+        font-size: 15px;
+        margin-right: 0.3rem;
+    }
+    .manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div p {
+        font-size: 13px;
+    }
+    .manage_view .proj_edit .proj_content .attach_div .divfile2
+    {
+        flex: 0 0 35%;
+        max-width: 35%;
+    }
+    .manage_view .proj_edit .proj_content .attach_div .divfile2 button {
+        font-size: 13px;
+        width: 100px;
+        height: 35px;
+    }
+    .manage_view .proj_edit .proj_content .no_update.px-5
+    {
+        padding-right: 0rem !important;
+    } 
+    .manage_view .proj_edit .proj_content .no_update p i {
+        font-size: 19px;
+        margin-right: 4px;
+    }
+    .manage_view .proj_edit .proj_content .no_update p {
+        font-size: 13px;
+        color: #2d62ed;
+    }
+    .manage_view .proj_edit .proj_content .no_updateyet p
+    {
+        font-size: 15px;
+    }
+    .note-icon-arrows-alt:before {
+        width: 16px;
+        background-color: #424242;
+    }
+    .manage_view .proj_edit .update .update_con .row .noti_div p {
+        margin-right: 1.2rem;
+        font-size: 13px;
+    }
+    .manage_view .proj_edit .update .update_con .text_div {
+        font-size: 13px;
+    }
+    .manage_view .proj_edit .update .update_con .seen_div p {
+        font-size: 12px;
+    }
+    .manage_view .proj_edit .update .update_con .like_div p, .manage_view .proj_edit .update .update_con .replay_div p {
+        font-size: 13px;
+    }
+    .manage_view .proj_edit .update .update_con .like_div img{
+        width: 16px;
+        height: 16px;
+    }
+    .manage_view .proj_edit .update .update_con .replay_div img {
+        width: 19px;
+        height: 19px;
+    }
+    .manage_view .proj_edit .update .update_con .like_div,
+    .manage_view .proj_edit .update .update_con .replay_div
+    {
+        height: 46px;
+    }
+    .manage_view .proj_edit .update .update_con >.has_pad {
+        padding: 18px 18px 10px;
+    }
+    .manage_view .proj_edit .align-self-end span:nth-child(4)
+    {
+        width: 25px;
+        height: 25px;
+    }
+    .manage_view .proj_edit .align-self-end span:nth-child(4) i
+    {
+        font-size: 14px;
+    }
+}

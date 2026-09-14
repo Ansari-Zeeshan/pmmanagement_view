@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="13.667" height="15" viewBox="0 0 13.667 15">
+  <g id="lettermail" transform="translate(6633 -1386)">
+    <g id="Group_45839" data-name="Group 45839">
+      <text id="A" transform="translate(-6633 1398)" font-size="12" font-family="Lato-Regular, Lato"><tspan x="0" y="0">A</tspan></text>
+      <g id="Group_45838" data-name="Group 45838" transform="translate(0 -0.75)">
+        <path id="Path_50857" data-name="Path 50857" d="M0,0V8.469" transform="translate(-6621.062 1390.196)" fill="none" stroke="#000" stroke-width="0.5"/>
+        <path id="Icon_ionic-ios-arrow-down" data-name="Icon ionic-ios-arrow-down" d="M7.96,13.115l1.34-1.77a.212.212,0,0,1,.358,0,.418.418,0,0,1,0,.474L8.14,13.824a.211.211,0,0,1-.349.01L6.261,11.82a.416.416,0,0,1,0-.474.212.212,0,0,1,.358,0Z" transform="translate(-6629.065 1385.412)"/>
+        <path id="Icon_ionic-ios-arrow-down-2" data-name="Icon ionic-ios-arrow-down" d="M1.773,1.868,3.113.1a.212.212,0,0,1,.358,0,.418.418,0,0,1,0,.474L1.952,2.577a.211.211,0,0,1-.349.01L.074.573A.4.4,0,0,1,0,.336.4.4,0,0,1,.074.1.212.212,0,0,1,.432.1Z" transform="translate(-6619.333 1392.424) rotate(180)"/>
+      </g>
+    </g>
+  </g>
+</svg>

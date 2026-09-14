@@ -1,0 +1,1678 @@
+/* proj edit css start */
+.proj_filter .divfilter2 .project1 .projmaincon .divcon2 span
+{
+    cursor: pointer;
+}
+.proj_filter #editText{
+    cursor: pointer;
+}
+.manage_view .proj_edit
+{
+position: fixed;
+right: 0;
+top: 0;
+height: 100%;
+overflow-y: auto;
+width: 66vw;
+z-index: 50;
+background: #fff;
+padding: 25px 60px 25px 25px;
+transform: translateX(100%);
+animation: slideprojRight 0.5s ease-in-out;
+box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.manage_view .proj_edit .tab-btn
+{
+    border-bottom: 1px solid #9999996e;
+}
+.manage_view .proj_edit::-webkit-scrollbar-track
+{
+border: 1px solid #fff;
+padding: 2px 0;
+background-color: #fff;
+}
+.manage_view .proj_edit::-webkit-scrollbar
+{
+width: 10px;
+}
+.manage_view .proj_edit::-webkit-scrollbar-thumb
+{
+border-radius: 15px;
+box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+background-color: #e8e9ed;
+border: 1px solid #fff;
+}
+@keyframes slideprojRight
+{
+    0%
+    {
+        transform: translateX(0%);
+    }
+    100%
+    {
+        transform: translateX(100%);
+    }
+}
+.manage_view .proj_edit.active
+{
+    transform: translateX(0%);
+    animation: slideprojLeft 0.5s ease-in-out;
+}
+@keyframes slideprojLeft
+{
+    0%
+    {
+        transform: translateX(100%);
+    }
+    100%
+    {
+        transform: translateX(0%);
+    }
+}
+.manage_view .proj_overlay
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  z-index: 30;
+  display: none;
+}
+.manage_view .proj_overlay.active
+{
+  display: block;
+}
+.manage_view .proj_edit .col-md-3 span
+{
+width: 31px;
+height: 31px;
+cursor: pointer;
+display: block;
+}
+.manage_view .proj_edit .col-md-3 span i
+{
+font-size: 20px;
+color: gray;
+font-weight: 200;
+}
+.manage_view .proj_edit .align-self-end div.user_img
+{
+width: 29px;
+height: 29px;
+border-radius: 30px;
+margin-right: 1rem;
+}
+.manage_view .proj_edit .align-self-end div img
+{
+width: 100%;
+height: 100%;
+border-radius: 30px;
+object-fit: cover;
+}
+.manage_view .proj_edit .align-self-end span:nth-child(4)
+{
+width: 28px;
+height: 28px;
+/* margin-right: 4rem; */
+}
+.manage_view .proj_edit .align-self-end span:nth-child(4) img
+{
+width: 100%;
+height: 100%;
+}
+.manage_view .proj_edit .align-self-end span:nth-child(5)
+{
+width: 3px;
+height: 3px;
+background-color: gray;
+color: gray;
+position: relative;
+}
+.manage_view .proj_edit .align-self-end span:nth-child(5)::after,
+.manage_view .proj_edit .align-self-end span:nth-child(5)::before
+{
+content: '';
+position: absolute;
+background-color: inherit;
+width: inherit;
+height: inherit;
+}
+.manage_view .proj_edit .align-self-end span:nth-child(5)::after
+{
+left: -4px;
+top: 0;
+}
+.manage_view .proj_edit .align-self-end span:nth-child(5)::before
+{
+right: -4px;
+top: 0;
+}
+.manage_view .proj_edit .proj_content {
+    padding-left: 42px;
+    margin-top: 10px;
+}
+.manage_view .proj_edit .proj_content .d-flex >h1,
+.manage_view .proj_add .main_add .border-bottom .d-flex >h1
+{
+    margin-bottom: 2rem;
+    font-size: 2.4rem;
+}
+.manage_view .proj_edit .proj_content .d-flex >h1[contenteditable="true"],
+.manage_view .proj_add .main_add .border-bottom .d-flex >h1[contenteditable="true"],
+.manage_view .proj_add .main_add .border-bottom .d-flex >p[contenteditable="true"]
+{
+    outline: 1px solid rgb(196, 196, 196);
+    transition: all 0.2s ease;
+}
+.manage_view .proj_edit .proj_content .d-flex span > img,
+.manage_view .proj_add .main_add .border-bottom .d-flex span > img,
+.manage_view .proj_add .main_add .border-bottom.d-flex span > img
+{
+    width: 12px;
+    height: 11px;
+    margin-left: 1.1rem;
+}
+.manage_view .proj_add .main_add .border-bottom .d-flex span > img,
+.manage_view .proj_add .main_add .border-bottom .d-flex span > img
+{
+    margin-left: 1.2rem;
+}
+.note-toolbar {
+    background-color: #fff;
+}
+
+.note-editor.note-airframe .note-statusbar, .note-editor.note-frame .note-statusbar {
+    background-color:#fff; 
+    border-top: 0px solid rgba(0,0,0,0.1);
+}
+.note-editor.note-airframe .note-statusbar .note-resizebar, .note-editor.note-frame .note-statusbar .note-resizebar {
+    height: 4px;
+}
+.note-editor.note-airframe .note-statusbar .note-resizebar .note-icon-bar, .note-editor.note-frame .note-statusbar .note-resizebar .note-icon-bar {
+    width: 0px; 
+    margin: 0px auto;
+    border-top: 1px solid rgba(0,0,0,0.08); 
+}
+/* .note-editor.note-airframe .note-editing-area .note-editable, .note-editor.note-frame .note-editing-area .note-editable {
+    height: 245px !important;
+} */
+.note-editor .note-toolbar, .note-popover .popover-content {
+    padding: 15px;
+}
+.note-frame {
+    color: #212529;
+    font-family: var(--heebo);
+    border-radius: 0px;
+}
+.note-btn.active, .note-btn.focus, .note-btn:active, .note-btn:focus, .note-btn:hover {
+    color: #585858;
+    text-decoration: none;
+    border: 1px solid #dae0e5;
+    background-color: #ebebeb;
+    outline: 0;
+    border-radius: 1px;
+}
+.note-btn {
+    color: #424242;
+    background-color: #fff;
+    border: 1px solid #fff;
+    padding: 5px 18px 5px 11px;
+    font-size: 13px;
+}
+.note-editor.note-airframe .note-editing-area, .note-editor.note-frame .note-editing-area {
+    padding-left: 16px;
+    font-size: 14px;
+}
+.note-editor.note-airframe .note-editing-area .note-editable, .note-editor.note-frame .note-editing-area .note-editable {
+    padding: 10px 12px;
+    overflow: visible;
+}
+.note-btn-group.note-style .dropdown-toggle span::before,
+.note-btn-group.note-style  .dropdown-toggle::after,
+.note-btn-group.note-para .dropdown-toggle span::before,
+.note-btn-group.note-para  .dropdown-toggle::after,
+.note-btn-group.note-table  .dropdown-toggle span::before,
+.note-btn-group.note-table .dropdown-toggle::after,
+.note-btn-group.note-color .dropdown-toggle::after
+{
+    content: none;
+}
+
+.note-btn>span.note-icon-caret:nth-child(2) {
+    padding-left: 0px;
+    margin-right: 0px;
+}
+.note-editor .note-toolbar>.note-btn-group.note-insert button:nth-child(2),
+.note-editor .note-toolbar>.note-btn-group.note-insert button:nth-child(3)
+{
+    display: none;
+}
+
+.note-icon-bold:before,
+.note-icon-underline:before,
+.note-icon-eraser:before,
+.note-icon-font:before {
+    content: "B";
+    font-family: var(--heebo);
+    font-size: 14px;
+    font-weight: 500;
+}
+.note-icon-underline:before
+{
+    content: 'U';
+    text-decoration: underline;
+}
+.note-icon-eraser:before
+{
+    content: '/';
+}
+.note-icon-font:before {
+    content: "A";
+}
+.note-icon-arrows-alt:before {
+    content: "";
+    width: 19px;
+    height: 2px;
+    background-color: #212529;
+}
+.manage_view .proj_edit .proj_content .attach_div
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    border-left: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+    border-right: 1px solid #dbdbdb;
+}
+.note-editor.note-airframe, .note-editor.note-frame {
+    border: 0px solid #dbdbdb;
+    border-left: 1px solid #dbdbdb;
+    border-right: 1px solid #dbdbdb;
+}
+.note-color-all > button > i
+{
+    background-color: #fff !important;
+}
+.note-icon-magic:before {
+    content: url(../icons/textmail.svg);
+    margin-top: -3px;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1,
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div
+{
+    display: flex;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div
+{
+    margin-right: 3.2rem;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div i
+{
+    font-size: 17px;
+    color: #2D62ED;
+    margin-right: 0.3rem;margin-top: 1px;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div p
+{
+    font-size: 14px;
+    color: #2D62ED;
+    cursor: pointer;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2)
+{
+    position: relative;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) .giflist
+{
+    position: absolute;
+    top: 27px;
+    left: -170%;
+    width: 250px;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    padding: 15px;
+    display: none;
+    z-index: 75;
+    background-color: #fff;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) .giflist.active
+{
+    display: block;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) .giflist input[type="text"]
+{
+    border: 1px solid #dbdbdb;
+    background-color: #fff;
+    padding: 5px 10px;
+    height: 38px;
+    width: 100%;
+    font-size: 13px;
+    outline: none;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) .giflist .gifin {
+    display: grid;
+    grid-template-columns: 50px 50px 50px 50px;
+    grid-gap: 0px;
+    grid-auto-rows: 50px;
+    margin-top: 1rem;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) .giflist .gifin figure
+{
+    cursor: pointer;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) .giflist .gifin img
+{
+    width: 50px;
+    height: 50px;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) .giflist .gifin figcaption
+{
+    font-size: 12px;
+}
+.manage_view .proj_edit .proj_content .attach_div .divfile2 button
+{
+    border-radius: 4px;
+    background-color: #2D62ED;
+    color: #fff;
+    font-size: 13px;
+    width: 118px;
+    height: 42px;
+    letter-spacing: 0.4px;
+}
+.manage_view .proj_edit .proj_content .no_update p
+{
+    font-size: 14px;
+    color: #3d3d3d;
+}
+.manage_view .proj_edit .proj_content .no_update p i
+{
+    vertical-align: top;
+    font-size: 21px;
+    margin-right: 3px;
+}
+.manage_view .proj_edit .proj_content .tab-btn .btn
+{
+    padding: 0 32px;
+    height: 50px;
+    font-size: 16px;
+    font-weight: 400;
+    margin-right:3.2rem;    
+}
+.manage_view .proj_edit .proj_content .tab-btn .btn.active
+{
+    border-bottom: 2px solid #2D62ED;
+    color: #2D62ED;
+    font-weight: 500;
+    position: relative;
+}
+.manage_view .proj_edit .proj_content .tab-btn .btn:nth-child(2)
+{
+    position: relative;
+}
+.manage_view .proj_edit .proj_content .tab-btn .favDiv {
+    position: absolute;
+    top: 186px;
+    left: 318px;
+    z-index: 70;
+    padding: 25px 23px;
+    background: #fff;
+    width: 200px;
+    height: auto;
+    box-shadow: 0 0 12px rgb(0, 0, 0, 0.1);
+    display: none;
+}
+.manage_view .proj_edit .proj_content .tab-btn .favDiv.active
+{
+   display: block;
+   animation: fadeUp 0.3s ease-in-out;
+}
+.manage_view .proj_edit .proj_content .tab-btn .favDiv ul
+{
+    list-style-type: none;
+}
+.manage_view .proj_edit .proj_content .tab-btn .favDiv ul li
+{
+    display: flex;
+    justify-content: flex-start;
+    font-size: 13px;
+    color: #000;   
+    margin-bottom: 1.7rem;
+}
+.manage_view .proj_edit .proj_content .tab-btn .favDiv ul li:last-child
+{
+    margin-bottom: 0rem;
+}
+.manage_view .proj_edit .proj_content .tab-btn .favDiv ul li img
+{
+    margin-right: 15px;
+    width: 12px;
+}
+
+.manage_view .proj_edit .proj_content .tab-btn .btn p
+{
+    color: #2D62ED;
+    margin-left: 6px;
+    display: inline-block;
+    width: 10px;
+    font-size: 18px;
+    visibility: hidden;
+}
+.manage_view .proj_edit .proj_content .tab-btn .btn p.active
+{
+    visibility: visible;
+}
+.manage_view .proj_edit .proj_content .tabproj_con
+{
+    display: none;
+    margin-top: 2rem;
+}
+.manage_view .proj_edit .proj_content .tabproj_con.active
+{
+    display: block;
+}
+.manage_view .proj_edit .proj_content .files .row
+{
+    align-items: flex-start;
+}
+.manage_view .proj_edit .update .update_con
+{
+   border: 1px solid #dbdbdb;
+   margin-top: 3.4rem;
+}
+.manage_view .proj_edit .update .update_con >.has_pad
+{
+    padding: 25px 25px 10px;
+}
+.manage_view .proj_edit .update .update_con .no_margin
+{
+    margin: 0;
+}
+.manage_view .proj_edit .update .update_con  .useractive_div
+{
+    display: flex;
+}
+.manage_view .proj_edit .update .update_con  .useractive_div div
+{
+width: 22px;
+height: 22px;
+border-radius: 30px;
+margin-right: 8px;
+}
+.manage_view .proj_edit .update .update_con  .useractive_div img
+{
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+}
+.manage_view .proj_edit .update .update_con  .useractive_div p
+{
+    margin-top: 3px;
+    margin-right: 6px;
+    font-size: 15px;
+    font-weight: 500;
+}
+.manage_view .proj_edit .update .update_con  .useractive_div span
+{
+    background: #22E636;
+    width: 12px;
+    height: 12px;
+    border-radius: 30px;
+    margin-top: 3px;
+}
+.manage_view .proj_edit .update .update_con .seen_div p
+{
+    font-size: 13px;
+    font-weight: 500;
+}
+.manage_view .proj_edit .update .update_con .row .noti_div p
+{
+    margin-right: 2.2rem;
+    font-size: 14px;
+    font-weight: 500;
+}
+.manage_view .proj_edit .update .update_con .row .noti_div i
+{
+    color: #707070;
+    margin-top: -2px;
+}
+.manage_view .proj_edit .update .update_con .text_div
+{
+    font-size: 14px;
+    color: #707070;
+    word-break: break-word;
+}
+.manage_view .proj_edit .update .update_con .like_div
+{
+    border-top: 1px solid #dbdbdb;
+    border-right: 1px solid #dbdbdb;
+    height: 64px;
+}
+.manage_view .proj_edit .update .update_con .like_div img,
+.manage_view .proj_edit .update .update_con .replay_div img
+{
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+}
+.manage_view .proj_edit .update .update_con .replay_div img
+{
+    width: 21px;
+    height: 21px;
+}
+.manage_view .proj_edit .update .update_con .like_div p,
+.manage_view .proj_edit .update .update_con .replay_div p
+{
+    margin-top: 2px;
+    font-size: 14px;
+}
+.manage_view .proj_edit .update .update_con .replay_div
+{
+    border-top: 1px solid #dbdbdb;
+    height: 64px;
+}
+
+.manage_view .proj_edit .align-self-end span#subcribe_pop {
+    cursor: pointer;
+}
+.proj_filter .proj_edit .subscribe
+{
+    position: relative;
+}
+.proj_filter .subscribe .subscribe_overlay
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    z-index: 60;
+    display: none;
+}
+.proj_filter .subscribe .subscribe_overlay.active
+{
+    display: block;
+}
+.proj_filter .proj_edit .subscriber_div
+{
+    content: '';
+    position: absolute;
+    top: 38px;
+    right: 0;
+    /* filter: drop-shadow(0px 1px 3px #00000029); */
+    box-shadow: 0 0 8px 0 rgb(0 0 0 / 11%);
+    background-color: #fff;
+    z-index: 70;
+    width: 410px;
+    height: auto;
+    padding: 15px 22px 25px;
+    display: none;
+}
+.proj_filter .proj_edit .subscriber_div.active
+{
+    display: block;
+    animation: 0.3s ease-in-out fadeIn;
+}
+.proj_filter .proj_edit .subscriber_div > .row span {
+    width: 40px;
+    height: 24px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.proj_filter .proj_edit .subscriber_div > .row span img {
+    width: 96%;
+    height: 96%;
+}
+.proj_filter .proj_edit .subscriber_div .subs_con
+{
+    margin: 23px 0 15px 8px;
+}
+.proj_filter .proj_edit .subscriber_div .subs_con > .d-flex img {
+    width: 9px;
+    margin-top: 0.6rem;
+    margin-right: 0.6rem;
+    height: 9px;
+}
+.proj_filter .proj_edit .subscriber_div .subs_con > .d-flex p
+{
+    font-weight: 500;
+    font-size: 15px;
+    word-spacing: 1px;
+}
+.proj_filter .proj_edit .subscriber_div .subs_con input[type="text"]
+{
+    margin: 19px 0px 26px;
+    height: 39px;
+    width: 100%;
+    padding: 0 15px;
+    font-size: 13px;
+    outline: none;
+    background: #ffffff;
+    border-radius: 3px;
+    border: 1px solid #dbdbdb;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 6%);
+    line-height: 1.5;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.proj_filter .proj_edit h5
+{
+    font-size: 15px;
+    color: #171E48;
+    word-spacing: 1px;
+}
+.proj_filter .proj_edit .col-8 > .d-flex
+{
+    width: 20px;
+    height: 20px;
+    border-radius: 30px;
+}
+.proj_filter .proj_edit .col-8 > .d-flex img
+{
+   margin-right: 7px;
+}
+.proj_filter .proj_edit .col-8 > .d-flex p
+{
+    font-size: 12px;
+    margin-top: 2px;
+}
+.proj_filter .proj_edit .col-4 > img
+{
+    width: 16px !important;
+    height: 16px !important;
+    padding-right: 0.72px;
+    cursor: pointer;
+}
+.proj_filter .proj_edit .proj_content .uploaded
+{
+    height: 70vh;
+    overflow-y: visible;
+}
+.proj_filter .proj_edit .proj_content .files .file_overlay
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    z-index: 60;
+    display: none;
+}
+.proj_filter .proj_edit .proj_content .files .file_overlay.active {
+    display: block;
+}
+.proj_filter .proj_edit .proj_content .files .search_field input[type="text"],
+.proj_filter .proj_edit .proj_content .files .afterupload .menu_div input
+ {
+    height: 44px;
+    width: 55%;
+    padding: 0 15px;
+    font-size: 13px;
+    outline: none;
+    background: #ffffff;
+    margin: 25px 0;
+    border-radius: 4px;
+    border: 1px solid #dbdbdb;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 6%);
+    line-height: 1.5;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.proj_filter .proj_edit .proj_content .files .search_field img
+{
+    width: 34px;
+    height: 50px;
+    position: absolute;
+    right: 27%;
+}
+.proj_filter .proj_edit .proj_content .files .needtoupload {
+    display: flex;
+    height: 60vh;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    width: 94%;
+    margin-left: 6%;
+    border: 1px dashed #cfcfcf;
+    position: relative;
+}
+.proj_filter .proj_edit .proj_content .files .upload_div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 0;
+    line-height: 3.8rem;
+}
+.proj_filter .proj_edit .proj_content .files .upload_div img {
+    margin-bottom: 3.8rem;
+    width: 8rem;
+}
+.proj_filter .proj_edit .proj_content .files .upload_div h2 {
+    font-size: 1.7rem;
+    margin-bottom: -0.1rem;
+    color: #171e48;
+}
+.proj_filter .proj_edit .proj_content .files .upload_div p
+{
+    font-size: 14px;
+    color: #2762edd6;
+    margin-bottom: 0.9rem;
+}
+.proj_filter .proj_edit .proj_content .files .upload_div button
+{
+    background: #2762ed;
+    color: #fff;
+    width: 110px;
+    height: 39px;
+    border-radius: 5px;
+    font-size: 13px;
+}
+.proj_filter .proj_edit .proj_content .files .afterupload
+{
+    padding: 22px 0 22px 30px;
+}
+.proj_filter .proj_edit .proj_content .files .afterupload .menu_div
+{
+    position: relative;
+}
+.proj_filter .proj_edit .proj_content .files .afterupload .menu_div .searchicon {
+    position: absolute;
+    top: 36px;
+    right: 51.8%;
+    width: 16px;
+}
+.proj_filter .proj_edit .proj_content .files .afterupload .menu_div button
+{
+    background: #fff;
+    margin-right: 2.3rem;
+    width: 108px;
+    height: 40px;
+    font-size: 13px;
+    color: #868686;
+    border: 1px solid #dbdbdb;
+}
+.proj_filter .proj_edit .proj_content .files .afterupload .menu_div button>img
+{
+    width: 9px;
+    margin:-2px 8px 0px -8px;
+}
+.proj_filter .proj_edit .proj_content .files .afterupload .menu_div input[type="text"] {
+    width: 30%;
+    height: 40px;
+    background-size: 19px;
+    background-image: url(../icons/search-1.svg);
+    background-repeat: no-repeat;
+    background-position: 90% center;
+}
+.proj_filter .proj_edit .proj_content .files .afterupload .col-2 img
+{
+    width: 21px;
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded {
+    padding: 10px 11px 1px 11px;
+    border: 1px solid #dbdbdb;
+    margin: 8px 0 13px 0px;
+    border-radius: 5px;
+    width: 92%;
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded .row
+{
+    align-items: flex-start;
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded .grid {
+    display: grid;
+    grid-template-columns: 51px 90%;
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded .grid .grid2
+{
+    line-height: 3.4rem;
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded .grid .grid2 h3
+{
+    font-size: 1.5rem;
+    margin-bottom: -0.4rem;
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded .grid .grid2 p {
+    font-size: 11px;
+    font-weight: 500;
+    color: #130a6359;
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded .grid .grid2 h5 {
+    font-size: 12px;
+    margin-right: 1.2rem;
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .box11
+{
+    width: 92%;
+    height: 38px;
+    margin-bottom: 3.2rem;
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .box11 img
+{
+    top: 15px;
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .custom-select .option-container2
+{
+    z-index: 60;
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded .open
+{
+    position: relative;
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded .open .openOption {
+    position: absolute;
+    right: 4.4%;
+    top: 16px;
+    background-color: #fff;
+    padding: 15px 25px;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.16);
+    z-index: 70;
+    width: 204px;
+    display: none;
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded .open .openOption.active
+{
+    display: block;
+    animation: fadeUp 0.3s ease-in-out;
+} 
+@keyframes fadeUp
+{
+    0%
+    {
+       margin-top: 10px;
+       opacity: 0;
+    }
+    100%
+    {
+        margin-top: 0px;
+        opacity: 1;
+    }
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded .open img
+{
+    cursor: pointer;
+    width: 11px;
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded .open .openOption ul
+{
+    list-style-type: none;
+}
+.proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded .open .openOption ul li
+{
+    line-height: 3.4rem;
+    font-size: 14px;
+    color: #171E48;
+    font-weight: 400;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft
+{
+    position: relative;
+}
+.proj_filter .proj_edit .proj_content .active_log .activelog_overlay
+{
+    position: fixed;
+    z-index: 60;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    display: none;
+}
+.proj_filter .proj_edit .proj_content .active_log .activelog_overlay.active
+{
+    display: block;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft .filterlog_con,
+.proj_filter .proj_edit .proj_content .active_log .btnleft .person_con
+{
+    position: absolute;
+    top: 40px;
+    left: 0.2%;
+    background-color: #fff;
+    z-index: 70;
+    padding: 30px;
+    width: 318px;
+    box-shadow: 0 0 12px rgb(0 0 0 / 10%);
+    display: none;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft .filterlog_con.active,
+.proj_filter .proj_edit .proj_content .active_log .btnleft .person_con.active
+{
+    display: block;
+    animation: fadeUp 0.3s ease-in-out;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft .person_con
+{
+    line-height: 5.1rem;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft .person_con h2
+{
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft .person_con p
+{
+    font-size: 14px;
+    font-weight: 400;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft .person_con img
+{
+    width: 32px;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft .filterlog_con > .d-flex
+{
+    justify-content: space-between;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft .filterlog_con > .d-flex h3
+{
+    font-size: 1.5rem;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft .filterlog_con > .d-flex span
+{
+    font-size: 13px;
+    color: #999999;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft .filterlog_con > .d-flex p
+{
+    font-size: 14px;
+    font-weight: 500;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft .filterlog_con .row > .col-6 p
+{
+    margin: 3rem 0 2.5rem;
+    font-size: 13px;
+    font-weight: 500;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft .filterlog_con .row > .col-6 .back
+{
+    width: 100px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #F6F2F2;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft .filterlog_con .row > .col-6 .back p
+{
+    font-size: 13px;
+    margin: 0;
+}
+
+.proj_filter .proj_edit .proj_content .active_log .btnleft button {
+    border-radius: 4px;
+    background-color: #2D62ED;
+    color: #fff;
+    font-size: 13px;
+    width: 93px;
+    height: 33px;
+    margin-right: 1.6rem;
+    letter-spacing: 0.4px;
+    font-weight: 400;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft button:nth-child(1)
+{
+    position: relative;
+    margin-right: 4rem;
+}
+.proj_filter .proj_edit .proj_content .active_log .btnleft button:nth-child(1)::before {
+    position: absolute;
+    top: -1px;
+    right: -25px;
+    content: url(../icons/arrowdwhite.png);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #2762ed;
+    width: 26px;
+    height: 33px;
+    border-left: 1px solid #a1a1a1;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.proj_filter .proj_edit .proj_content .active_log .btnleft button:nth-child(2)
+{
+    background-color: #fff;
+    color: #585858;
+    border: 1px solid #ebebeb;
+}
+.proj_filter .proj_edit .proj_content .active_log .iconright img
+{
+    margin-right: 1.9rem;
+}
+.proj_filter .proj_edit .proj_content .active_log .border-bottom {
+    display: flex;
+    height: 75px;
+    justify-content: center;
+    align-items: center;
+}
+.proj_filter .proj_edit .proj_content .active_log .border-bottom
+{
+    width: 100%;
+}
+.proj_filter .proj_edit .proj_content .active_log .border-bottom tbody
+{
+    width: 100%;
+}
+.proj_filter .proj_edit .proj_content .active_log .border-bottom table,
+.proj_filter .proj_edit .proj_content .active_log .border-bottom table tr
+{
+    display: flex;
+    width: 100%;
+}
+.proj_filter .proj_edit .proj_content .active_log .border-bottom table tr td
+{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 20px 8px;
+    font-size: 13px;
+    font-family: var(--heebo);
+}
+.proj_filter .proj_edit .proj_content .active_log .border-bottom table tr td:nth-child(2) span
+{
+    width: 28px;
+    height: 28px;
+    background-color: #FDAB3D;
+    border-radius: 30px;
+    display: inline-block;
+    line-height: 30px;
+    text-align: center;
+    color: #fff;
+    font-weight: 400;
+    margin-right: 0.9rem;
+}
+.proj_filter .proj_edit .proj_content .active_log .border-bottom table tr td:nth-child(2) p
+{
+    margin-top: 0.4rem;
+}
+.proj_filter .proj_edit .proj_content .active_log .border-bottom table tr td:nth-child(1) img,
+.proj_filter .proj_edit .proj_content .active_log .border-bottom table tr td:nth-child(3) img
+{
+    margin-right: 0.9rem;
+}
+.proj_filter .proj_edit .proj_content .active_log .border-bottom table tr .timelinelog4 span, 
+.proj_filter .proj_edit .proj_content .active_log .border-bottom table tr .timelinelog5 span 
+{
+    width: 81px;
+    height: 25px;
+    background: #AEE8B5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 30px;
+    font-size: 12px;
+}
+
+
+/* proj edit css end */
+
+
+/* proj add css start */
+.proj_filter .proj_add
+{
+position: fixed;
+right: 0;
+top: 0;
+height: 100%;
+overflow: hidden;
+width: 66vw;
+z-index: 50;
+background: #fff;
+padding: 25px;
+transform: translateX(100%);
+animation: slideprojRight 0.5s ease-in-out;
+box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+@keyframes slideprojRight
+{
+    0%
+    {
+        transform: translateX(0%);
+    }
+    100%
+    {
+        transform: translateX(100%);
+    }
+}
+.proj_filter .proj_add.active
+{
+    transform: translateX(0%);
+    animation: slideprojLeft 0.5s ease-in-out;
+}
+@keyframes slideprojLeft
+{
+    0%
+    {
+        transform: translateX(100%);
+    }
+    100%
+    {
+        transform: translateX(0%);
+    }
+}
+.proj_filter .proj_add .col-md-12 > span
+{
+    cursor: pointer;
+}
+.proj_filter .proj_add .main_add
+{
+    padding: 4rem 23px 4rem 4.5rem;
+    overflow-y: scroll;
+    max-height: 82vh;
+}
+.proj_filter .proj_add .main_add #disabledValue::placeholder
+{
+   color: #000;
+}
+.proj_filter .proj_add .main_add .mt-5
+{
+    padding-left: 6px;
+}
+.proj_filter .proj_add .main_add .col-md-12 .d-flex > h1
+{
+    color: #171E48;
+    margin-bottom: 1.2rem;
+    margin-left: -3px;
+}
+.proj_filter .proj_add .main_add .col-md-12 .d-flex > p
+{
+    font-size: 14px;
+    margin-bottom: 2.2rem;
+    font-weight: 500;
+}
+.proj_filter .proj_add .main_add .border-bottom {
+    border-bottom: 1px solid #dee2e6c2!important;
+}
+.proj_filter .proj_add .main_add p
+{
+    font-weight: 500;
+    margin-bottom: 6px;
+    font-size: 15px;
+}
+.proj_filter .proj_add .main_add input[type="text"],
+.proj_filter .proj_add .main_add .assignee_div .userBox
+{
+    height: 39px;
+    width: 90%;
+    padding: 0 15px;
+    font-size: 13px;
+    outline: none;
+    background: #ffffff;
+    border-radius: 7px;
+    border: 1px solid #dbdbdb;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 6%);
+    line-height: 1.5;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    margin-bottom: 4rem;
+}
+.proj_filter .proj_add .main_add .assignee_div .userBox
+{
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.proj_filter .proj_add .main_add .assignee_div .userBox .img-div
+{
+  width: 24px;
+  height: 24px;
+  border-radius: 30px;
+  margin-right: 5px;
+}
+.proj_filter .proj_add .main_add .assignee_div .userBox .img-div img {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+    object-position: 50% 50%;
+}
+.proj_filter .proj_add .assignee_div
+{
+    position: relative;
+}
+.proj_filter .proj_add .assignee_div .assignee_overlay
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 60;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    display: none;
+}
+.proj_filter .proj_add .assignee_div .assignee_overlay.active
+{
+    display: block;
+}
+.proj_filter .proj_add .projadd_bottom
+{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 105px;
+    width: 100%;
+    padding: 0 38px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.18);
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.proj_filter .proj_add .projadd_bottom .btn {
+    height: 40px;
+    width: 115px;
+    background: aqua;
+    border-radius: 5px;
+    font-size: 13px;
+    text-transform: uppercase;
+    font-weight: 400;
+    letter-spacing: 0.13px;
+}
+.proj_filter .proj_add .projadd_bottom .btn:nth-child(1)
+{
+    border: 1px solid #2d62ed;
+    background-color: transparent;
+    color: #2d62ed;
+}
+.proj_filter .proj_add .projadd_bottom .btn:nth-child(2)
+{
+    background-color: #2d62ed;
+    color: #fff;
+}
+.proj_filter .proj_add .projadd_bottom .btn,
+.proj_filter .proj_add .projadd_bottom .btn:not(last-child)
+{
+    margin-right: 15px;
+}
+
+/* proj add css end */
+
+
+
+/* responsive css */
+
+@media(max-width:849px)
+{
+    /* proj_edit css */
+    .manage_view .proj_overlay {
+        z-index: 60;
+    }
+    .manage_view .proj_edit {
+        width: 100vw;
+        transform: translateX(100%) !important;
+        animation: none;
+        animation: fadeOut 0.3s ease-in-out;
+        top: 51px;
+        padding: 25px;
+        z-index: 65;
+    }
+    @keyframes fadeOut
+    {
+        0%
+        {
+            opacity: 1;
+        }
+        100%
+        {
+            opacity: 0;
+        }
+    }
+    .manage_view .proj_edit.active
+    {
+        transform: translateX(0%) !important;
+        animation: none;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn
+    {
+        0%
+        {
+            opacity: 0;
+        }
+        100%
+        {
+            opacity: 1;
+        }
+    }
+    .manage_view .proj_edit .col-md-3 span {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2.1rem;
+        margin-left: -7px;
+    }
+    .manage_view .proj_edit .col-md-3 span > img {
+        width: 100%;
+        height: 100%;
+    }
+    .manage_view .proj_edit .align-self-end div.user_img {
+        width: 25px;
+        height: 25px;
+        margin-right: 0.5rem;
+    }
+    .manage_view .proj_edit .align-self-end span:nth-child(3) {
+        width: 25px;
+        height: 25px;
+        margin-right: 2.1rem;
+    }
+    .manage_view .proj_edit .proj_content {
+        padding-left: 0px;
+        padding-right: 0px;
+        margin-top: 10px;
+    }
+    .manage_view .proj_edit .proj_content .d-flex >h1 {
+        margin-bottom: 2.3rem;
+        font-size: 1.8rem;
+        margin-top: -2.8rem;
+        margin-left: 1px;
+    }
+    .manage_view .proj_edit .proj_content > .d-flex span
+    {
+        margin-top: -3.1rem;
+    }
+    .manage_view .proj_edit .proj_content span i {
+        font-size: 13px;
+    }
+    .manage_view .proj_edit .tab-btn {
+        display: flex;
+    }
+    .manage_view .proj_edit .proj_content .tab-btn .btn {
+        padding: 0 16px;
+        height: 43px;
+        font-size: 15px;
+        margin-right: 1.3rem;
+    }
+    .manage_view .proj_edit .proj_content .tab-btn .btn p {
+        margin-left: 1px;
+        width: 5px;
+        font-size: 18px;
+    }
+    .manage_view .proj_edit .proj_content .tab-btn .btn:nth-child(3)
+    {
+        margin-right: 0rem;
+    }
+    .note-editor .note-toolbar, .note-popover .popover-content {
+        padding: 0px 0px 0 9px;
+    }
+    .note-btn {
+        color: #424242;
+        background-color: #fff;
+        border: 1px solid #fff;
+        padding: 5px 12px 5px 8px;
+        font-size: 11px;
+    }
+    .note-editor.note-airframe .note-editing-area, .note-editor.note-frame .note-editing-area {
+        padding-left: 6px;
+        font-size: 13px;
+    }
+    .manage_view .proj_edit .proj_content .attach_div {
+        padding: 12px;
+    }
+    .manage_view .proj_edit .proj_content .attach_div .divfile1
+    {
+        flex: 0 0 65%;
+        max-width: 65%;
+        flex-wrap: wrap;
+    }
+    .manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div {
+        margin-right: 1.6rem !important;
+    }
+    .manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div>img
+    {
+        margin-right: 0.4rem;
+        height: 14px;
+    }
+    .manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(1),
+    .manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div:nth-child(2) {
+        margin-bottom: 0.85rem;
+    }
+    .manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div i {
+        font-size: 15px;
+        margin-right: 0.3rem;
+        margin-top: 0.2rem;
+    }
+    .manage_view .proj_edit .proj_content .tab-btn .btn.active::before {
+        right: 1.8%;
+    }
+    .manage_view .proj_edit .proj_content .attach_div .divfile1 .emoji_div p {
+        font-size: 13px;
+    }
+    .manage_view .proj_edit .proj_content .attach_div .divfile2
+    {
+        flex: 0 0 35%;
+        max-width: 35%;
+    }
+    .manage_view .proj_edit .proj_content .attach_div .divfile2 button {
+        font-size: 13px;
+        width: 100px;
+        height: 35px;
+    }
+    .manage_view .proj_edit .proj_content .no_update.px-5
+    {
+        padding-right: 0rem !important;
+    } 
+    .manage_view .proj_edit .proj_content .no_update p i {
+        font-size: 19px;
+        margin-right: 4px;
+    }
+    .manage_view .proj_edit .proj_content .no_update p {
+        font-size: 13px;
+        color: #2d62ed;
+    }
+    .manage_view .proj_edit .proj_content .no_updateyet p
+    {
+        font-size: 15px;
+    }
+    .note-icon-arrows-alt:before {
+        width: 16px;
+        background-color: #424242;
+    }
+    .manage_view .proj_edit .update .update_con .row .noti_div p {
+        margin-right: 1.2rem;
+        font-size: 13px;
+    }
+    .manage_view .proj_edit .update .update_con .text_div {
+        font-size: 13px;
+    }
+    .manage_view .proj_edit .update .update_con .seen_div p {
+        font-size: 12px;
+    }
+    .manage_view .proj_edit .update .update_con .like_div p, .manage_view .proj_edit .update .update_con .replay_div p {
+        font-size: 13px;
+    }
+    .manage_view .proj_edit .update .update_con .like_div img{
+        width: 16px;
+        height: 16px;
+    }
+    .manage_view .proj_edit .update .update_con .replay_div img {
+        width: 19px;
+        height: 19px;
+    }
+    .manage_view .proj_edit .update .update_con .like_div,
+    .manage_view .proj_edit .update .update_con .replay_div
+    {
+        height: 46px;
+    }
+    .manage_view .proj_edit .update .update_con >.has_pad {
+        padding: 18px 18px 10px;
+    }
+    .manage_view .proj_edit .align-self-end span:nth-child(4)
+    {
+        width: 25px;
+        height: 25px;
+    }
+    .manage_view .proj_edit .align-self-end span:nth-child(4) i
+    {
+        font-size: 14px;
+    }
+    .proj_filter .proj_edit .subscriber_div {
+        width: 300px;
+        padding: 15px 22px 15px;
+    }
+    .proj_filter .proj_edit .subscriber_div .subs_con {
+        margin: 23px 0 13px -3px;
+    }
+    .proj_filter .proj_edit .subscriber_div .subs_con > .d-flex p {
+        font-size: 14px;
+    }
+    .proj_filter .proj_edit .subscriber_div .subs_con input[type="text"] {
+        margin: 11px 0px 22px;
+        border-radius: 6px;
+    }
+    .proj_filter .proj_edit h5 {
+        font-size: 14px;
+    }
+    .proj_filter .proj_edit .subscriber_div .subs_con .row.pt-3
+    {
+        padding-top: 0.3rem !important;
+    }
+    .proj_filter .proj_edit .proj_content .files .search_field input[type="text"] {
+        height: 40px;
+        width: 80%;
+        font-size: 13px;
+        margin: 7px 0;
+    }
+    .proj_filter .proj_edit .proj_content .files .search_field img {
+        width: 31px;
+        height: 50px;
+        right: 17%;
+    }
+    .proj_filter .proj_edit .proj_content .files .upload_div {
+        height: 46vh;
+    }
+    .proj_filter .proj_edit .proj_content .files .upload_div img {
+        margin-bottom: 3rem;
+        width: 90px;
+    }
+    .proj_filter .proj_edit .proj_content .files .upload_div h2 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .proj_filter .proj_edit .proj_content .files .upload_div button {
+        width: 103px;
+        height: 36px;
+    }
+    .proj_filter .proj_edit .proj_content .files .afterupload {
+        padding: 0px;
+    }
+    .proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded {
+        margin: 8px 0 20px 0px;
+    }
+    .proj_filter .proj_edit .proj_content .files .afterupload .menu_div button {
+        margin-right: 1.2rem;
+        height: 38px;
+        font-size: 12px;
+        width: 97px;
+    }
+    .proj_filter .proj_edit .proj_content .files .afterupload .menu_div input[type="text"] {
+        width: 50%;
+        height: 38px;
+        font-size: 12px;
+        width: 54.5%;
+        background-size: 15px;
+        background-position: 92.4% center;
+    }
+    .proj_filter .proj_edit .proj_content .files .afterupload .menu_div .searchicon {
+        top: 38px;
+        right: 9.5%;
+        width: 14px;
+    }
+    .proj_filter .proj_edit .proj_content .files .afterupload .col-2 img {
+        width: 18px;
+    }
+    .proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded .grid .grid2 h3 {
+        font-size: 1.4rem;
+    }
+    .manage_view .proj_edit .proj_content .tab-btn .favDiv {
+        left: 30%;
+        z-index: 70;
+        padding: 16px 20px;
+    }
+    .proj_filter .proj_edit .proj_content .active_log .btnleft button {
+        font-size: 12px;
+        width: 75px;
+        height: 33px;
+        margin-right: 1.6rem;
+    }
+    .proj_filter .proj_edit .proj_content .active_log .iconright img {
+        margin-right: 1.8rem;
+        width: 20px;
+    }
+    .proj_filter .proj_edit .proj_content .active_log .iconright img:nth-child(2)
+    {
+        margin-right: 0rem;
+    }
+    .proj_filter .proj_edit .proj_content .active_log .con_activity
+    {
+        overflow-y: scroll;
+    }
+    .proj_filter .proj_edit .proj_content .active_log .border-bottom {
+        width: 180%;
+    }
+
+    /* proj_add css */
+    .proj_filter .proj_add {
+        top: 52px;
+        height: 100vh;
+        overflow: auto;
+        width: 100vw;
+        z-index: 65;
+        background: #fff;
+        padding: 20px;
+    }
+    .proj_filter .proj_add .col-md-12 > span img{
+        cursor: pointer;
+        width: 23px;
+        height: 23px;
+    }
+    .proj_filter .proj_add .main_add {
+        padding: 2.5rem 1rem 15rem 1rem;
+    }
+    .proj_filter .proj_add .main_add .border-bottom {
+        margin-bottom: 2rem;
+    }
+    .proj_filter .proj_add .main_add .mt-5 {
+        padding-left: 0px;
+        margin-top: 0rem !important;
+    }
+    .proj_filter .proj_add .main_add .mt-5 {
+        padding-top: 0rem !important;
+    }
+    .proj_filter .proj_add .main_add p {
+        font-size: 14px;
+    }
+    .proj_filter .proj_add .main_add input[type="text"], .proj_filter .proj_add .main_add .assignee_div .userBox {
+        width: 100%;
+        margin-bottom: 2.4rem;
+    }
+    .proj_filter .proj_add .projadd_bottom {
+        position: fixed;
+        bottom: 51px;
+        z-index: 68;
+    }
+    .proj_filter .proj_edit .proj_content .files .uploaded .box11 {
+        width: 100% !important;
+    }
+    .proj_filter .proj_edit .proj_content .files .uploaded .fileuploaded {
+        width: 100%;
+    }
+    .proj_filter .proj_edit .proj_content .uploaded {
+        height: 75vh;
+    }
+    .proj_filter .proj_edit .proj_content .files .needtoupload {
+        width: 100%;
+        margin-left: 0%;
+    }
+}

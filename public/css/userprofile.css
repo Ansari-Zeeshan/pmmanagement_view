@@ -1,0 +1,282 @@
+.profile_filter
+{
+    padding: 5rem;
+    margin-bottom: 0rem !important;
+    min-height: 100vh;
+    background-color: #FCFCFC;
+}
+.profile_filter .col-md-12 h1
+{
+    margin-bottom: 4.1rem;
+    font-size: 2.7rem;
+    font-weight: 600;
+    position: relative;
+}
+.profile_filter .col-md-12 h1::before {
+    position: absolute;
+    content: '';
+    top: 14px;
+    left: 13.8%;
+    width: 86.5%;
+    height: 1px;
+    background-color: #000;
+}
+.profile_filter .profile_content
+{
+    box-shadow: 0 0 15px rgb(0 0 0 / 7%);
+    background-color: #ffffff;
+}
+.profile_filter .profile_content .face
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: -11rem;
+}
+.profile_filter .profile_content .face h2
+{
+    margin: 3rem 0 1.6rem 0;
+    font-weight: 600;
+    color: #000;
+    font-size: 1.8rem;
+}
+.profile_filter .profile_content .face p
+{
+    color: #555555;
+    letter-spacing: 0px;
+}
+.profile_filter .profile_content .detail
+{
+    border-left: 1px solid #dee2e6;
+    margin: 0;
+    padding: 0;
+}
+.profile_filter .profile_content .detail .info
+{
+    padding: 3rem 3.5rem;
+}
+.profile_filter .profile_content .detail .info >h2,
+.profile_filter .profile_content .detail .info .left h2,
+.profile_filter .profile_content .detail .info .right h2
+{   
+    margin-bottom: 1.8rem;
+    font-size: 1.6rem;
+    color: #a3a3a3;
+}  
+.profile_filter .profile_content .detail .info .need_flex
+{
+    display: flex;
+}
+.profile_filter .profile_content .detail .info .need_flex .d-flex
+{
+   margin-right: 5rem;
+}
+.profile_filter .profile_content .detail .info .need_flex h4
+{
+    margin-right: 1.5rem;
+}
+.profile_filter .profile_content .detail .info .need_flex .left
+{
+    margin-right: 5rem;
+}
+.profile_filter .profile_content .detail .info .need_flex .left,
+.profile_filter .profile_content .detail .info .need_flex .right
+{
+    flex: 0 0 30%;
+    max-width: 30%;
+}
+.profile_filter .profile_content .detail .info .need_flex .left h2,
+.profile_filter .profile_content .detail .info .need_flex .right h2
+{
+    margin-bottom: 2.2rem;
+}
+.profile_filter .profile_content .detail .info .need_flex .left input,
+.profile_filter .profile_content .detail .info .need_flex .right input
+{
+    height: 39px;
+    width: 100%;
+    padding: 0 15px;
+    font-size: 14px;
+    outline: none;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #dbdbdb;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 6%);
+    line-height: 1.5;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.profile_filter .btn
+{
+    background-color: #2D62ED;
+    color: #fff;
+    letter-spacing: 0.25px;
+    padding: 11px 34px;
+    border-radius: 5px;
+    font-size: 1.3rem;
+    margin-top: 4rem;
+}
+.profile_filter .profile_content .info h2,
+.profile_filter .profile_content .info h4
+{
+    font-weight: 400;
+}
+.profile_filter .profile_content .info h4
+{
+    color: #7c7c7c;
+    font-size: 1.4rem;
+    letter-spacing: 0.1px;
+}
+.profile_filter .profile_content .info h3,
+.profile_filter .profile_content .info p
+{
+    font-size: 1.5rem;
+    color: #555555;
+    font-weight: 400;
+    letter-spacing: 0px;
+}
+.profile_filter .profile_content .info p
+{
+    font-size: 1.4rem;
+}
+.profile_filter .profile_content .info span
+{
+    color: #2D62ED;
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    margin-top: -3px;
+}
+.profile_filter .profile_content .info h3
+{
+    margin-top: -1px;
+}
+
+@media(max-width: 849px)
+{ 
+    .profile_filter .profile_content .face {
+        margin-top: 0rem;
+        border-bottom: 1px solid #dee2e6;
+        padding: 1.9rem 0rem;
+    }
+    .profile_filter .col-md-12 h1::before {
+        display: none;
+    }
+    .profile_filter .profile_content .face img
+    {
+        width: 70px;
+    }
+    .profile_filter .profile_content .face h2 {
+        margin: 2rem 0 0.5rem 0;
+        font-size: 1.7rem;
+    }
+    .profile_filter .profile_content .face p {
+        font-size: 1.4rem;
+    }
+    .profile_filter .m_width
+    {
+        width: 94.5%;
+    }
+    .proj_filter .divfilter2.profile_filter {
+        flex:  0 0 100%;
+        max-width: 100%;
+        padding: 0 0rem 0 2.5rem;
+        margin-left: 0%;
+        overflow: hidden;
+    }
+    .proj_filter .divfilter2.profile_filter .profile_content
+    {
+        width: 92%;
+        margin-top: 2.2rem;
+    }
+    .profile_filter .profile_content .detail .info .need_flex {
+        display: block;
+    }
+    .profile_filter .profile_content .detail .info .need_flex .d-flex
+    {
+        display: grid !important;
+        grid-template-columns: 45% 55%;
+        grid-template-rows: 33px;
+    }
+    .profile_filter .profile_content .detail {
+        border-left: none;
+    }
+    .profile_filter .profile_content .detail .info {
+        padding: 3rem 1.6rem;
+    }
+    .profile_filter .profile_content .detail .info .need_flex .left, 
+    .profile_filter .profile_content .detail .info .need_flex .right {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    .profile_filter .profile_content .detail .info .need_flex .left {
+        margin-right: 0rem;
+    }
+    .profile_filter .profile_content .info h4 {
+        font-size: 1.3rem;
+    }
+    .profile_filter .profile_content .info h3 {
+        margin-top: 0px;
+    }
+    .profile_filter .profile_content .info h3, .profile_filter .profile_content .info p {
+        font-size: 1.4rem;
+    }
+    .profile_filter .profile_content .info span {
+        font-size: 1.4rem;
+    }
+    .profile_filter .profile_content .detail .info .need_flex .d-flex {
+        margin-right: 0rem;
+    }
+    .profile_filter .profile_content .detail .info >h2, 
+    .profile_filter .profile_content .detail .info .left h2, 
+    .profile_filter .profile_content .detail .info .right h2 {
+        margin-bottom: 1.9rem;
+        font-size: 1.55rem;
+        color: #a3a3a3;
+    }
+    .profile_filter .profile_content .detail .info .left h2,
+    .profile_filter .profile_content .detail .info .right h2
+    {
+        margin-bottom: 0.8rem !important;
+    } 
+    .profile_filter .profile_content .detail .info .right h2
+    {
+        margin-top: 2.5rem;
+    }
+    .profile_filter .profile_content .detail .info .need_flex .left input,
+     .profile_filter .profile_content .detail .info .need_flex .right input {
+        font-size: 13px;
+    }
+    .profile_filter .btn {
+        padding: 10px 25px;
+        font-size: 1.3rem;
+        margin-top: 3rem;
+    }
+    .profile_filter .col-md-12 h1 {
+        margin-bottom: 3.1rem;
+        font-size: 2rem;
+        font-weight: 700;
+        position: relative;
+        margin-top: 8rem;
+    }
+    .profile_filter .col-md-12 h1 {
+        margin-bottom: 1.3rem;
+        font-size: 2.1rem;
+        font-weight: 700;
+        margin-top: 8rem;
+        color: #171E48;
+    }
+    .profile_filter >.row >.col-md-12
+    {
+        width: 92%;
+        border-bottom: 1px solid #dee2e6;
+    }
+}
+
+@media(min-width: 850px) and (max-width: 1230px)
+{
+    .profile_filter .col-md-12 h1::before {
+        left: 22.8%;
+        width: 77.5%;
+    }
+}

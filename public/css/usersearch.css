@@ -1,0 +1,78 @@
+.proj_filter .proj_add .assignee_div .usersearch_div {
+    position: absolute;
+    left: 6%;
+    top: -230px;
+    box-shadow: 0 0 8px 0 rgb(0 0 0 / 11%);
+    background-color: #fff;
+    padding: 20px;
+    width: 300px;
+    height: auto;
+    display: none;
+    z-index: 70;
+}
+.proj_filter .proj_add .assignee_div .usersearch_div.active {
+    display: block;
+    animation: 0.3s ease-in-out fadeIn;
+}
+.proj_filter .proj_add .assignee_div .usersearch_div .sep_div
+{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #dedede;
+    height: 28px;
+    width: 100%;
+    margin-bottom: 0.2rem;
+}
+.proj_filter .proj_add .assignee_div .usersearch_div .sep_div div p {
+    margin-bottom: 0.7rem;
+    font-size: 1.5rem;
+}
+.proj_filter .proj_add .assignee_div .usersearch_div .user-list {
+    overflow-y: auto;
+    max-height: 270px;
+    width: 100%;
+    cursor: pointer;
+}
+.proj_filter .proj_add .assignee_div .usersearch_div .hover_div {
+    padding: 15px 0px 0 7px;
+    height: 53px;
+}
+.proj_filter .proj_add .assignee_div .usersearch_div .row {
+    align-items: flex-start;
+}
+.proj_filter .proj_add .assignee_div .usersearch_div .user-list {
+    overflow-y: auto;
+    max-height: 270px;
+    overflow-x: hidden;
+}
+.proj_filter .proj_add .assignee_div .usersearch_div input[type="text"] 
+{
+    width: 100%;
+    margin-bottom: 3rem;
+}
+.proj_filter .proj_add .assignee_div .usersearch_div .user-list .img-div {
+    flex: 0 0 21%;
+    max-width: 21%;
+}
+.proj_filter .proj_add .assignee_div .usersearch_div .user-list .img-div img {
+    width: 31px;
+    height: 31px;
+    object-fit: cover;
+    border-radius: 30px;
+}
+.proj_filter .proj_add .assignee_div .usersearch_div .user-list .info-div {
+    flex: 0 0 79%;
+    max-width: 79%;
+    display: flex;
+    justify-content: space-between;
+}
+.proj_filter .proj_add .assignee_div .usersearch_div .user-list .info-div h6 {
+    font-size: 14px;
+    color: #27282E;
+    font-weight: 500;
+}
+.proj_filter .proj_add .assignee_div .usersearch_div .user-list .info-div p {
+    margin-bottom: 2.5rem;
+    font-size: 12px;
+    color: #91939B;
+}

@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;400;500;600;700;800&family=Lato:wght@400;700&family=Marcellus&family=Open+Sans&family=Roboto&display=swap');
+*
+{
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+scroll-behavior: smooth;
+}
+
+:root
+{
+--heebo:'Heebo', sans-serif;
+--marcel: 'Marcellus', serif;
+--open: 'Open Sans', sans-serif;
+--roboto: 'Roboto', sans-serif;
+--lato: 'Lato', sans-serif;
+--caret: "\f0da";
+}
+body
+{
+
+
+font-family: var(--heebo) !important;
+
+min-height: 100vh;
+}
+
+
+
+.main {
+    width: 100%;
+    min-height: 100vh;
+    background-color:  #F2F5F8;
+}
+.text {
+    padding-top: 100px;
+    font: var(--unnamed-font-style-normal) normal medium 18px/28px var(--unnamed-font-family-proxima-nova);
+    letter-spacing: var(--unnamed-character-spacing-0);
+    color: var(--unnamed-color-000000);
+    text-align: center;
+    font: normal normal medium 18px/28px Proxima Nova;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+
+}
+.icon {
+   font-size: 1rem;
+   margin-top: 30px;
+}
+.success {
+    margin-top: 30px;
+    font-size: 1rem;
+    font-weight: 500;
+}
+.text h1 {
+    font-size: 2rem;
+}
+.text1 {
+    font-weight: 600;
+    color: #000;
+    font-size: 1.2rem;
+}
+.bttn button{
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 30px;
+    background-color: #2D62ED;
+    border-radius: 4px;
+    margin-top: 50px;
+    font: normal normal medium 18px/28px Proxima Nova;
+}
+.bttn button {
+    color: #fff;
+    font-weight: 400;
+    font-size: 1rem;
+}
+progress {
+    width: 28%;  
+    margin-top: 20px;
+}
+
+
+
+

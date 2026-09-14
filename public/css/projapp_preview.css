@@ -1,0 +1,674 @@
+.mview_req .prevOverlay {
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    z-index: 9;
+    display: none;
+}
+
+.mview_req .prevOverlay.active {
+    display: block;
+}
+
+.proj_approval {
+    flex: 0 0 94.5%;
+    max-width: 94.5%;
+    margin-left: 5.5%;
+    min-height: 100vh;
+    padding: 25px 0px 35px;
+}
+
+.proj_approval .proj_form {
+    padding: 2.3rem 3.3rem;
+    width: 95%;
+    box-shadow: 0px 0px 11px #00000029;
+    border-radius: 4px;
+    margin-left: 2.5%;
+}
+
+.proj_approval .proj_form .grid_top {
+    display: grid;
+    grid-template-columns: 13% 75% 12%;
+    border-bottom: 2px solid #ededed;
+    padding: 0 0 2.8rem;
+    margin: 0;
+}
+
+.proj_approval .proj_form .grid_top .grid1 h2 {
+    font-family: var(--marcel);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 2.5rem;
+    color: #000000;
+}
+
+.proj_approval .proj_form .grid_top .grid2 {
+    align-self: flex-end;
+    justify-content: center;
+    display: flex;
+}
+
+.proj_approval .proj_form .grid_top .grid2 h1 {
+    text-transform: uppercase;
+    color: #171E48;
+    word-spacing: 1px;
+    letter-spacing: 0.5px;
+    font-size: 2.1rem;
+}
+
+.proj_approval .proj_form .grid_top .grid3 {
+    text-align: right;
+}
+
+.proj_approval .proj_form .grid_top .grid3 p {
+    font-size: 1.3rem;
+    letter-spacing: 0.15px;
+    word-wrap: 1px;
+}
+
+.proj_approval .proj_form .sep_div {
+    display: flex;
+    justify-content: space-between;
+    padding: 21px 0px 14px;
+    align-items: center;
+}
+
+.proj_approval .proj_form .sep_div .col-md-3:nth-child(2) {
+    justify-content: flex-end;
+    display: flex;
+}
+
+.proj_approval .proj_form .sep_div h4 {
+    color: #171E48;
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+}
+
+.proj_approval .proj_form .main_form {
+    background-color: #faf9fa;
+    padding: 0;
+}
+
+.proj_approval .proj_form .main_form .con_pad {
+    padding: 0rem 3rem;
+}
+
+.proj_approval .proj_form .main_form .con_pad .row {
+    align-items: flex-start;
+}
+
+.proj_approval .proj_form .main_form .con_pad .col-md-3,
+.proj_approval .proj_form .main_form .con_pad .col-md-7 {
+    margin-top: 1.7rem;
+}
+
+.proj_approval .proj_form .main_form .con_pad .col-md-3 p {
+    color: #171E48;
+    opacity: 0.87;
+    font-size: 1.5rem;
+}
+
+.proj_approval .proj_form .main_form .con_pad .col-md-7 p {
+    font-size: 1.5rem;
+    color: #171E48;
+    font-weight: 500;
+}
+
+.proj_approval .proj_form .main_form .con_pad .col-md-7 span {
+    font-size: 12px;
+}
+
+.proj_approval .proj_form .main_form .con_pad .col-md-7 span i {
+    vertical-align: bottom;
+    margin-inline-end: 0.5rem;
+}
+
+.proj_approval .proj_form .main_form .mainform_head {
+    background-color: #EFEFF4;
+    padding: 1.2rem 3rem;
+    width: 100%;
+    margin: 1rem 0 0;
+}
+
+.proj_approval .proj_form .main_form .mainform_head h1 {
+    font-size: 1.9rem;
+    text-transform: capitalize;
+    font-weight: 500;
+}
+
+.proj_approval .proj_form .main_form .con_pad .approver_name {
+    padding: 1.8rem 0;
+    border-bottom: 1px solid #dbdbdb;
+}
+
+.proj_approval .proj_form .main_form .con_pad .approver_name .divcol1 {
+    flex: 0 0 37%;
+    max-width: 37%;
+}
+
+.proj_approval .proj_form .main_form .con_pad .approver_name .divcol2 {
+    flex: 0 0 31%;
+    max-width: 31%;
+}
+
+.proj_approval .proj_form .main_form .con_pad .approver_name .divcol3 {
+    flex: 0 0 32%;
+    max-width: 32%;
+}
+
+.proj_approval .proj_form .main_form .con_pad .approver_name h5,
+.proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup h5 {
+    font-weight: 500;
+    margin-bottom: 0;
+    font-size: 1.6rem;
+}
+
+.proj_approval .proj_form .main_form .con_pad .approver_name .grid .grid2 p,
+.proj_approval .proj_form .main_form .con_pad .approver_name .remark_div p {
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0px;
+    color: #171E48;
+    opacity: 0.87;
+}
+
+.proj_approval .proj_form .main_form .con_pad .approver_name .status_div {
+    margin-top: 0;
+}
+
+.proj_approval .proj_form .main_form .con_pad .approver_name .title_div .grid {
+    display: grid;
+    grid-template-columns: 9.5% 75%;
+}
+
+.proj_approval .proj_form .main_form .con_pad .approver_name .title_div .grid .grid2 {
+    display: flex;
+    align-items: center;
+}
+
+.proj_approval .proj_form .main_form .con_pad .approver_name .title_div .grid .grid1 div {
+    width: 34px;
+    height: 34px;
+    border-radius: 30px;
+}
+
+.proj_approval .proj_form .main_form .con_pad .approver_name .title_div .grid .grid1 div img {
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+}
+
+.proj_approval .proj_form .main_form .con_pad .approver_name .status_div button {
+    width: 115px;
+    height: 42px;
+    background-color: #2CC6AB;
+    font-size: 13px;
+    border-radius: 0px;
+    color: #fff;
+    outline: none;
+}
+
+.proj_approval .proj_form .main_form .con_pad .approver_name .status_div button.pending {
+    background-color: #FFC800;
+}
+
+.proj_approval .proj_form .main_form .con_pad input[type="textarea"] {
+    margin: 4.7rem 0 3.2rem;
+    padding: 2.5rem;
+    background-color: #fff;
+    width: 100%;
+    height: 150px;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div {
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .btn.req,
+.proj_approval .proj_form .main_form .con_pad .btn_div .btn.deli,
+.proj_approval .proj_form .main_form .con_pad .btn_div .btn.rej,
+.proj_approval .proj_form .main_form .con_pad .btn_div .btn.appr {
+    width: 190px;
+    height: 42px;
+    border-radius: 5px;
+    border: 1px solid #2D62ED;
+    font-size: 1.3rem;
+    color: #2D62ED;
+    text-transform: uppercase;
+    margin-right: 2rem;
+    letter-spacing: 0.15px;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .btn.deli {
+    width: 168px;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .btn.rej,
+.proj_approval .proj_form .main_form .con_pad .btn_div .btn.appr {
+    background-color: #CB0C0C;
+    color: #fff;
+    border: none;
+    width: 120px;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .btn.appr {
+    background-color: #0E9113;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup,
+.proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup {
+    position: absolute;
+    right: 495px;
+    bottom: 138%;
+    background-color: #fff;
+    z-index: 70;
+    width: 338px;
+    max-height: 340px;
+    overflow-y: auto;
+    overflow-x: clip;
+    padding-bottom: 30px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgb(0 0 0 / 15%);
+    display: none;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup.show,
+.proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup.show {
+    display: block;
+    animation: fadeUp 0.2s ease-in;
+}
+
+@keyframes fadeUp {
+    0% {
+        opacity: 0;
+        bottom: 100%;
+    }
+
+    100% {
+        opacity: 1;
+        bottom: 138%;
+    }
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup {
+    right: 308px;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup h5,
+.proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup h5 {
+    margin-block-end: 3rem;
+    font-size: 1.8rem;
+    padding: 30px 35px 0px;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup .projapp_search,
+.proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup .projapp_search {
+    margin: 15px 35px 12px;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup .projapp_search input[type="text"],
+.proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup .projapp_search input[type="text"] {
+    width: 100%;
+    padding: 10px 25px;
+    font-size: 14px;
+    background: #ffffff;
+    outline: 0;
+    height: 39px;
+    border-radius: 3px;
+    border: 1px solid #dbdbdb;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 6%);
+    padding-left: 15px;
+    display: inline !important;
+    line-height: 1.5;
+    color: #495057;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup .pop_grid,
+.proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup .pop_grid {
+    display: grid;
+    grid-template-columns: 21% 75%;
+    padding: 0 35px;
+    height: 57px;
+    align-content: center;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup .pop_grid:hover,
+.proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup .pop_grid:hover {
+    background-color: #F4F4F4;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup .pop_grid .pop_grid1 div,
+.proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup .pop_grid .pop_grid1 div {
+    width: 35px;
+    height: 35px;
+    border-radius: 30px;
+    background-color: #3A80D7;
+    color: #fff;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup .pop_grid .pop_grid1.green div,
+.proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup .pop_grid .pop_grid1.green div {
+    background-color: #3AD75F;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup .pop_grid .pop_grid1 div img,
+.proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup .pop_grid .pop_grid1 div img {
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+}
+
+.proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup .pop_grid .pop_grid2,
+.proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup .pop_grid .pop_grid2 {
+    display: flex;
+    align-items: flex-end;
+    height: 38px;
+    font-size: 1.5rem;
+    color: #171E48;
+    opacity: 0.87;
+}
+
+
+
+
+
+@media (max-width:849px) {
+    .proj_approval .proj_form {
+        margin-top: 5rem;
+    }
+
+    .proj_approval {
+        flex: 0 0 100%;
+        max-width: 100%;
+        min-height: 100vh;
+        margin-left: 0%;
+        background-color: #fff;
+        padding: 35px 0px 35px 29px;
+        overflow-x: hidden;
+    }
+
+    .proj_approval .proj_form {
+        padding: 1.1rem 2.3rem;
+        width: 90.9%;
+        margin-left: 0%;
+        margin-top: 11.8%;
+    }
+
+    .proj_approval .proj_form .grid_top {
+        grid-template-columns: 50% 0 50%;
+        grid-template-rows: 174px;
+        padding: 0 0 1rem;
+    }
+
+    .proj_approval .proj_form .grid_top .grid1 h2 img {
+        width: 75px;
+        height: 13px;
+        margin-left: -6px;
+    }
+
+    .proj_approval .proj_form .grid_top .grid1 h2 {
+        display: flex;
+        height: 26px;
+        align-items: center;
+    }
+
+    .proj_approval .proj_form .grid_top .grid2 h1 {
+        font-size: 1.6rem;
+        letter-spacing: 0.2px;
+        line-height: 2rem;
+    }
+
+    .proj_approval .proj_form .sep_div {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 20px 0px 13px;
+    }
+
+    .proj_approval .proj_form .grid_top .grid2 {
+        text-align: center;
+    }
+
+    .proj_approval .proj_form .sep_div .m-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .proj_approval .proj_form .sep_div h4 {
+        font-size: 1.24rem;
+        font-weight: 400;
+        margin-bottom: 1rem;
+    }
+
+    .proj_approval .proj_form .sep_div .col-md-3:nth-child(2) {
+        justify-content: flex-start;
+    }
+
+    .proj_approval .proj_form .main_form .mainform_head {
+        padding: 1.2rem 1.2rem;
+        margin: 0rem 0 2.2rem;
+        position: relative;
+    }
+
+    .proj_approval .proj_form .main_form .mainform_head.mt-5 {
+        margin-top: 0rem !important;
+    }
+
+    .proj_approval .proj_form .main_form .mainform_head::before {
+        position: absolute;
+        right: 4.6%;
+        top: 9px;
+        content: url(../icons/arrowdown.svg);
+        transform: rotate(0deg);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .proj_approval .proj_form .main_form .mainform_head.active::before {
+        transform: rotate(180deg);
+    }
+
+    .proj_approval .proj_form .main_form .mainform_head h1 {
+        font-size: 1.5rem;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad {
+        padding: 0rem 1.2rem;
+        height: 0;
+        visibility: hidden;
+        transition: height 0.4s ease-out, visibility 0.2s ease-out;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad.active {
+        height: 368px;
+        visibility: visible !important;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .row.mt-4 {
+        margin-top: 0rem !important;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .m-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .col-md-3.nomar_mob,
+    .proj_approval .proj_form .main_form .con_pad .col-md-7.nomar_mob {
+        margin-top: 0rem;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .col-md-7.mobile_top {
+        margin-top: 1rem;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .row.mar_mob {
+        margin-bottom: 2rem;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .col-md-3 p {
+        font-size: 1.3rem;
+        opacity: 0.95;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .col-md-7 p {
+        font-size: 1.3rem;
+    }
+
+    .proj_approval .proj_form .grid_top .grid3 p {
+        font-size: 1.2rem;
+        letter-spacing: 0.1px;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .col-md-7 span img {
+        width: 20px;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .col-md-7 span a {
+        font-weight: 500;
+    }
+
+    .proj_approval .proj_form .main_form .overflow_control {
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .proj_approval .proj_form .main_form .overflow_control .con_pad {
+        overflow: scroll;
+    }
+
+    .proj_approval .proj_form .main_form .overflow_control .con_pad .approver_name {
+        width: 220%;
+        flex-wrap: nowrap;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .approver_name h5,
+    .proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup h5 {
+        font-size: 1.5rem;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .approver_name .title_div .grid {
+        grid-template-columns: 21.5% 75%;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .approver_name .title_div .grid .grid1 div {
+        width: 32px;
+        height: 32px;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .approver_name .grid .grid2 p,
+    .proj_approval .proj_form .main_form .con_pad .approver_name .remark_div p {
+        font-size: 14px;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .approver_name .status_div button {
+        width: 101px;
+        height: 41px;
+    }
+
+    .main_form textarea[type="textarea"] {
+        font-size: 1.3rem;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .btn_div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .btn_div .btn.req,
+    .proj_approval .proj_form .main_form .con_pad .btn_div .btn.deli,
+    .proj_approval .proj_form .main_form .con_pad .btn_div .btn.rej,
+    .proj_approval .proj_form .main_form .con_pad .btn_div .btn.appr {
+        width: 208px;
+        height: 38px;
+        border-radius: 7px;
+        margin-bottom: 1.5rem;
+        margin-right: 0rem;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .btn_div .btn.deli {
+        width: 208px;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .btn_div .same_line {
+        display: flex;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .btn_div .btn.rej {
+        margin-right: 1.5rem;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .btn_div .btn.rej,
+    .proj_approval .proj_form .main_form .con_pad .btn_div .btn.appr {
+        width: 95px;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup .sticky.bg-white,
+    .proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup .sticky.bg-white {
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup .sticky.bg-white h5,
+    .proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup .sticky.bg-white h5 {
+        padding: 30px 18px 0px;
+        font-size: 1.8rem;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup .sticky.bg-white h5.pb-3,
+    .proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup .sticky.bg-white h5.pb-3 {
+        padding-bottom: 0.5rem !important;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup,
+    .proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup {
+        left: 43.5%;
+        transform: translateX(-50%);
+        bottom: 106%;
+        z-index: 10;
+        width: 266px;
+        max-height: 280px;
+        padding-bottom: 30px;
+        border-radius: 15px;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup .projapp_search,
+    .proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup .projapp_search {
+        margin: 15px 18px 12px;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup .pop_grid,
+    .proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup .pop_grid {
+        display: grid;
+        grid-template-columns: 21% 79%;
+        padding: 0 18px;
+        height: 52px;
+        align-content: center;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup .pop_grid .pop_grid2,
+    .proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup .pop_grid .pop_grid2 {
+        font-size: 1.4rem;
+        opacity: 1;
+        font-weight: 500;
+    }
+
+    .proj_approval .proj_form .main_form .con_pad .btn_div .reqinfo_popup .pop_grid .pop_grid1 div,
+    .proj_approval .proj_form .main_form .con_pad .btn_div .deleg_popup .pop_grid .pop_grid1 div {
+        width: 32px;
+        height: 32px;
+    }
+}

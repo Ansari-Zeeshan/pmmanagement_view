@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <g id="tasklist-add_" data-name="tasklist-add " transform="translate(-3934 -636)">
+    <circle id="Ellipse_1471" data-name="Ellipse 1471" cx="8" cy="8" r="8" transform="translate(3934 636)" fill="#646b72"/>
+    <g id="Group_32562" data-name="Group 32562" transform="translate(3942.014 632.72) rotate(45)">
+      <path id="Path_36486" data-name="Path 36486" d="M18,7.5v6.2" transform="translate(2.732 -12.188) rotate(45)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_36487" data-name="Path 36487" d="M7.5,18h6.2" transform="translate(13.2 -12.188) rotate(45)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

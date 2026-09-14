@@ -1,0 +1,36 @@
+.guage-title {
+  width: 300px;
+  margin: 0px auto 0px auto;
+  font-family: "Futura";
+}
+.guage-title span {
+  text-align: center;
+  display: block;
+  font-size: 22px;
+  font-weight: 100;
+  padding-right: 40px;
+}
+
+.chart-gauge {
+  width: 400px;
+  height: auto;
+  margin: 0px;
+}
+
+.chart-filled {
+  fill: #1ca9ed;
+}
+
+.chart-empty {
+  fill: #eaf2f6;
+}
+
+.needle,
+.needle-center {
+  fill: #464a4f;
+  display: none;
+}
+
+svg {
+  font: 10px sans-serif;
+}
