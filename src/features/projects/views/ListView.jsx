@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import { MessageSquare, Plus } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { LeadProfileModal } from '../../../components/common/LeadProfileModal';
+import { useWorkspaceStore } from '../../../store/useWorkspaceStore';
 
 const calculateTotalDays = (dateStr) => {
   if (!dateStr || typeof dateStr !== 'string') return '';
@@ -75,34 +79,32 @@ const TruncatedCellText = ({
   style = {},
   maxWidth = '100%',
   fontSize = '13px',
-  minCharsForEllipsis = 0,
 }) => {
   const textRef = React.useRef(null);
-  const [isOverflowing, setIsOverflowing] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const textStr = String(text || '');
-  const isOverLength = minCharsForEllipsis > 0 ? textStr.length > minCharsForEllipsis : true;
+  const isLongText = textStr.length > 100;
 
   const handleMouseEnter = () => {
-    if (isOverLength && textRef.current) {
-      const hasOverflow = textRef.current.scrollWidth > textRef.current.clientWidth;
-      setIsOverflowing(hasOverflow);
-    } else {
-      setIsOverflowing(false);
+    if (textRef.current) {
+      const isOverflowing = textRef.current.scrollWidth > textRef.current.clientWidth;
+      if (isLongText || isOverflowing) {
+        setShowTooltip(true);
+      }
     }
-    setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
+    setShowTooltip(false);
   };
 
   return (
     <div
-      className="position-relative d-inline-block w-100"
+      className="position-relative d-inline-block w-100 align-middle"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      title={isLongText ? textStr : undefined}
       style={{ maxWidth, overflow: 'hidden' }}
     >
       <p
@@ -113,7 +115,7 @@ const TruncatedCellText = ({
           width: '100%',
           whiteSpace: 'nowrap',
           overflow: 'hidden',
-          textOverflow: isOverLength ? 'ellipsis' : 'clip',
+          textOverflow: 'ellipsis',
           margin: 0,
           fontSize,
           color: '#1e293b',
@@ -124,19 +126,21 @@ const TruncatedCellText = ({
         {textStr}
       </p>
 
-      {isHovered && isOverLength && isOverflowing && (
+      {showTooltip && (
         <div
           className="position-absolute bg-dark text-white rounded px-2 py-1 shadow-lg"
           style={{
             bottom: '100%',
             left: 0,
             marginBottom: '4px',
-            zIndex: 9999,
+            zIndex: 99999,
             fontSize: '11.5px',
             fontWeight: '500',
-            whiteSpace: 'nowrap',
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
             pointerEvents: 'none',
             boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+            maxWidth: '320px',
           }}
         >
           {textStr}
@@ -147,11 +151,33 @@ const TruncatedCellText = ({
 };
 
 export const ListView = ({ tasks = [], onTaskStatusChange, onTaskClick, onChatClick, onAddProject }) => {
+  const { setChatDrawerOpen, setActiveTaskDetail } = useWorkspaceStore();
   const [collapsedGroups, setCollapsedGroups] = useState({});
   const [activeStatusDropdown, setActiveStatusDropdown] = useState(null); // taskId
+  const [statusDropdownPos, setStatusDropdownPos] = useState(null); // { taskId, top, left }
   const [activeColumnDropdownGroup, setActiveColumnDropdownGroup] = useState(null); // groupKey
+  const [columnDropdownPos, setColumnDropdownPos] = useState(null); // { groupKey, top, left }
   const [hoveredPlannedDateTaskId, setHoveredPlannedDateTaskId] = useState(null);
-  const [hoveredTitleTaskId, setHoveredTitleTaskId] = useState(null);
+  const [selectedLeadProfile, setSelectedLeadProfile] = useState(null);
+
+  // Close active portal dropdowns on global click outside or window scroll
+  useEffect(() => {
+    const handleGlobalClickOrScroll = () => {
+      if (activeStatusDropdown || activeColumnDropdownGroup) {
+        setActiveStatusDropdown(null);
+        setStatusDropdownPos(null);
+        setActiveColumnDropdownGroup(null);
+        setColumnDropdownPos(null);
+      }
+    };
+
+    window.addEventListener('click', handleGlobalClickOrScroll);
+    window.addEventListener('scroll', handleGlobalClickOrScroll, true);
+    return () => {
+      window.removeEventListener('click', handleGlobalClickOrScroll);
+      window.removeEventListener('scroll', handleGlobalClickOrScroll, true);
+    };
+  }, [activeStatusDropdown, activeColumnDropdownGroup]);
 
   const defaultColumns = {
     assignees: true,
@@ -229,26 +255,42 @@ export const ListView = ({ tasks = [], onTaskStatusChange, onTaskClick, onChatCl
   ];
 
   return (
-    <div className="list tab_content position-relative active w-100">
+    <div className="list tab_content pm-list-view-container position-relative active w-100">
       {groups.map((group) => {
         const groupTasks = tasks.filter((t) => (t.group || 'Research') === group.key);
         const isCollapsed = collapsedGroups[group.key];
         const visibleColumns = groupVisibleColumns[group.key] || defaultColumns;
         const isColumnDropdownOpen = activeColumnDropdownGroup === group.key;
+        const hasActiveStatusInGroup = groupTasks.some((t) => t._id === activeStatusDropdown);
+        const isDropdownActiveInGroup = isColumnDropdownOpen || hasActiveStatusInGroup;
 
         return (
-          <div key={group.key} className={`project1 ${group.colorClass} mb-4`}>
-            <div className="projectcon1 mt-0 mb-0">
-              <div className="child-border table-scroll-wrapper">
-                <table className="workspace-group-table">
+          <div
+            key={group.key}
+            className={`project1 pm-project-group-card ${group.colorClass} mb-4`}
+            style={{ position: 'relative', zIndex: isDropdownActiveInGroup ? 99999 : 1 }}
+          >
+            {/* Group Container Body */}
+            <div className="projectcon1 pm-project-group-content mt-0 mb-0">
+              <div
+                className="child-border table-scroll-wrapper pm-table-scroll-wrapper"
+                style={{
+                  overflowX: isDropdownActiveInGroup ? 'visible' : 'auto',
+                  overflowY: 'visible',
+                  position: 'relative',
+                }}
+              >
+                <table className="workspace-group-table pm-workspace-group-table">
                   {/* Table Header Row */}
-                  <thead className="workspace-group-thead">
+                  <thead
+                    className="workspace-group-thead pm-workspace-group-thead"
+                    style={{ position: 'relative', zIndex: isColumnDropdownOpen ? 99999 : 25 }}
+                  >
                     <tr>
-                      <th
-                        className="head1 mysticky2"
-                      >
+                      {/* Project Title Header Column */}
+                      <th className="head1 th-project-group-title mysticky2 col-w-title">
                         <div className="d-flex align-items-center gap-2">
-                          <span onClick={() => toggleGroup(group.key)} style={{ cursor: 'pointer' }}>
+                          <span onClick={() => toggleGroup(group.key)} style={{ cursor: 'pointer' }} className="d-inline-flex align-items-center justify-content-center">
                             <img
                               src="/icons/dropdown-1.svg"
                               alt="toggle"
@@ -258,144 +300,106 @@ export const ListView = ({ tasks = [], onTaskStatusChange, onTaskClick, onChatCl
                               }}
                             />
                           </span>
-                          <span className="dot" style={{ backgroundColor: group.dotColor, width: '12px', height: '12px', borderRadius: '50%', display: 'inline-block' }}></span>
-                          <h5 className="m-0" style={{ fontSize: '15px', fontWeight: 600 }}>{group.title}</h5>
+                          <span className="dot" style={{ backgroundColor: group.dotColor, width: '12px', height: '12px', borderRadius: '50%', display: 'inline-block' }} />
+                          <h5 className="m-0 fs-7 fw-bold">{group.title}</h5>
                         </div>
                       </th>
 
+                      {/* Assignees Header Column */}
                       {visibleColumns.assignees && (
-                        <th className="head2 assignees">
-                          <h5 className="m-0" style={{ fontSize: '13.5px', fontWeight: 600, whiteSpace: 'nowrap' }}>Assignees</h5>
+                        <th className="head2 th-assignees assignees col-w-assignees">
+                          <h5 className="th-header-text">Assignees</h5>
                         </th>
                       )}
+                      {/* Subitems Header Column */}
                       {visibleColumns.subitems && (
-                        <th className="head3 subitems">
-                          <h5 className="m-0" style={{ fontSize: '13.5px', fontWeight: 600, whiteSpace: 'nowrap' }}>Subitems</h5>
+                        <th className="head3 th-subitems subitems col-w-subitems">
+                          <h5 className="th-header-text">Subitems</h5>
                         </th>
                       )}
+                      {/* Planned Date Header Column */}
                       {visibleColumns.plannedDate && (
-                        <th className="head4 plannedDate">
-                          <h5 className="m-0" style={{ fontSize: '13.5px', fontWeight: 600, whiteSpace: 'nowrap' }}>Planned Date</h5>
+                        <th className="head4 th-planned-date plannedDate col-w-planned-date">
+                          <h5 className="th-header-text">Planned Date</h5>
                         </th>
                       )}
+                      {/* Actual Date Header Column */}
                       {visibleColumns.actualDate && (
-                        <th className="head5 actualDate">
-                          <h5 className="m-0" style={{ fontSize: '13.5px', fontWeight: 600, whiteSpace: 'nowrap' }}>Actual Date</h5>
+                        <th className="head5 th-actual-date actualDate col-w-actual-date">
+                          <h5 className="th-header-text">Actual Date</h5>
                         </th>
                       )}
+                      {/* Actual Budget Header Column */}
                       {visibleColumns.actualBudget && (
-                        <th className="head6 actualBudget">
-                          <h5 className="m-0" style={{ fontSize: '13.5px', fontWeight: 600, whiteSpace: 'nowrap' }}>Actual Budget</h5>
+                        <th className="head6 th-actual-budget actualBudget col-w-actual-budget">
+                          <h5 className="th-header-text">Actual Budget</h5>
                         </th>
                       )}
+                      {/* Planned Budget Header Column */}
                       {visibleColumns.plannedBudget && (
-                        <th className="head7 plannedBudget">
-                          <h5 className="m-0" style={{ fontSize: '13.5px', fontWeight: 600, whiteSpace: 'nowrap' }}>Planned Budget</h5>
+                        <th className="head7 th-planned-budget plannedBudget col-w-planned-budget">
+                          <h5 className="th-header-text">Planned Budget</h5>
                         </th>
                       )}
+                      {/* Project Lead Header Column */}
                       {visibleColumns.projectLead && (
-                        <th className="head8 projectLead">
-                          <h5 className="m-0" style={{ fontSize: '13.5px', fontWeight: 600, whiteSpace: 'nowrap' }}>Project Lead</h5>
+                        <th className="head8 th-project-lead projectLead col-w-project-lead">
+                          <h5 className="th-header-text">Project Lead</h5>
                         </th>
                       )}
+                      {/* Domain Lead Header Column */}
                       {visibleColumns.domainLead && (
-                        <th className="head9 domainLead">
-                          <h5 className="m-0" style={{ fontSize: '13.5px', fontWeight: 600, whiteSpace: 'nowrap' }}>Domain Lead</h5>
+                        <th className="head9 th-domain-lead domainLead col-w-domain-lead">
+                          <h5 className="th-header-text">Domain Lead</h5>
                         </th>
                       )}
+                      {/* Status Header Column */}
                       {visibleColumns.status && (
-                        <th className="head10 status">
-                          <h5 className="m-0" style={{ fontSize: '13.5px', fontWeight: 600, whiteSpace: 'nowrap' }}>Status</h5>
+                        <th className="head10 th-status status col-w-status">
+                          <h5 className="th-header-text">Status</h5>
                         </th>
                       )}
 
-                      <th className="head11 ps-0">
+                      {/* Hide/Collapse Column Toggle Trigger */}
+                      <th className="head11 th-column-toggle col-w-toggle ps-0 position-relative">
                         <div className="position-relative d-inline-block">
                           <span
+                            className="column-toggle-btn d-inline-flex align-items-center justify-content-center"
                             onClick={(e) => {
                               e.stopPropagation();
-                              setActiveColumnDropdownGroup(isColumnDropdownOpen ? null : group.key);
+                              if (isColumnDropdownOpen) {
+                                setActiveColumnDropdownGroup(null);
+                                setColumnDropdownPos(null);
+                              } else {
+                                const rect = e.currentTarget.getBoundingClientRect();
+                                setActiveColumnDropdownGroup(group.key);
+                                setColumnDropdownPos({
+                                  groupKey: group.key,
+                                  top: rect.bottom + 6,
+                                  left: Math.max(10, rect.right - 190),
+                                });
+                              }
                             }}
                             style={{
-                              width: '20px',
-                              height: '20px',
-                              backgroundColor: '#2D62ED',
-                              borderRadius: '50%',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
+                              width: '22px',
+                              height: '22px',
+                              background: isColumnDropdownOpen
+                                ? 'linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)'
+                                : 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                              borderRadius: '6px',
                               color: '#ffffff',
-                              fontSize: '13px',
-                              fontWeight: 'bold',
+                              boxShadow: isColumnDropdownOpen
+                                ? '0 2px 8px rgba(30, 58, 138, 0.4)'
+                                : '0 2px 6px rgba(29, 78, 216, 0.35)',
                               cursor: 'pointer',
                               userSelect: 'none',
-                              lineHeight: 1,
+                              transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                              transform: isColumnDropdownOpen ? 'rotate(45deg)' : 'rotate(0deg)',
                             }}
                             title="Toggle Columns"
                           >
-                            +
+                            <Plus size={13} strokeWidth={2.5} color="#ffffff" />
                           </span>
-
-                          {isColumnDropdownOpen && (
-                            <div
-                              className="position-absolute end-0 top-100 mt-2 bg-white shadow-lg border py-2 px-0"
-                              style={{
-                                zIndex: 9999,
-                                width: '180px',
-                                boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.16)',
-                                borderColor: '#e5e7eb',
-                                borderRadius: '6px',
-                                backgroundColor: '#ffffff',
-                              }}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <div className="d-flex flex-column">
-                                {[
-                                  { key: 'assignees', label: 'Assignees', icon: '/icons/subitm.svg' },
-                                  { key: 'subitems', label: 'Subitems', icon: '/icons/subitm.svg' },
-                                  { key: 'plannedDate', label: 'Planned Date', icon: '/icons/calender.svg' },
-                                  { key: 'actualDate', label: 'Actual Date', icon: '/icons/calender.svg' },
-                                  { key: 'actualBudget', label: 'Actual Budget', icon: '/icons/workload.svg' },
-                                  { key: 'plannedBudget', label: 'Planned Budget', icon: '/icons/workload.svg' },
-                                  { key: 'projectLead', label: 'Project Lead', icon: '/icons/avatar1.svg' },
-                                  { key: 'domainLead', label: 'Domain Lead', icon: '/icons/avatar2.svg' },
-                                  { key: 'status', label: 'Status', icon: '/icons/filter.svg' },
-                                ].map(({ key, label, icon }) => {
-                                  const isVisible = visibleColumns[key];
-                                  return (
-                                    <div
-                                      key={key}
-                                      className="d-flex align-items-center gap-2 px-3 py-1.5 cursor-pointer select-none"
-                                      style={{
-                                        cursor: 'pointer',
-                                        fontSize: '12.5px',
-                                        color: isVisible ? '#2D62ED' : '#64748b',
-                                        backgroundColor: 'transparent',
-                                        transition: 'background-color 0.15s',
-                                      }}
-                                      onClick={() => toggleColumn(group.key, key)}
-                                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f8fafc')}
-                                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-                                    >
-                                      <img
-                                        src={icon}
-                                        alt=""
-                                        style={{
-                                          width: '13px',
-                                          height: '13px',
-                                          opacity: isVisible ? 1 : 0.4,
-                                          filter: isVisible ? 'none' : 'grayscale(100%)',
-                                        }}
-                                      />
-                                      <span className={isVisible ? 'fw-medium' : ''} style={{ fontSize: '12.5px' }}>
-                                        {label}
-                                      </span>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          )}
                         </div>
                       </th>
                     </tr>
@@ -404,260 +408,240 @@ export const ListView = ({ tasks = [], onTaskStatusChange, onTaskClick, onChatCl
                   {/* Expandable Project Body Rows */}
                   {!isCollapsed && (
                     <tbody>
-                      {groupTasks.map((task, idx) => (
-                        <tr key={task._id || idx} className="border-bottom project-row-item">
-                          <td
-                            className="divcon1 mysticky2 position-relative"
-                            onClick={() => onTaskClick && onTaskClick(task)}
-                            style={{
-                              cursor: 'pointer',
-                              position: 'sticky',
-                              left: 0,
-                              zIndex: 10,
-                              minWidth: '300px',
-                              width: '300px',
-                              fontSize: '13px',
-                              paddingLeft: '12px',
-                            }}
+                      {groupTasks.map((task, idx) => {
+                        const isStatusOpen = activeStatusDropdown === task._id;
+                        return (
+                          <tr
+                            key={task._id || idx}
+                            className="border-bottom project-row-item"
+                            style={{ position: 'relative', zIndex: isStatusOpen ? 99999 : 1 }}
                           >
-                            <p className="m-0 text-nowrap" style={{ fontSize: '13px', color: '#1e293b', whiteSpace: 'nowrap' }}>
-                              {task.title || ''}
-                            </p>
-                          </td>
+                            {/* Project Title Cell */}
+                            <td
+                              className="divcon1 cell-project-title mysticky2 col-w-title position-relative cursor-pointer"
+                              onClick={() => onTaskClick && onTaskClick(task)}
+                              style={{ paddingLeft: '12px', fontSize: '13px' }}
+                            >
+                              <div className="d-flex align-items-center justify-content-between w-100 pe-2" style={{ overflow: 'hidden' }}>
+                                <TruncatedCellText text={task.title || ''} fontSize="13px" />
+                                <button
+                                  type="button"
+                                  className="btn btn-link p-0 ms-2 border-0 bg-transparent flex-shrink-0 d-inline-flex align-items-center justify-content-center"
+                                  style={{
+                                    opacity: 0.65,
+                                    transition: 'all 0.15s ease',
+                                    color: '#64748b',
+                                    width: '24px',
+                                    height: '24px',
+                                    cursor: 'pointer',
+                                    borderRadius: '4px',
+                                  }}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActiveTaskDetail(task);
+                                    setChatDrawerOpen(true);
+                                    if (onChatClick) onChatClick(task);
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.currentTarget.style.opacity = '1';
+                                    e.currentTarget.style.color = '#2D62ED';
+                                    e.currentTarget.style.backgroundColor = '#eff6ff';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.currentTarget.style.opacity = '0.65';
+                                    e.currentTarget.style.color = '#64748b';
+                                    e.currentTarget.style.backgroundColor = 'transparent';
+                                  }}
+                                  title={`Chat about ${task.title || 'Task'}`}
+                                >
+                                  <MessageSquare size={14} strokeWidth={1.8} />
+                                </button>
+                              </div>
+                            </td>
 
-                          {visibleColumns.assignees && (
-                            <td className="divcon2 assignees" style={{ fontSize: '13px' }}>
-                              <div className="d-flex align-items-center gap-1 flex-nowrap">
-                                {task.assignees?.map((a, aIdx) => (
+                            {/* Assignees Cell - Left / Start Aligned */}
+                            {visibleColumns.assignees && (
+                              <td className="divcon2 cell-assignees assignees col-w-assignees">
+                                <div className="d-flex align-items-center justify-content-start gap-1 flex-nowrap">
+                                  {task.assignees?.map((a, aIdx) => (
+                                    <div key={aIdx} className="pm-avatar-circle">
+                                      <img
+                                        src={a.avatarUrl || '/img/client1.jpg'}
+                                        alt="assignee"
+                                        className="pm-avatar-img"
+                                        onError={(e) => { e.target.src = '/icons/avatar1.svg'; }}
+                                      />
+                                    </div>
+                                  ))}
+                                </div>
+                              </td>
+                            )}
+
+                            {/* Subitems Cell - Left / Start Aligned */}
+                            {visibleColumns.subitems && (
+                              <td className="divcon3 cell-subitems subitems col-w-subitems">
+                                <div className="d-flex align-items-center justify-content-start gap-1">
+                                  <span id="tree_open" className="d-inline-flex align-items-center justify-content-center">
+                                    <img src="/icons/subitm.svg" alt="subitem" style={{ width: '14px', height: '14px' }} />
+                                  </span>
+                                  <span style={{ fontSize: '13px' }}>{idx === 0 ? '1' : ''}</span>
+                                </div>
+                              </td>
+                            )}
+
+                            {/* Planned Date Cell - Left / Start Aligned */}
+                            {visibleColumns.plannedDate && (
+                              <td
+                                className="divcon4 cell-planned-date plannedDate col-w-planned-date position-relative cursor-pointer"
+                                onMouseEnter={() => setHoveredPlannedDateTaskId(task._id)}
+                                onMouseLeave={() => setHoveredPlannedDateTaskId(null)}
+                              >
+                                <div className="d-flex align-items-center justify-content-start w-100">
+                                  <span className="pm-pill-planned-date">
+                                    <TruncatedCellText text={task.plannedDate || 'Oct 20 - 28'} fontSize="13px" />
+                                  </span>
+                                </div>
+
+                                {hoveredPlannedDateTaskId === task._id && (
                                   <div
-                                    key={aIdx}
-                                    className="avatar-wrapper"
+                                    className="position-absolute bg-dark text-white rounded px-2 py-1 shadow-lg"
                                     style={{
-                                      width: '26px',
-                                      height: '26px',
-                                      borderRadius: '50%',
-                                      overflow: 'hidden',
-                                      flexShrink: 0,
-                                      display: 'inline-block',
+                                      bottom: '100%',
+                                      left: '50%',
+                                      transform: 'translateX(-50%)',
+                                      marginBottom: '6px',
+                                      zIndex: 99999,
+                                      fontSize: '11.5px',
+                                      fontWeight: '600',
+                                      whiteSpace: 'nowrap',
+                                      pointerEvents: 'none',
+                                      boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
                                     }}
                                   >
+                                    {calculateTotalDays(task.plannedDate || 'Oct 20 - 28')}
+                                  </div>
+                                )}
+                              </td>
+                            )}
+
+                            {/* Actual Date Cell - Left / Start Aligned */}
+                            {visibleColumns.actualDate && (
+                              <td className="divcon5 cell-actual-date actualDate col-w-actual-date">
+                                <div className="d-flex align-items-center justify-content-start w-100">
+                                  <span className="pm-pill-actual-date">
+                                    <TruncatedCellText text={task.actualDate || 'Oct 20, 2026'} fontSize="13px" />
+                                  </span>
+                                </div>
+                              </td>
+                            )}
+
+                            {/* Actual Budget Cell */}
+                            {visibleColumns.actualBudget && (
+                              <td className="divcon6 cell-actual-budget actualBudget col-w-actual-budget">
+                                <TruncatedCellText text={task.actualBudget || '100 AED'} fontSize="13px" />
+                              </td>
+                            )}
+
+                            {/* Planned Budget Cell */}
+                            {visibleColumns.plannedBudget && (
+                              <td className="divcon7 cell-planned-budget plannedBudget col-w-planned-budget">
+                                <TruncatedCellText text={task.plannedBudget || '100 AED'} fontSize="13px" />
+                              </td>
+                            )}
+
+                            {/* Project Lead Cell */}
+                            {visibleColumns.projectLead && (
+                              <td className="divcon8 cell-project-lead projectLead col-w-project-lead">
+                                <div
+                                  className="d-flex align-items-center gap-2 cursor-pointer overflow-hidden"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSelectedLeadProfile({ name: task.projectLead || 'John', type: 'Project Lead' });
+                                  }}
+                                  title="Click to view Project Lead Profile"
+                                >
+                                  <div className="pm-avatar-circle border border-white">
                                     <img
-                                      src={a.avatarUrl || '/img/client1.jpg'}
-                                      alt="assignee"
-                                      style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'cover',
-                                        borderRadius: '50%',
-                                        display: 'block',
-                                      }}
+                                      src="/img/client1.jpg"
+                                      alt="lead"
+                                      className="pm-avatar-img"
                                       onError={(e) => { e.target.src = '/icons/avatar1.svg'; }}
                                     />
                                   </div>
-                                ))}
-                              </div>
-                            </td>
-                          )}
+                                  <TruncatedCellText text={task.projectLead || 'John'} fontSize="13px" />
+                                </div>
+                              </td>
+                            )}
 
-                          {visibleColumns.subitems && (
-                            <td className="divcon3 subitems" style={{ fontSize: '13px' }}>
-                              <span id="tree_open">
-                                <img src="/icons/subitm.svg" alt="subitem" />
-                              </span>
-                              <span className="ms-3" style={{ fontSize: '13px' }}>{idx === 0 ? '1' : ''}</span>
-                            </td>
-                          )}
-
-                          {visibleColumns.plannedDate && (
-                            <td
-                              className="divcon4 plannedDate position-relative"
-                              onMouseEnter={() => setHoveredPlannedDateTaskId(task._id)}
-                              onMouseLeave={() => setHoveredPlannedDateTaskId(null)}
-                              style={{ position: 'relative', cursor: 'pointer', fontSize: '13px' }}
-                            >
-                              <span
-                                style={{
-                                  backgroundColor: '#cedbfe',
-                                  borderRadius: '12px',
-                                  padding: '3px 10px',
-                                  fontSize: '13px',
-                                  color: '#1e293b',
-                                  fontWeight: 500,
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  whiteSpace: 'nowrap',
-                                  minWidth: '95px',
-                                }}
-                              >
-                                {task.plannedDate || 'Oct 20 - 28'}
-                              </span>
-
-                              {hoveredPlannedDateTaskId === task._id && (
+                            {/* Domain Lead Cell */}
+                            {visibleColumns.domainLead && (
+                              <td className="divcon9 cell-domain-lead domainLead col-w-domain-lead">
                                 <div
-                                  className="position-absolute bg-dark text-white rounded px-2 py-1 shadow-lg"
-                                  style={{
-                                    bottom: '100%',
-                                    left: '50%',
-                                    transform: 'translateX(-50%)',
-                                    marginBottom: '6px',
-                                    zIndex: 9999,
-                                    fontSize: '11.5px',
-                                    fontWeight: '600',
-                                    whiteSpace: 'nowrap',
-                                    pointerEvents: 'none',
-                                    boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+                                  className="d-flex align-items-center gap-2 cursor-pointer overflow-hidden"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSelectedLeadProfile({ name: task.domainLead || 'Smith', type: 'Domain Lead' });
+                                  }}
+                                  title="Click to view Domain Lead Profile"
+                                >
+                                  <div className="pm-avatar-circle border border-white">
+                                    <img
+                                      src="/img/client2.jpg"
+                                      alt="domain"
+                                      className="pm-avatar-img"
+                                      onError={(e) => { e.target.src = '/icons/avatar2.svg'; }}
+                                    />
+                                  </div>
+                                  <TruncatedCellText text={task.domainLead || 'Smith'} fontSize="13px" />
+                                </div>
+                              </td>
+                            )}
+
+                            {/* Status Cell */}
+                            {visibleColumns.status && (
+                              <td className="divcon10 cell-status status col-w-status">
+                                <div
+                                  className={getStatusClass(task.status)}
+                                  style={{ cursor: 'pointer', fontSize: '13px' }}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (isStatusOpen) {
+                                      setActiveStatusDropdown(null);
+                                      setStatusDropdownPos(null);
+                                    } else {
+                                      const rect = e.currentTarget.getBoundingClientRect();
+                                      setActiveStatusDropdown(task._id);
+                                      setStatusDropdownPos({
+                                        taskId: task._id,
+                                        top: rect.bottom + 6,
+                                        left: Math.max(10, rect.right - 270),
+                                      });
+                                    }
                                   }}
                                 >
-                                  {calculateTotalDays(task.plannedDate || 'Oct 20 - 28')}
+                                  {task.status || 'On Track'}
                                 </div>
-                              )}
-                            </td>
-                          )}
-
-                          {visibleColumns.actualDate && (
-                            <td className="divcon5 actualDate" style={{ fontSize: '13px' }}>
-                              <span
-                                style={{
-                                  backgroundColor: '#f1f5f9',
-                                  border: '1px solid #cbd5e1',
-                                  borderRadius: '12px',
-                                  padding: '3px 10px',
-                                  fontSize: '13px',
-                                  color: '#334155',
-                                  fontWeight: 500,
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  whiteSpace: 'nowrap',
-                                  minWidth: '95px',
-                                }}
-                              >
-                                {task.actualDate || 'Oct 20, 2026'}
-                              </span>
-                            </td>
-                          )}
-
-                          {visibleColumns.actualBudget && (
-                            <td className="divcon6 actualBudget" style={{ fontSize: '13px' }}>
-                              <p className="m-0 text-nowrap" style={{ fontSize: '13px', color: '#1e293b', whiteSpace: 'nowrap' }}>
-                                {task.actualBudget || 'AED 200'}
-                              </p>
-                            </td>
-                          )}
-
-                          {visibleColumns.plannedBudget && (
-                            <td className="divcon7 plannedBudget" style={{ fontSize: '13px' }}>
-                              {task.plannedBudget && task.plannedBudget.length > 150 ? (
-                                <TruncatedCellText text={task.plannedBudget} fontSize="13px" minCharsForEllipsis={150} />
-                              ) : (
-                                <p className="m-0 text-nowrap" style={{ fontSize: '13px', color: '#1e293b', whiteSpace: 'nowrap' }}>
-                                  {task.plannedBudget || 'AED 100'}
-                                </p>
-                              )}
-                            </td>
-                          )}
-
-                          {visibleColumns.projectLead && (
-                            <td className="divcon8 projectLead" style={{ fontSize: '13px' }}>
-                              <div className="d-flex align-items-center gap-2">
-                                <div className="avatar-wrapper" style={{ width: '26px', height: '26px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0 }}>
-                                  <img
-                                    src="/img/client1.jpg"
-                                    alt="lead"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%', display: 'block' }}
-                                    onError={(e) => { e.target.src = '/icons/avatar1.svg'; }}
-                                  />
-                                </div>
-                                <p className="m-0 text-nowrap" style={{ fontSize: '13px', color: '#1e293b', whiteSpace: 'nowrap' }}>
-                                  {task.projectLead || 'John'}
-                                </p>
-                              </div>
-                            </td>
-                          )}
-
-                          {visibleColumns.domainLead && (
-                            <td className="divcon9 domainLead" style={{ fontSize: '13px' }}>
-                              <div className="d-flex align-items-center gap-2">
-                                <div className="avatar-wrapper" style={{ width: '26px', height: '26px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0 }}>
-                                  <img
-                                    src="/img/client2.jpg"
-                                    alt="domain"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%', display: 'block' }}
-                                    onError={(e) => { e.target.src = '/icons/avatar2.svg'; }}
-                                  />
-                                </div>
-                                <p className="m-0 text-nowrap" style={{ fontSize: '13px', color: '#1e293b', whiteSpace: 'nowrap' }}>
-                                  {task.domainLead || 'Smith'}
-                                </p>
-                              </div>
-                            </td>
-                          )}
-
-                          {visibleColumns.status && (
-                            <td className="divcon10 status position-relative" style={{ fontSize: '13px' }}>
-                              <div
-                                className={getStatusClass(task.status)}
-                                style={{ cursor: 'pointer', fontSize: '13px' }}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setActiveStatusDropdown(activeStatusDropdown === task._id ? null : task._id);
-                                }}
-                              >
-                                {task.status || 'On Track'}
-                              </div>
-
-                              {/* STATUS GRID POPOVER */}
-                              {activeStatusDropdown === task._id && (
-                                <div
-                                  className="dropdown-menu show shadow-lg p-2 border-0 position-absolute end-0 top-100 bg-white"
-                                  style={{ zIndex: 1080, width: '270px', borderRadius: '8px' }}
-                                >
-                                  <div className="row g-2">
-                                    {statusGridOptions.map((pair, pIdx) => (
-                                      <React.Fragment key={pIdx}>
-                                        {pair.map((st) => (
-                                          <div key={st.label} className="col-6">
-                                            <div
-                                              className={st.class}
-                                              style={{ cursor: 'pointer', textAlign: 'center', margin: '2px 0' }}
-                                              onClick={(e) => {
-                                                e.stopPropagation();
-                                                onTaskStatusChange && onTaskStatusChange(task._id, st.label);
-                                                setActiveStatusDropdown(null);
-                                              }}
-                                            >
-                                              {st.label}
-                                            </div>
-                                          </div>
-                                        ))}
-                                      </React.Fragment>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
-                            </td>
-                          )}
-                        </tr>
-                      ))}
+                              </td>
+                            )}
+                          </tr>
+                        );
+                      })}
 
                       {/* Add Row Button */}
                       <tr className="border-bottom">
                         <td
-                          className="divcon1 mysticky2"
+                          className="divcon1 mysticky2 col-w-title"
                           style={{
                             position: 'sticky',
                             left: 0,
                             zIndex: 10,
-                            minWidth: '300px',
-                            width: '300px',
                             paddingLeft: '12px',
                           }}
                         >
                           <p
                             className="text-primary fw-bold cursor-pointer m-0"
                             onClick={onAddProject}
-                            style={{ cursor: 'pointer', paddingLeft: '0px', fontSize: '13px' }}
+                            style={{ cursor: 'pointer', fontSize: '13px' }}
                           >
                             + Add
                           </p>
@@ -672,6 +656,129 @@ export const ListView = ({ tasks = [], onTaskStatusChange, onTaskClick, onChatCl
           </div>
         );
       })}
+      {/* Lead Profile Popup Modal */}
+      {selectedLeadProfile && (
+        <LeadProfileModal
+          leadName={selectedLeadProfile.name}
+          leadType={selectedLeadProfile.type}
+          onClose={() => setSelectedLeadProfile(null)}
+        />
+      )}
+
+      {/* PORTAL FOR ELEVATED STATUS GRID POPOVER */}
+      {activeStatusDropdown && statusDropdownPos && createPortal(
+        <div
+          className="dropdown-menu show shadow-2xl p-2 border position-fixed bg-white"
+          style={{
+            position: 'fixed',
+            top: `${statusDropdownPos.top}px`,
+            left: `${statusDropdownPos.left}px`,
+            zIndex: 999999,
+            width: '270px',
+            borderRadius: '10px',
+            boxShadow: '0 16px 48px rgba(0, 0, 0, 0.28), 0 2px 8px rgba(0,0,0,0.12)',
+            backgroundColor: '#ffffff',
+            border: '1px solid #e2e8f0',
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="row g-2">
+            {statusGridOptions.map((pair, pIdx) => (
+              <React.Fragment key={pIdx}>
+                {pair.map((st) => (
+                  <div key={st.label} className="col-6">
+                    <div
+                      className={st.class}
+                      style={{ cursor: 'pointer', textAlign: 'center', margin: '2px 0' }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onTaskStatusChange && onTaskStatusChange(statusDropdownPos.taskId, st.label);
+                        setActiveStatusDropdown(null);
+                        setStatusDropdownPos(null);
+                      }}
+                    >
+                      {st.label}
+                    </div>
+                  </div>
+                ))}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* PORTAL FOR ELEVATED COLUMN TOGGLE DROPDOWN */}
+      {activeColumnDropdownGroup && columnDropdownPos && createPortal(
+        <div
+          className="column-dropdown-fadeup position-fixed bg-white shadow-2xl border"
+          style={{
+            position: 'fixed',
+            top: `${columnDropdownPos.top}px`,
+            left: `${columnDropdownPos.left}px`,
+            zIndex: 999999,
+            width: '190px',
+            padding: '8px 0',
+            boxShadow: '0px 16px 48px rgba(0, 0, 0, 0.25)',
+            borderColor: '#e5e7eb',
+            borderRadius: '10px',
+            backgroundColor: '#ffffff',
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="d-flex flex-column">
+            {[
+              { key: 'assignees', label: 'Assignees', icon: '/icons/subitm.svg' },
+              { key: 'subitems', label: 'Subitems', icon: '/icons/subitm.svg' },
+              { key: 'plannedDate', label: 'Planned Date', icon: '/icons/calender.svg' },
+              { key: 'actualDate', label: 'Actual Date', icon: '/icons/calender.svg' },
+              { key: 'actualBudget', label: 'Actual Budget', icon: '/icons/workload.svg' },
+              { key: 'plannedBudget', label: 'Planned Budget', icon: '/icons/workload.svg' },
+              { key: 'projectLead', label: 'Project Lead', icon: '/icons/avatar1.svg' },
+              { key: 'domainLead', label: 'Domain Lead', icon: '/icons/avatar2.svg' },
+              { key: 'status', label: 'Status', icon: '/icons/filter.svg' },
+            ].map(({ key, label, icon }) => {
+              const visibleColumns = groupVisibleColumns[columnDropdownPos.groupKey] || defaultColumns;
+              const isVisible = visibleColumns[key];
+              return (
+                <div
+                  key={key}
+                  className="d-flex align-items-center select-none"
+                  style={{
+                    cursor: 'pointer',
+                    fontSize: '12.5px',
+                    padding: '8px 16px',
+                    color: '#808080',
+                    gap: '8px',
+                    backgroundColor: 'transparent',
+                    transition: 'background-color 0.15s ease',
+                  }}
+                  onClick={() => toggleColumn(columnDropdownPos.groupKey, key)}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f8fafc')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                >
+                  <img
+                    src={icon}
+                    alt=""
+                    style={{
+                      width: '14px',
+                      height: '14px',
+                      opacity: isVisible ? 1 : 0.4,
+                      filter: isVisible ? 'none' : 'grayscale(100%)',
+                    }}
+                  />
+                  <span style={{ fontSize: '12.5px', color: '#808080', fontWeight: 400 }}>
+                    {label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 };
+
+export default ListView;

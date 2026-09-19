@@ -21,7 +21,17 @@ export const Header = () => {
   };
 
   return (
-    <header className="navbar navbar-expand-lg bg-white border-bottom px-4 py-2 sticky-top d-flex justify-content-between align-items-center">
+    <header
+      className="navbar navbar-expand-lg bg-white border-bottom px-4 py-2 sticky-top d-flex justify-content-between align-items-center"
+      style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 2100,
+        backgroundColor: '#ffffff',
+        width: '100%',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+      }}
+    >
       {/* Left Brand Identity */}
       <div className="d-flex align-items-center gap-3">
         <img

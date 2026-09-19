@@ -9,11 +9,10 @@
     position: relative;
     }
 
-    input[type="text"] {
-        height: 20px;
-         font-size: 21px;
+#wrap input[type="text"] {
+    height: 20px;
+    font-size: 21px;
     display: inline-block;
-   
     border: none;
     outline: none;
     color: #555;
@@ -27,19 +26,15 @@
     z-index: 3;
     transition: width .4s cubic-bezier(0.000, 0.795, 0.000, 1.000);
     cursor: pointer;
-    }
+}
 
-    /* input[type="text"]:focus:hover {
-    border-bottom: 1px solid #BBB;
-    } */
-
-    input[type="text"]:focus {
+#wrap input[type="text"]:focus {
     width: 500px;
     z-index: 1;
-    /* border-bottom: 1px solid #BBB; */
     cursor: text;
-    }
-    input[type="submit"] {
+}
+
+#wrap input[type="submit"] {
     height: 16px;
     width: 16px;
     display: inline-block;
@@ -55,15 +50,13 @@
     right: 45px;
     z-index: 2;
     cursor: pointer;
-    /* opacity: 0.4; */
-    cursor: pointer;
     transition: opacity .4s ease;
-    }
+}
 
-    input[type="submit"]:hover {
-        border: none;
+#wrap input[type="submit"]:hover {
+    border: none;
     opacity: 0.8;
-    }
+}
 
 
     

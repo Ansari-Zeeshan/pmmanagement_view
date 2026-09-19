@@ -1,0 +1,232 @@
+/* ==========================================================================
+   Emaar PM Connect - Premium Gantt Chart & Dynamic Timeline Stylesheet
+   ========================================================================== */
+
+/* Executive KPI Metric Summary Cards */
+.gantt-kpi-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 12px 16px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  transition: all 0.2s ease;
+  flex: 1 1 0px;
+  min-width: 180px;
+}
+
+.gantt-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.08);
+  border-color: #cbd5e1;
+}
+
+/* Main Gantt Table Canvas */
+.gantt-table-wrapper {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.gantt-table-wrapper::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.gantt-table-wrapper::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+.gantt-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Tree Hierarchy Row Variants */
+.gantt-row-project {
+  background-color: #f8fafc !important;
+  border-left: 4px solid #2563eb !important;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.gantt-row-project:hover {
+  background-color: #f1f5f9 !important;
+}
+
+.gantt-row-milestone {
+  background-color: #ffffff !important;
+  border-left: 4px solid #64748b !important;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.gantt-row-milestone:hover {
+  background-color: #f8fafc !important;
+}
+
+.gantt-row-task {
+  background-color: #fafafa !important;
+  border-left: 4px solid #3b82f6 !important;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.gantt-row-task:hover {
+  background-color: #f3f4f6 !important;
+}
+
+/* Critical Path Glow & Dimming Highlights */
+.gantt-critical-glow {
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.75) !important;
+  border: 2px solid #f59e0b !important;
+  z-index: 50 !important;
+  animation: criticalPulse 2s infinite ease-in-out;
+}
+
+@keyframes criticalPulse {
+  0% { box-shadow: 0 0 10px rgba(245, 158, 11, 0.6); }
+  50% { box-shadow: 0 0 18px rgba(245, 158, 11, 0.95); }
+  100% { box-shadow: 0 0 10px rgba(245, 158, 11, 0.6); }
+}
+
+.gantt-dimmed {
+  opacity: 0.38 !important;
+  filter: grayscale(0.2);
+}
+
+/* Live Today Red Grid Indicator Line */
+.gantt-today-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #ef4444;
+  z-index: 25;
+  pointer-events: none;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+}
+
+.gantt-today-badge {
+  position: absolute;
+  top: -18px;
+  left: -20px;
+  background-color: #ef4444;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+}
+
+/* Tree Chevron Toggle Animation */
+.gantt-chevron {
+  display: inline-block;
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 4px;
+}
+
+.gantt-chevron:hover {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: #2563eb !important;
+}
+
+.gantt-chevron.open {
+  transform: rotate(90deg);
+}
+
+/* Loading Spinner Row for Async API Re-fetch */
+.gantt-loading-pulse {
+  animation: ganttPulse 1.2s infinite ease-in-out;
+}
+
+@keyframes ganttPulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 0.9; }
+  100% { opacity: 0.4; }
+}
+
+/* Timeline Bar Hover & Elevation */
+.gantt-timeline-bar {
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+  cursor: pointer;
+}
+
+.gantt-timeline-bar:hover {
+  transform: translateY(-1px) scale(1.006);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+  filter: brightness(1.06);
+  z-index: 100 !important;
+}
+
+/* Premium Floating Tooltip Box */
+.gantt-floating-tooltip {
+  position: fixed;
+  z-index: 99999;
+  background: #0f172a;
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+  width: 320px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  animation: ganttTooltipPop 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
+}
+
+@keyframes ganttTooltipPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.gantt-tooltip-badge-project {
+  background: rgba(226, 169, 103, 0.2);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.gantt-tooltip-badge-milestone {
+  background: rgba(100, 116, 139, 0.2);
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.gantt-tooltip-badge-task {
+  background: rgba(37, 99, 235, 0.2);
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.4);
+}
+
+/* Media Print Optimization */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .gantt-table-wrapper,
+  .gantt-table-wrapper * {
+    visibility: visible;
+  }
+  .gantt-table-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}

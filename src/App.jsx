@@ -1,7 +1,8 @@
 import React, { useEffect, lazy, Suspense } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from './store/useAuthStore';
 import { Sidebar } from './components/layout/Sidebar';
+import { Header } from './components/layout/Header';
 import { NotificationDrawer } from './components/notifications/NotificationDrawer';
 import { ChatDrawer } from './features/chat/ChatDrawer';
 
@@ -10,10 +11,13 @@ const LoginPage = lazy(() => import('./features/auth/LoginPage').then((m) => ({ 
 const DashboardPage = lazy(() => import('./features/dashboard/DashboardPage').then((m) => ({ default: m.DashboardPage })));
 const OwnerDashboardPage = lazy(() => import('./features/dashboard/OwnerDashboardPage').then((m) => ({ default: m.OwnerDashboardPage })));
 const ProjectWorkspacePage = lazy(() => import('./features/projects/ProjectWorkspacePage').then((m) => ({ default: m.ProjectWorkspacePage })));
+const ProjectListPage = lazy(() => import('./features/projects/ProjectListPage').then((m) => ({ default: m.ProjectListPage })));
+const ProjectDetailsPage = lazy(() => import('./features/projects/ProjectDetailsPage').then((m) => ({ default: m.ProjectDetailsPage })));
 const ProjectApprovalPreviewPage = lazy(() => import('./features/projects/ProjectApprovalPreviewPage').then((m) => ({ default: m.ProjectApprovalPreviewPage })));
 const RequestsPage = lazy(() => import('./features/requests/RequestsPage').then((m) => ({ default: m.RequestsPage })));
 const NewITProjectRequestPage = lazy(() => import('./features/requests/NewITProjectRequestPage').then((m) => ({ default: m.NewITProjectRequestPage })));
 const ChangeProjectRequestPage = lazy(() => import('./features/requests/ChangeProjectRequestPage').then((m) => ({ default: m.ChangeProjectRequestPage })));
+const ITProjectClosurePage = lazy(() => import('./features/requests/ITProjectClosurePage').then((m) => ({ default: m.ITProjectClosurePage })));
 const MyTasksPage = lazy(() => import('./features/tasks/MyTasksPage').then((m) => ({ default: m.MyTasksPage })));
 const SearchResultsPage = lazy(() => import('./features/search/SearchResultsPage').then((m) => ({ default: m.SearchResultsPage })));
 const UserProfilePage = lazy(() => import('./features/profile/UserProfilePage').then((m) => ({ default: m.UserProfilePage })));
@@ -27,12 +31,42 @@ const LoadingFallback = () => (
 );
 
 const ProtectedLayout = () => {
-  const { isAuthenticated, isLoading, fetchCurrentUser } = useAuthStore();
+  const { isAuthenticated, isLoading, fetchCurrentUser, logout } = useAuthStore();
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCurrentUser();
   }, []);
+
+  // 1-Hour Inactivity Auto-Logout (3,600,000 ms)
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const INACTIVITY_TIMEOUT = 3600000; // 1 Hour in milliseconds
+    let timeoutId;
+
+    const handleUserActivity = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        logout();
+        sessionStorage.setItem('logout_reason', 'Inactivity timeout: You were automatically logged out after 1 hour of inactivity.');
+        navigate('/login', { replace: true });
+      }, INACTIVITY_TIMEOUT);
+    };
+
+    // Initial setup
+    handleUserActivity();
+
+    // Event listeners to detect activity
+    const activityEvents = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+    activityEvents.forEach((event) => window.addEventListener(event, handleUserActivity));
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      activityEvents.forEach((event) => window.removeEventListener(event, handleUserActivity));
+    };
+  }, [isAuthenticated, logout, navigate]);
 
   if (!isAuthenticated && !isLoading) {
     return <Navigate to="/login" replace />;
@@ -40,7 +74,7 @@ const ProtectedLayout = () => {
 
   // Compute section class to match original CSS scoping
   let sectionClass = 'manage_view';
-  if (location.pathname.startsWith('/projects') || location.pathname === '/my-tasks') {
+  if (location.pathname.startsWith('/projects') || location.pathname.startsWith('/project-list') || location.pathname === '/my-tasks') {
     sectionClass = 'manage_view proj_filter';
   } else if (location.pathname.startsWith('/requests')) {
     sectionClass = 'manage_view mview_req';
@@ -76,11 +110,14 @@ const ProtectedLayout = () => {
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/owner-dashboard" element={<OwnerDashboardPage />} />
                 <Route path="/projects" element={<ProjectWorkspacePage />} />
+                <Route path="/project-list" element={<ProjectListPage />} />
                 <Route path="/projects/approval-preview" element={<ProjectApprovalPreviewPage />} />
+                <Route path="/projects/:projectId" element={<ProjectDetailsPage />} />
                 <Route path="/my-tasks" element={<MyTasksPage />} />
                 <Route path="/requests" element={<RequestsPage />} />
                 <Route path="/requests/new-it-project" element={<NewITProjectRequestPage />} />
                 <Route path="/requests/change-project" element={<ChangeProjectRequestPage />} />
+                <Route path="/requests/project-closure" element={<ITProjectClosurePage />} />
                 <Route path="/search" element={<SearchResultsPage />} />
                 <Route path="/profile" element={<UserProfilePage />} />
                 <Route path="/userprofile" element={<UserProfilePage />} />

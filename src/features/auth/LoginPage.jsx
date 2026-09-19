@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginWithEmail, loginWithGoogle } from '../../lib/firebase';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -8,10 +8,25 @@ export const LoginPage = () => {
   const [password, setPassword] = useState('password123');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [infoMessage, setInfoMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { fetchCurrentUser } = useAuthStore();
+  const { isAuthenticated, fetchCurrentUser } = useAuthStore();
+
+  useEffect(() => {
+    if (localStorage.getItem('auth_token') || isAuthenticated) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    const reason = sessionStorage.getItem('logout_reason');
+    if (reason) {
+      setInfoMessage(reason);
+      sessionStorage.removeItem('logout_reason');
+    }
+  }, []);
 
   const handleEmailLogin = async (e) => {
     e.preventDefault();
@@ -69,6 +84,7 @@ export const LoginPage = () => {
             <form onSubmit={handleEmailLogin}>
               <h1>Sign In</h1>
               <p>Enter your details below</p>
+              {infoMessage && <div className="alert alert-warning py-2 small mb-3">{infoMessage}</div>}
               {error && <div className="alert alert-danger py-2 small mb-3">{error}</div>}
               <p>Email address</p>
               <input

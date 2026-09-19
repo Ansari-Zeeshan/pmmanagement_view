@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../../lib/axios';
 
@@ -204,7 +204,7 @@ export const DashboardPage = () => {
           <div className="card1 bg-white p-4 rounded-3 border-0 h-100 shadow-sm d-flex flex-column justify-content-between" style={{ borderRadius: '12px', minHeight: '340px' }}>
             <div className="d-flex justify-content-between align-items-center mb-3">
               <h3 className="fw-bold text-dark m-0" style={{ fontSize: '18px' }}>Projects Overview</h3>
-              <span className="badge bg-light text-secondary rounded-pill px-3 py-1.5 fw-bold" style={{ fontSize: '12px', border: '1px solid #E2E8F0' }}>50 Total</span>
+              <span className="badge bg-light text-secondary rounded-pill px-3 py-1 fw-bold" style={{ fontSize: '12px', border: '1px solid #E2E8F0' }}>50 Total</span>
             </div>
 
             <div className="row align-items-center g-3 my-auto">
@@ -486,7 +486,7 @@ export const DashboardPage = () => {
             <div>
               <div className="d-flex justify-content-between align-items-center mb-4">
                 <h3 className="fw-bold text-dark m-0" style={{ fontSize: '18px' }}>Milestone</h3>
-                <span className="badge bg-primary bg-opacity-10 text-primary rounded-pill px-2.5 py-1 fw-bold" style={{ fontSize: '12px' }}>11 Total</span>
+                <span className="badge bg-primary bg-opacity-10 text-primary rounded-pill px-2 py-1 fw-bold" style={{ fontSize: '12px' }}>11 Total</span>
               </div>
               <div className="d-flex align-items-center justify-content-between gap-3 my-2">
                 {/* Premium Pill Legend List */}

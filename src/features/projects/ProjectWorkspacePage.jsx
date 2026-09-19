@@ -207,10 +207,10 @@ export const ProjectWorkspacePage = () => {
   };
 
   return (
-    <div className="divfilter2">
-      {/* Sticky Header Container with top_up (Row 1) and top_up2 (Row 2) */}
+    <div className="divfilter2 pm-workspace-main-wrapper">
+      {/* Sticky Workspace Navigation & Filter Header */}
       <div
-        className="sticky-top bg-white border-bottom shadow-sm"
+        className="sticky-top pm-workspace-sticky-container bg-white border-bottom shadow-sm"
         style={{
           position: 'sticky',
           top: 0,
@@ -218,8 +218,8 @@ export const ProjectWorkspacePage = () => {
           backgroundColor: '#ffffff',
         }}
       >
-        {/* TOP 1: Main Navbar for Title + View Switcher (top_up) */}
-        <div className="top_up bg-white border-bottom d-flex align-items-center" style={{ zIndex: 10 }}>
+        {/* Row 1: View Switcher Tabs (List, Gantt, Calendar, Workload, Kanban) */}
+        <div className="top_up pm-workspace-nav-header bg-white border-bottom d-flex align-items-center" style={{ zIndex: 10 }}>
           <div className="d-flex align-items-center gap-2">
             <h1 className="m-0 fw-bold" style={{ fontSize: '26px', color: '#171E48', lineHeight: 1 }}>
               Projects
@@ -416,7 +416,7 @@ export const ProjectWorkspacePage = () => {
                       {['Research', 'Wireframe', 'Visual Studio'].map((g) => (
                         <li
                           key={g}
-                          className={`filter-item-row px-2 py-1.5 rounded cursor-pointer ${selectedGroup === g ? 'active' : ''}`}
+                          className={`filter-item-row px-2 py-1 rounded cursor-pointer ${selectedGroup === g ? 'active' : ''}`}
                           onClick={() => setSelectedGroup(selectedGroup === g ? null : g)}
                           style={{
                             fontSize: '13px',
@@ -446,7 +446,7 @@ export const ProjectWorkspacePage = () => {
                       {['Project 01', 'Project 02', 'Project 03'].map((n, idx) => (
                         <li
                           key={idx}
-                          className="filter-item-row px-2 py-1.5 rounded cursor-pointer"
+                          className="filter-item-row px-2 py-1 rounded cursor-pointer"
                           style={{
                             fontSize: '13px',
                             color: '#334155',
@@ -473,7 +473,7 @@ export const ProjectWorkspacePage = () => {
                       {['John Doe', 'Smith'].map((a) => (
                         <li
                           key={a}
-                          className="filter-item-row px-2 py-1.5 rounded cursor-pointer"
+                          className="filter-item-row px-2 py-1 rounded cursor-pointer"
                           style={{
                             fontSize: '13px',
                             color: '#334155',
@@ -500,7 +500,7 @@ export const ProjectWorkspacePage = () => {
                       {['On Track', 'At Risk', 'Approved', 'Planned', 'On Hold', 'Ready to begin', 'No Update'].map((st) => (
                         <li
                           key={st}
-                          className={`filter-item-row px-2 py-1.5 rounded cursor-pointer d-flex align-items-center gap-2 ${selectedStatus === st ? 'active' : ''}`}
+                          className={`filter-item-row px-2 py-1 rounded cursor-pointer d-flex align-items-center gap-2 ${selectedStatus === st ? 'active' : ''}`}
                           onClick={() => setSelectedStatus(selectedStatus === st ? null : st)}
                           style={{
                             fontSize: '13px',
@@ -538,7 +538,7 @@ export const ProjectWorkspacePage = () => {
                       {['High', 'Medium', 'Low', 'Blank'].map((pr) => (
                         <li
                           key={pr}
-                          className={`filter-item-row px-2 py-1.5 rounded cursor-pointer d-flex align-items-center gap-2 ${selectedPriority === pr ? 'active' : ''}`}
+                          className={`filter-item-row px-2 py-1 rounded cursor-pointer d-flex align-items-center gap-2 ${selectedPriority === pr ? 'active' : ''}`}
                           onClick={() => setSelectedPriority(selectedPriority === pr ? null : pr)}
                           style={{
                             fontSize: '13px',
@@ -662,6 +662,8 @@ export const ProjectWorkspacePage = () => {
             tasks={filteredTasks}
             onTaskStatusChange={handleTaskStatusChange}
             onTaskClick={(task) => handleOpenRowDetails(task, 'UPDATES')}
+            onAddTask={(newTask) => setTaskList((prev) => [...prev, newTask])}
+            onViewChange={(view) => setActiveView(view)}
           />
         )}
         {activeView === 'GANTT' && (

@@ -1,0 +1,253 @@
+/* ==========================================================================
+   Emaar PM Connect - Workspace & Table Custom Stylesheet
+   Centralized CSS to eliminate inline styles, redundant code, and guarantee
+   left/start alignment for all table cells across views.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Table & Cell Global Alignment Rules
+   -------------------------------------------------------------------------- */
+.pm-workspace-group-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate !important;
+  border-spacing: 0 2px !important; /* 2px row vertical separation gap */
+}
+
+/* Ensure ALL table td cells and internal flex containers align to start (left) & have row separation borders */
+.pm-workspace-group-table td,
+.pm-workspace-group-table th,
+.cell-start-align {
+  text-align: left !important;
+  vertical-align: middle;
+  border-bottom: 1px solid #e2e8f0 !important;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  background-color: #ffffff;
+  box-sizing: border-box !important;
+}
+
+.pm-workspace-group-table tr.project-row-item:hover td {
+  background-color: #f8fafc !important;
+}
+
+.pm-workspace-group-table td > div {
+  justify-content: flex-start !important;
+}
+
+/* Enforce stable scrollbar gutter for table scroll wrappers */
+.table-scroll-wrapper,
+.table-responsive {
+  scrollbar-gutter: stable !important;
+}
+
+/* --------------------------------------------------------------------------
+   2. Column Standard Width Utility Classes
+   -------------------------------------------------------------------------- */
+.col-w-title {
+  width: 280px !important;
+  min-width: 280px !important;
+  max-width: 280px !important;
+}
+
+.col-w-assignees {
+  width: 130px !important;
+  min-width: 130px !important;
+  max-width: 130px !important;
+}
+
+.col-w-subitems {
+  width: 90px !important;
+  min-width: 90px !important;
+  max-width: 90px !important;
+}
+
+.col-w-planned-date {
+  width: 140px !important;
+  min-width: 140px !important;
+  max-width: 140px !important;
+}
+
+.col-w-actual-date {
+  width: 140px !important;
+  min-width: 140px !important;
+  max-width: 140px !important;
+}
+
+.col-w-actual-budget {
+  width: 130px !important;
+  min-width: 130px !important;
+  max-width: 130px !important;
+}
+
+.col-w-planned-budget {
+  width: 140px !important;
+  min-width: 140px !important;
+  max-width: 140px !important;
+}
+
+.col-w-project-lead {
+  width: 140px !important;
+  min-width: 140px !important;
+  max-width: 140px !important;
+}
+
+.col-w-domain-lead {
+  width: 140px !important;
+  min-width: 140px !important;
+  max-width: 140px !important;
+}
+
+.col-w-status {
+  width: 140px !important;
+  min-width: 140px !important;
+  max-width: 140px !important;
+}
+
+.col-w-toggle {
+  width: 45px !important;
+  min-width: 45px !important;
+  max-width: 45px !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. Table Header & Sticky Column Styles
+   -------------------------------------------------------------------------- */
+.th-header-text {
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.pm-sticky-title-column {
+  position: sticky !important;
+  left: 0;
+  z-index: 10;
+}
+
+/* --------------------------------------------------------------------------
+   4. Date Pills & Badge Styling
+   -------------------------------------------------------------------------- */
+.pm-pill-planned-date {
+  background-color: #cedbfe;
+  border-radius: 12px;
+  padding: 3px 10px;
+  font-size: 13px;
+  color: #1e293b;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.pm-pill-actual-date {
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 3px 10px;
+  font-size: 13px;
+  color: #334155;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   5. Avatars & Lead Hover Effects
+   -------------------------------------------------------------------------- */
+.pm-avatar-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+
+.pm-avatar-circle:hover {
+  transform: none !important;
+  box-shadow: 0 0 0 2px #2563eb !important;
+}
+
+.pm-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   6. React Portal Popover & Dropdown Styles
+   -------------------------------------------------------------------------- */
+.pm-status-popover-portal {
+  position: fixed;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  padding: 10px;
+  z-index: 999999;
+  width: 270px;
+}
+
+.pm-status-popover-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.pm-column-toggle-popover-portal {
+  position: fixed;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e2e8f0;
+  padding: 8px;
+  z-index: 999999;
+  width: 190px;
+}
+
+.pm-column-toggle-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.15s ease;
+}
+
+.pm-column-toggle-item:hover {
+  background-color: #f1f5f9;
+}
+
+/* --------------------------------------------------------------------------
+   7. Modals & Drawers Stacking
+   -------------------------------------------------------------------------- */
+.pm-modal-backdrop {
+  z-index: 100010 !important;
+  backdrop-filter: blur(4px);
+}
+
+.pm-profile-modal-card {
+  width: 460px;
+  max-width: 92vw;
+  z-index: 100015 !important;
+  border: 1px solid #e2e8f0;
+}
+
+.pm-chat-drawer-panel {
+  width: 450px;
+  z-index: 1065 !important;
+}

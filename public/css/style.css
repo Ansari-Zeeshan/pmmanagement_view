@@ -2273,32 +2273,69 @@ height: 17px; */
   margin-top: 1px;
 }
 
-.proj_filter .divfilter2 .project1 .projectcon1 .head11 span {
-  width: 17px;
-  height: 17px;
-  background-color: #2d62ed;
-  border: 0.5px solid #2f5fdd;
-  border-radius: 30px;
-  display: flex;
+.proj_filter .divfilter2 .project1 .projectcon1 .head11 > span,
+.proj_filter .divfilter2 .project1 .projectcon1 .head11 span.column-toggle-btn,
+.column-toggle-btn {
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  border: none;
+  border-radius: 6px;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 2px 6px rgba(29, 78, 216, 0.35);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.h1fixed span {
-  width: 17px;
-  height: 17px;
-  background-color: #2d62ed;
-  border: 0.5px solid #2f5fdd;
-  border-radius: 30px;
-  display: flex;
+.column-toggle-btn:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  box-shadow: 0 4px 10px rgba(29, 78, 216, 0.45);
+  transform: scale(1.08);
+}
+
+.h1fixed > span,
+.h1fixed span.column-toggle-btn {
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  border: none;
+  border-radius: 6px;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 2px 6px rgba(29, 78, 216, 0.35);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.proj_filter .divfilter2 .project1 .projectcon1 .head11 span i {
+.proj_filter .divfilter2 .project1 .projectcon1 .head11 > span i,
+.proj_filter
+  .divfilter2
+  .project1
+  .projectcon1
+  .head11
+  span.column-toggle-btn
+  i {
   color: #fff;
   font-size: 1.2rem;
   cursor: pointer;
+}
+
+@keyframes columnFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.column-dropdown-fadeup {
+  animation: columnFadeUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .proj_filter .divfilter2 .project1 .border-bottom {
@@ -4713,7 +4750,7 @@ ul.dropdown-menu {
   width: 100% !important;
   min-width: max-content !important;
   border-collapse: separate !important;
-  border-spacing: 0 !important;
+  border-spacing: 0 1px !important; /* 2px row vertical separation gap */
   table-layout: auto !important;
   margin: 0 !important;
 }

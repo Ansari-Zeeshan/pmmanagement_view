@@ -1,87 +1,187 @@
-import React, { useState } from 'react';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIconMui from '@mui/icons-material/ChevronRight';
+import FilterListOffIcon from '@mui/icons-material/FilterListOff';
+import PrintIcon from '@mui/icons-material/Print';
+import SearchIcon from '@mui/icons-material/Search';
+import StarIcon from '@mui/icons-material/Star';
+import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import TableChartIcon from '@mui/icons-material/TableChart';
+import {
+  Box,
+  Button,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  MenuItem,
+  Paper,
+  Select,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography
+} from '@mui/material';
+import {
+  Building,
+  Calendar,
+  ChevronRight,
+  Clock, DollarSign,
+  Loader2,
+  ShieldCheck,
+  Star,
+  Tag
+} from 'lucide-react';
+import { useCallback, useMemo, useState } from 'react';
+import { apiClient } from '../../../lib/axios';
+import './gantt.css';
+
+// Formats date range as requested: "Nov 01' 26 - Dec 15' 27"
+export const formatGanttBarDateRange = (startDateStr, endDateStr) => {
+  if (!startDateStr || !endDateStr) return '';
+  const dStart = new Date(startDateStr + 'T00:00:00');
+  const dEnd = new Date(endDateStr + 'T23:59:59');
+  if (isNaN(dStart.getTime()) || isNaN(dEnd.getTime())) return '';
+
+  const monthNamesShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  const mStart = monthNamesShort[dStart.getMonth()];
+  const dayStart = String(dStart.getDate()).padStart(2, '0');
+  const yrStart = String(dStart.getFullYear()).slice(-2);
+
+  const mEnd = monthNamesShort[dEnd.getMonth()];
+  const dayEnd = String(dEnd.getDate()).padStart(2, '0');
+  const yrEnd = String(dEnd.getFullYear()).slice(-2);
+
+  return `${mStart} ${dayStart}' ${yrStart} - ${mEnd} ${dayEnd}' ${yrEnd}`;
+};
 
 export const GanttView = ({ tasks = [], onTaskClick }) => {
-  // Navigation & Scale States (Years 1990 to 2100)
-  const [selectedYear, setSelectedYear] = useState(2026);
-  const [selectedMonth, setSelectedMonth] = useState(9); // 0-indexed (9 = October)
+  const currentDate = new Date();
+  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth());
   const [selectedScale, setSelectedScale] = useState('Month'); // 'Days' | 'Month' | 'Quarter' | 'Year'
 
-  // Tree Expansion States
-  const [expandedProjects, setExpandedProjects] = useState({ 'proj-1': true, 'proj-2': true, 'proj-3': true });
-  const [expandedMilestones, setExpandedMilestones] = useState({ 'm1-1': true, 'm1-2': true, 'm2-1': true });
+  // Gantt Search & Filter States
+  const [ganttSearch, setGanttSearch] = useState('');
+  const [ganttStatusFilter, setGanttStatusFilter] = useState('ALL');
+  const [ganttGroupFilter, setGanttGroupFilter] = useState('ALL');
+  const [ganttPriorityFilter, setGanttPriorityFilter] = useState('ALL');
+  const [ganttAssigneeFilter, setGanttAssigneeFilter] = useState('ALL');
+  const [ganttSortBy, setGanttSortBy] = useState('DEFAULT');
 
-  // Hover & Active Popover State
-  const [activeItem, setActiveItem] = useState(null);
+  // Critical Path Focus Toggle
+  const [highlightCriticalPath, setHighlightCriticalPath] = useState(false);
+
+  // Tree Expansion States (Default closed until user clicks to open)
+  const [expandedProjects, setExpandedProjects] = useState({});
+  const [expandedMilestones, setExpandedMilestones] = useState({});
+
+  // Async API Loading States & Cached Maps
+  const [loadingProjects, setLoadingProjects] = useState({});
+  const [loadingMilestones, setLoadingMilestones] = useState({});
+  const [fetchedMilestonesMap, setFetchedMilestonesMap] = useState({});
+  const [fetchedTasksMap, setFetchedTasksMap] = useState({});
+
+  // Floating Premium Tooltip Mouse Tracker State
+  const [tooltipData, setTooltipData] = useState(null);
 
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  // Sample Hierarchical Project -> Milestone -> Task Tree Data with exact date ranges
+  // Dynamic Today Button Text Generator
+  const getTodayButtonText = () => {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const monthShort = now.toLocaleDateString('en-US', { month: 'short' });
+    const year = now.getFullYear();
+    return `Today (${day} ${monthShort} ${year})`;
+  };
+
+  const handleJumpToToday = () => {
+    const now = new Date();
+    setSelectedYear(now.getFullYear());
+    setSelectedMonth(now.getMonth());
+  };
+
+  // Rich, Unique Hierarchical Projects -> Milestones -> Tasks with distinct project color schemes
   const defaultHierarchicalData = [
     {
       id: 'proj-1',
+      reference: 'PRJ-1024',
       title: 'Emaar Beachfront Tower 1',
       type: 'PROJECT',
       group: 'Research',
-      startDate: '2026-10-15',
-      endDate: '2027-10-11',
-      range: '15 Oct 2026 - 11 Oct 2027',
-      duration: '361 Days',
+      startDate: '2026-11-01',
+      endDate: '2027-12-15',
+      range: '01 Nov 2026 - 15 Dec 2027',
+      duration: '410 Days',
       percentage: '75%',
       status: 'On Track',
       plannedBudget: 'AED 500,000',
       actualBudget: 'AED 350,000',
-      barColor: '#E2A967', // Golden
+      barColor: '#d97706', // Amber Gold
       criticalPath: true,
+      domainLead: { name: 'Nicholas Amazon', role: 'Senior Project Lead', avatar: '/img/client1.jpg' },
       milestones: [
         {
           id: 'm1-1',
+          code: 'MS-101',
           title: 'Milestone 01: Geotechnical Soil & Foundation',
           type: 'MILESTONE',
-          startDate: '2026-10-15',
+          startDate: '2026-11-01',
           endDate: '2027-01-15',
-          range: '15 Oct 2026 - 15 Jan 2027',
-          duration: '92 Days',
+          range: '01 Nov 2026 - 15 Jan 2027',
+          duration: '76 Days',
           percentage: '100%',
           status: 'Approved',
           plannedBudget: 'AED 150,000',
           actualBudget: 'AED 140,000',
-          barColor: '#607D8B', // Slate
+          barColor: '#f59e0b',
+          criticalPath: true,
+          lead: { name: 'Claire Bure', role: 'Technical Lead', avatar: '/img/client1.jpg' },
           tasks: [
             {
               id: 't1-1-1',
+              code: 'TSK-201',
               title: 'Task 1.1: Soil Boring & Analysis',
               type: 'TASK',
-              startDate: '2026-10-15',
-              endDate: '2026-11-30',
-              range: '15 Oct 2026 - 30 Nov 2026',
-              duration: '46 Days',
+              startDate: '2026-11-01',
+              endDate: '2026-12-15',
+              range: '01 Nov 2026 - 15 Dec 2026',
+              duration: '45 Days',
               percentage: '100%',
               status: 'Approved',
+              priority: 'High',
               plannedBudget: 'AED 50,000',
               actualBudget: 'AED 48,000',
-              barColor: '#2D62ED',
+              barColor: '#b45309',
+              criticalPath: true,
+              assignee: { name: 'Ajmal Khan', role: 'Governance Lead', avatar: '/img/client2.jpg' },
             },
             {
               id: 't1-1-2',
+              code: 'TSK-202',
               title: 'Task 1.2: Foundation Reinforcement Inspection',
               type: 'TASK',
-              startDate: '2026-12-01',
+              startDate: '2026-12-16',
               endDate: '2027-01-15',
-              range: '01 Dec 2026 - 15 Jan 2027',
-              duration: '46 Days',
+              range: '16 Dec 2026 - 15 Jan 2027',
+              duration: '31 Days',
               percentage: '100%',
               status: 'Approved',
+              priority: 'Critical',
               plannedBudget: 'AED 100,000',
               actualBudget: 'AED 92,000',
-              barColor: '#2D62ED',
+              barColor: '#b45309',
+              criticalPath: true,
+              assignee: { name: 'Logan Harrington', role: 'Domain Lead', avatar: '/img/client3.jpg' },
             },
           ],
         },
         {
           id: 'm1-2',
+          code: 'MS-102',
           title: 'Milestone 02: Structural Framing & Pouring',
           type: 'MILESTONE',
           startDate: '2027-01-16',
@@ -92,10 +192,13 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
           status: 'In Progress',
           plannedBudget: 'AED 350,000',
           actualBudget: 'AED 210,000',
-          barColor: '#607D8B',
+          barColor: '#f59e0b',
+          criticalPath: false,
+          lead: { name: 'Leonard Campbell', role: 'Infrastructure Lead', avatar: '/img/client3.jpg' },
           tasks: [
             {
               id: 't1-2-1',
+              code: 'TSK-203',
               title: 'Task 2.1: Column Steel Shoring',
               type: 'TASK',
               startDate: '2027-01-16',
@@ -104,12 +207,16 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
               duration: '75 Days',
               percentage: '50%',
               status: 'In Progress',
+              priority: 'Medium',
               plannedBudget: 'AED 200,000',
               actualBudget: 'AED 110,000',
-              barColor: '#2D62ED',
+              barColor: '#b45309',
+              criticalPath: false,
+              assignee: { name: 'Claire Bure', role: 'Technical Lead', avatar: '/img/client1.jpg' },
             },
             {
               id: 't1-2-2',
+              code: 'TSK-204',
               title: 'Task 2.2: Concrete Slab Pouring',
               type: 'TASK',
               startDate: '2027-04-01',
@@ -118,53 +225,67 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
               duration: '90 Days',
               percentage: '30%',
               status: 'In Progress',
+              priority: 'High',
               plannedBudget: 'AED 150,000',
               actualBudget: 'AED 100,000',
-              barColor: '#2D62ED',
+              barColor: '#b45309',
+              criticalPath: false,
+              assignee: { name: 'Ajmal Khan', role: 'Governance Lead', avatar: '/img/client2.jpg' },
             },
           ],
         },
         {
           id: 'm1-3',
+          code: 'MS-103',
           title: 'Milestone 03: Facade & MEP Handover',
           type: 'MILESTONE',
           startDate: '2027-07-01',
-          endDate: '2027-10-11',
-          range: '01 Jul 2027 - 11 Oct 2027',
-          duration: '102 Days',
+          endDate: '2027-12-15',
+          range: '01 Jul 2027 - 15 Dec 2027',
+          duration: '168 Days',
           percentage: '0%',
           status: 'Planned',
           plannedBudget: 'AED 200,000',
           actualBudget: 'AED 0',
-          barColor: '#607D8B',
+          barColor: '#f59e0b',
+          criticalPath: false,
+          lead: { name: 'Nicholas Amazon', role: 'Senior Project Lead', avatar: '/img/client1.jpg' },
           tasks: [
             {
               id: 't1-3-1',
+              code: 'TSK-205',
               title: 'Task 3.1: Exterior Glass Curtain Installation',
               type: 'TASK',
               startDate: '2027-07-01',
-              endDate: '2027-08-31',
-              range: '01 Jul 2027 - 31 Aug 2027',
-              duration: '62 Days',
+              endDate: '2027-09-30',
+              range: '01 Jul 2027 - 30 Sep 2027',
+              duration: '92 Days',
               percentage: '0%',
               status: 'Planned',
+              priority: 'Medium',
               plannedBudget: 'AED 120,000',
               actualBudget: 'AED 0',
-              barColor: '#2D62ED',
+              barColor: '#b45309',
+              criticalPath: false,
+              assignee: { name: 'Logan Harrington', role: 'Domain Lead', avatar: '/img/client3.jpg' },
             },
             {
               id: 't1-3-2',
-              title: 'Task 3.2: MEP Final Commissioning',
+              code: 'TSK-206',
+              title: 'Task 3.2: HVAC Commissioning & Signoff',
               type: 'TASK',
-              startDate: '2027-09-01',
-              endDate: '2027-10-11',
-              range: '01 Sep 2027 - 11 Oct 2027',
-              duration: '41 Days',
+              startDate: '2027-10-01',
+              endDate: '2027-12-15',
+              range: '01 Oct 2027 - 15 Dec 2027',
+              duration: '76 Days',
               percentage: '0%',
               status: 'Planned',
+              priority: 'Low',
               plannedBudget: 'AED 80,000',
               actualBudget: 'AED 0',
-              barColor: '#2D62ED',
+              barColor: '#b45309',
+              criticalPath: false,
+              assignee: { name: 'Claire Bure', role: 'Technical Lead', avatar: '/img/client1.jpg' },
             },
           ],
         },
@@ -172,47 +293,74 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
     },
     {
       id: 'proj-2',
-      title: 'Dubai Mall Expansion Phase II',
+      reference: 'PRJ-2088',
+      title: 'Dubai Creek Harbour Residences Phase II',
       type: 'PROJECT',
       group: 'Wireframe',
-      startDate: '2026-04-01',
-      endDate: '2026-12-31',
-      range: '01 Apr 2026 - 31 Dec 2026',
-      duration: '275 Days',
-      percentage: '40%',
-      status: 'At Risk',
+      startDate: '2026-10-15',
+      endDate: '2027-08-30',
+      range: '15 Oct 2026 - 30 Aug 2027',
+      duration: '319 Days',
+      percentage: '60%',
+      status: 'In Progress',
       plannedBudget: 'AED 1,200,000',
-      actualBudget: 'AED 600,000',
-      barColor: '#E2A967',
+      actualBudget: 'AED 720,000',
+      barColor: '#2563eb', // Royal Blue
       criticalPath: false,
+      domainLead: { name: 'Claire Bure', role: 'Technical Lead', avatar: '/img/client1.jpg' },
       milestones: [
         {
           id: 'm2-1',
-          title: 'Milestone 01: Architectural Wireframes & HVAC',
+          code: 'MS-201',
+          title: 'Milestone 01: Waterfront Promenade Piling',
           type: 'MILESTONE',
-          startDate: '2026-04-01',
-          endDate: '2026-08-31',
-          range: '01 Apr 2026 - 31 Aug 2026',
-          duration: '153 Days',
-          percentage: '40%',
-          status: 'At Risk',
-          plannedBudget: 'AED 400,000',
-          actualBudget: 'AED 250,000',
-          barColor: '#607D8B',
+          startDate: '2026-10-15',
+          endDate: '2027-02-28',
+          range: '15 Oct 2026 - 28 Feb 2027',
+          duration: '136 Days',
+          percentage: '85%',
+          status: 'In Progress',
+          plannedBudget: 'AED 600,000',
+          actualBudget: 'AED 480,000',
+          barColor: '#3b82f6',
+          criticalPath: false,
+          lead: { name: 'Ajmal Khan', role: 'Governance Lead', avatar: '/img/client2.jpg' },
           tasks: [
             {
               id: 't2-1-1',
-              title: 'Task 1.1: Ducting Blueprint Sign-off',
+              code: 'TSK-301',
+              title: 'Task 1.1: Marine Sheet Piling',
               type: 'TASK',
-              startDate: '2026-04-01',
-              endDate: '2026-06-30',
-              range: '01 Apr 2026 - 30 Jun 2026',
-              duration: '91 Days',
-              percentage: '40%',
-              status: 'At Risk',
-              plannedBudget: 'AED 150,000',
-              actualBudget: 'AED 90,000',
-              barColor: '#2D62ED',
+              startDate: '2026-10-15',
+              endDate: '2026-12-31',
+              range: '15 Oct 2026 - 31 Dec 2026',
+              duration: '77 Days',
+              percentage: '100%',
+              status: 'Approved',
+              priority: 'High',
+              plannedBudget: 'AED 350,000',
+              actualBudget: 'AED 320,000',
+              barColor: '#1d4ed8',
+              criticalPath: false,
+              assignee: { name: 'Nicholas Amazon', role: 'Senior Project Lead', avatar: '/img/client1.jpg' },
+            },
+            {
+              id: 't2-1-2',
+              code: 'TSK-302',
+              title: 'Task 1.2: Promenade Deck Curing',
+              type: 'TASK',
+              startDate: '2027-01-01',
+              endDate: '2027-02-28',
+              range: '01 Jan 2027 - 28 Feb 2027',
+              duration: '59 Days',
+              percentage: '70%',
+              status: 'In Progress',
+              priority: 'Medium',
+              plannedBudget: 'AED 250,000',
+              actualBudget: 'AED 160,000',
+              barColor: '#1d4ed8',
+              criticalPath: false,
+              assignee: { name: 'Logan Harrington', role: 'Domain Lead', avatar: '/img/client3.jpg' },
             },
           ],
         },
@@ -220,47 +368,56 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
     },
     {
       id: 'proj-3',
-      title: 'Burj Khalifa Sky Pod Refurbishment',
+      reference: 'PRJ-3045',
+      title: 'Downtown Dubai Luxury Retail Expansion',
       type: 'PROJECT',
-      group: 'Development',
-      startDate: '2025-06-01',
-      endDate: '2028-05-31',
-      range: '01 Jun 2025 - 31 May 2028',
-      duration: '3 Years',
-      percentage: '60%',
-      status: 'On Track',
-      plannedBudget: 'AED 3,000,000',
-      actualBudget: 'AED 1,800,000',
-      barColor: '#E2A967',
+      group: 'Visual Studio',
+      startDate: '2026-12-01',
+      endDate: '2027-11-30',
+      range: '01 Dec 2026 - 30 Nov 2027',
+      duration: '364 Days',
+      percentage: '40%',
+      status: 'At Risk',
+      plannedBudget: 'AED 850,000',
+      actualBudget: 'AED 340,000',
+      barColor: '#059669', // Emerald Green
       criticalPath: true,
+      domainLead: { name: 'Logan Harrington', role: 'Domain Lead', avatar: '/img/client3.jpg' },
       milestones: [
         {
           id: 'm3-1',
-          title: 'Milestone 01: Pod Interior Glass Replacement',
+          code: 'MS-301',
+          title: 'Milestone 01: Retail Plaza Underground Utilities',
           type: 'MILESTONE',
-          startDate: '2025-06-01',
-          endDate: '2026-12-31',
-          range: '01 Jun 2025 - 31 Dec 2026',
-          duration: '579 Days',
-          percentage: '80%',
-          status: 'On Track',
-          plannedBudget: 'AED 1,500,000',
-          actualBudget: 'AED 1,200,000',
-          barColor: '#607D8B',
+          startDate: '2026-12-01',
+          endDate: '2027-04-30',
+          range: '01 Dec 2026 - 30 Apr 2027',
+          duration: '150 Days',
+          percentage: '40%',
+          status: 'At Risk',
+          plannedBudget: 'AED 400,000',
+          actualBudget: 'AED 200,000',
+          barColor: '#10b981',
+          criticalPath: true,
+          lead: { name: 'Claire Bure', role: 'Technical Lead', avatar: '/img/client1.jpg' },
           tasks: [
             {
               id: 't3-1-1',
-              title: 'Task 1.1: Glass Fabrication & Testing',
+              code: 'TSK-401',
+              title: 'Task 1.1: Sewer & Electrical Conduit Excavation',
               type: 'TASK',
-              startDate: '2025-06-01',
-              endDate: '2026-03-31',
-              range: '01 Jun 2025 - 31 Mar 2026',
-              duration: '304 Days',
-              percentage: '100%',
-              status: 'Approved',
-              plannedBudget: 'AED 800,000',
-              actualBudget: 'AED 750,000',
-              barColor: '#2D62ED',
+              startDate: '2026-12-01',
+              endDate: '2027-02-15',
+              range: '01 Dec 2026 - 15 Feb 2027',
+              duration: '76 Days',
+              percentage: '50%',
+              status: 'At Risk',
+              priority: 'Critical',
+              plannedBudget: 'AED 250,000',
+              actualBudget: 'AED 150,000',
+              barColor: '#047857',
+              criticalPath: true,
+              assignee: { name: 'Ajmal Khan', role: 'Governance Lead', avatar: '/img/client2.jpg' },
             },
           ],
         },
@@ -268,67 +425,187 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
     },
   ];
 
-  // Map workspace tasks into hierarchy if present
-  const projectsData = tasks.length > 0
-    ? tasks.map((t, idx) => ({
-        id: t._id || `proj-${idx}`,
-        title: t.title,
-        type: 'PROJECT',
-        group: t.group || 'Research',
-        startDate: t.startDate || '2026-10-15',
-        endDate: t.endDate || '2027-10-11',
-        range: t.plannedDate || '15 Oct 2026 - 11 Oct 2027',
-        duration: '361 Days',
-        percentage: t.status === 'COMPLETED' ? '100%' : '50%',
-        status: t.status || 'On Track',
-        plannedBudget: t.plannedBudget || 'AED 100,000',
-        actualBudget: t.actualBudget || 'AED 200,000',
-        barColor: idx === 0 ? '#E2A967' : '#607D8B',
-        criticalPath: idx % 2 === 0,
-        rawTask: t,
-        milestones: [
-          {
-            id: `m-${t._id}-1`,
-            title: `Milestone 1 for ${t.title}`,
-            type: 'MILESTONE',
-            startDate: t.startDate || '2026-10-15',
-            endDate: t.endDate || '2027-01-15',
-            range: t.plannedDate || '15 Oct 2026 - 15 Jan 2027',
-            duration: '92 Days',
-            percentage: '50%',
-            status: t.status || 'On Track',
-            plannedBudget: 'AED 50,000',
-            actualBudget: 'AED 100,000',
-            barColor: '#607D8B',
-            tasks: [
+  // Dynamically map flat tasks from store into deduplicated Gantt tree structure
+  const allProjectsRaw = useMemo(() => {
+    const combined = [...defaultHierarchicalData];
+    const existingTitles = new Set(defaultHierarchicalData.map((p) => p.title.toLowerCase()));
+
+    if (Array.isArray(tasks) && tasks.length > 0) {
+      tasks.forEach((t, idx) => {
+        const titleLower = (t.title || '').toLowerCase();
+        if (t.title && !existingTitles.has(titleLower)) {
+          existingTitles.add(titleLower);
+          combined.push({
+            id: t._id || `store-proj-${idx}`,
+            reference: `PRJ-${4000 + idx}`,
+            title: t.title,
+            type: 'PROJECT',
+            group: t.group || 'Development',
+            startDate: t.plannedDate ? '2026-11-01' : '2026-11-15',
+            endDate: t.actualDate ? '2027-06-30' : '2027-10-15',
+            range: '01 Nov 2026 - 30 Jun 2027',
+            duration: '240 Days',
+            percentage: `${t.progress || 35}%`,
+            status: t.status || 'In Progress',
+            plannedBudget: t.plannedBudget || 'AED 250,000',
+            actualBudget: t.actualBudget || 'AED 100,000',
+            barColor: '#7c3aed',
+            criticalPath: idx % 2 === 0,
+            domainLead: { name: 'Claire Bure', role: 'Technical Lead', avatar: '/img/client1.jpg' },
+            milestones: [
               {
-                id: `t-${t._id}-1-1`,
-                title: `Subtask 1.1`,
-                type: 'TASK',
-                startDate: t.startDate || '2026-10-15',
-                endDate: t.endDate || '2026-11-30',
-                range: '15 Oct 2026 - 30 Nov 2026',
-                duration: '46 Days',
-                percentage: '50%',
-                status: t.status || 'On Track',
-                plannedBudget: 'AED 25,000',
-                actualBudget: 'AED 50,000',
-                barColor: '#2D62ED',
+                id: `store-m-${idx}`,
+                code: `MS-${500 + idx}`,
+                title: `${t.title} - Phase 1 Delivery`,
+                type: 'MILESTONE',
+                startDate: '2026-11-01',
+                endDate: '2027-03-31',
+                range: '01 Nov 2026 - 31 Mar 2027',
+                duration: '150 Days',
+                percentage: `${t.progress || 35}%`,
+                status: t.status || 'In Progress',
+                plannedBudget: t.plannedBudget || 'AED 150,000',
+                actualBudget: t.actualBudget || 'AED 50,000',
+                barColor: '#8b5cf6',
+                criticalPath: idx % 2 === 0,
+                lead: { name: 'Ajmal Khan', role: 'Governance Lead', avatar: '/img/client2.jpg' },
+                tasks: [
+                  {
+                    id: `store-t-${idx}`,
+                    code: `TSK-${600 + idx}`,
+                    title: `${t.title} - Operational Execution`,
+                    type: 'TASK',
+                    startDate: '2026-11-01',
+                    endDate: '2027-01-31',
+                    range: '01 Nov 2026 - 31 Jan 2027',
+                    duration: '91 Days',
+                    percentage: `${t.progress || 35}%`,
+                    status: t.status || 'In Progress',
+                    priority: t.priority || 'Medium',
+                    plannedBudget: t.plannedBudget || 'AED 100,000',
+                    actualBudget: t.actualBudget || 'AED 40,000',
+                    barColor: '#6d28d9',
+                    criticalPath: idx % 2 === 0,
+                    assignee: t.assignees && t.assignees[0]
+                      ? { name: t.assignees[0].name, role: 'Assignee', avatar: t.assignees[0].avatarUrl || '/img/client1.jpg' }
+                      : { name: 'Ajmal Khan', role: 'Governance Lead', avatar: '/img/client2.jpg' },
+                  },
+                ],
               },
             ],
-          },
-        ],
-      }))
-    : defaultHierarchicalData;
+          });
+        }
+      });
+    }
 
-  // Toggle Project / Milestone Expansion
-  const toggleProject = (projId) => {
-    setExpandedProjects((prev) => ({ ...prev, [projId]: !prev[projId] }));
-  };
+    return combined;
+  }, [tasks]);
 
-  const toggleMilestone = (mileId) => {
-    setExpandedMilestones((prev) => ({ ...prev, [mileId]: !prev[mileId] }));
-  };
+  // Apply Search & Filter & Sort criteria to projects
+  const projectsData = useMemo(() => {
+    let filtered = allProjectsRaw.filter((proj) => {
+      if (ganttSearch) {
+        const q = ganttSearch.toLowerCase();
+        const matchTitle = proj.title ? proj.title.toLowerCase().includes(q) : false;
+        const matchGroup = proj.group ? proj.group.toLowerCase().includes(q) : false;
+        if (!matchTitle && !matchGroup) return false;
+      }
+      if (ganttStatusFilter !== 'ALL') {
+        const matchProj = proj.status === ganttStatusFilter;
+        const matchChild = proj.milestones && proj.milestones.some((m) =>
+          m.status === ganttStatusFilter || (m.tasks && m.tasks.some((t) => t.status === ganttStatusFilter))
+        );
+        if (!matchProj && !matchChild) return false;
+      }
+      if (ganttGroupFilter !== 'ALL') {
+        if (proj.group !== ganttGroupFilter) return false;
+      }
+      if (ganttPriorityFilter !== 'ALL') {
+        const matchChildPriority = proj.milestones && proj.milestones.some((m) =>
+          m.tasks && m.tasks.some((t) => (t.priority || '').toLowerCase() === ganttPriorityFilter.toLowerCase())
+        );
+        if (!matchChildPriority) return false;
+      }
+      if (ganttAssigneeFilter !== 'ALL') {
+        const matchAssignee = proj.domainLead && proj.domainLead.name === ganttAssigneeFilter;
+        const matchChildAssignee = proj.milestones && proj.milestones.some((m) =>
+          (m.lead && m.lead.name === ganttAssigneeFilter) ||
+          (m.tasks && m.tasks.some((t) => t.assignee && t.assignee.name === ganttAssigneeFilter))
+        );
+        if (!matchAssignee && !matchChildAssignee) return false;
+      }
+      return true;
+    });
+
+    if (ganttSortBy === 'PRIORITY') {
+      filtered.sort((a, b) => (b.criticalPath ? 1 : 0) - (a.criticalPath ? 1 : 0));
+    } else if (ganttSortBy === 'DUE_DATE') {
+      filtered.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+    } else if (ganttSortBy === 'TITLE') {
+      filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+    }
+
+    return filtered;
+  }, [allProjectsRaw, ganttSearch, ganttStatusFilter, ganttGroupFilter, ganttPriorityFilter, ganttAssigneeFilter, ganttSortBy]);
+
+  // Async API Re-fetching Toggle Handlers for Projects and Milestones
+  const toggleProject = useCallback(async (projId) => {
+    if (expandedProjects[projId]) {
+      setExpandedProjects((prev) => ({ ...prev, [projId]: false }));
+      return;
+    }
+
+    if (!fetchedMilestonesMap[projId]) {
+      setLoadingProjects((prev) => ({ ...prev, [projId]: true }));
+      try {
+        const res = await apiClient.get(`/projects/${projId}/milestones`).catch(() => null);
+        if (res && Array.isArray(res.milestones)) {
+          setFetchedMilestonesMap((prev) => ({ ...prev, [projId]: res.milestones }));
+        } else {
+          await new Promise((resolve) => setTimeout(resolve, 320));
+          const projectItem = projectsData.find((p) => p.id === projId);
+          if (projectItem && projectItem.milestones) {
+            setFetchedMilestonesMap((prev) => ({ ...prev, [projId]: projectItem.milestones }));
+          }
+        }
+      } finally {
+        setLoadingProjects((prev) => ({ ...prev, [projId]: false }));
+      }
+    }
+
+    setExpandedProjects((prev) => ({ ...prev, [projId]: true }));
+  }, [expandedProjects, fetchedMilestonesMap, projectsData]);
+
+  const toggleMilestone = useCallback(async (mileId) => {
+    if (expandedMilestones[mileId]) {
+      setExpandedMilestones((prev) => ({ ...prev, [mileId]: false }));
+      return;
+    }
+
+    if (!fetchedTasksMap[mileId]) {
+      setLoadingMilestones((prev) => ({ ...prev, [mileId]: true }));
+      try {
+        const res = await apiClient.get(`/milestones/${mileId}/tasks`).catch(() => null);
+        if (res && Array.isArray(res.tasks)) {
+          setFetchedTasksMap((prev) => ({ ...prev, [mileId]: res.tasks }));
+        } else {
+          await new Promise((resolve) => setTimeout(resolve, 320));
+          let foundTasks = [];
+          projectsData.forEach((p) => {
+            if (p.milestones) {
+              const match = p.milestones.find((m) => m.id === mileId);
+              if (match && match.tasks) foundTasks = match.tasks;
+            }
+          });
+          setFetchedTasksMap((prev) => ({ ...prev, [mileId]: foundTasks }));
+        }
+      } finally {
+        setLoadingMilestones((prev) => ({ ...prev, [mileId]: false }));
+      }
+    }
+
+    setExpandedMilestones((prev) => ({ ...prev, [mileId]: true }));
+  }, [expandedMilestones, fetchedTasksMap, projectsData]);
 
   // Timeline Navigation Handlers
   const handlePrev = () => {
@@ -340,7 +617,7 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
         setSelectedMonth(11);
       }
     } else {
-      if (selectedYear > 1990) setSelectedYear(selectedYear - 1);
+      setSelectedYear(Math.max(1990, selectedYear - 1));
     }
   };
 
@@ -353,229 +630,502 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
         setSelectedMonth(0);
       }
     } else {
-      if (selectedYear < 2100) setSelectedYear(selectedYear + 1);
+      setSelectedYear(Math.min(2100, selectedYear + 1));
     }
   };
 
-  const handleJumpToDefault = () => {
-    setSelectedYear(2026);
-    setSelectedMonth(9);
-  };
-
-  // Generate Year Options (1990 to 2100)
-  const yearOptions = [];
-  for (let y = 1990; y <= 2100; y++) {
-    yearOptions.push(y);
-  }
-
-  // Calculate Viewport Bounds for Current Scale, Year, and Month
-  const getViewportBounds = () => {
-    if (selectedScale === 'Days') {
-      const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
-      const vStart = new Date(selectedYear, selectedMonth, 1, 0, 0, 0, 0).getTime();
-      const vEnd = new Date(selectedYear, selectedMonth, daysInMonth, 23, 59, 59, 999).getTime();
-      return { vStart, vEnd, totalCols: daysInMonth };
-    } else if (selectedScale === 'Month' || selectedScale === 'Quarter') {
-      const vStart = new Date(selectedYear, 0, 1, 0, 0, 0, 0).getTime();
-      const vEnd = new Date(selectedYear, 11, 31, 23, 59, 59, 999).getTime();
-      return { vStart, vEnd, totalCols: selectedScale === 'Month' ? 12 : 4 };
-    } else {
-      // 'Year' scale: 5 Years starting from selectedYear
-      const vStart = new Date(selectedYear, 0, 1, 0, 0, 0, 0).getTime();
-      const vEnd = new Date(selectedYear + 4, 11, 31, 23, 59, 59, 999).getTime();
-      return { vStart, vEnd, totalCols: 5 };
+  // Generate Year dropdown options (1990 - 2100)
+  const yearOptions = useMemo(() => {
+    const years = [];
+    for (let y = 1990; y <= 2100; y++) {
+      years.push(y);
     }
+    return years;
+  }, []);
+
+  // Compute Days for Selected Month & Year
+  const getDaysInMonth = (year, month) => {
+    return new Date(year, month + 1, 0).getDate();
   };
 
-  const { vStart, vEnd, totalCols } = getViewportBounds();
-
-  // Dynamic Bar Position & Width Calculation Function
-  const calculateBarPosition = (startDateStr, endDateStr) => {
-    const itemStart = new Date(startDateStr + 'T00:00:00').getTime();
-    const itemEnd = new Date(endDateStr + 'T23:59:59').getTime();
-
-    if (isNaN(itemStart) || isNaN(itemEnd) || itemEnd < vStart || itemStart > vEnd) {
-      return { visible: false, marginLeft: '0%', width: '0%' };
-    }
-
-    const effectiveStart = Math.max(itemStart, vStart);
-    const effectiveEnd = Math.min(itemEnd, vEnd);
-
-    const totalViewportDuration = vEnd - vStart;
-    const offsetFromStart = effectiveStart - vStart;
-    const barSpan = effectiveEnd - effectiveStart;
-
-    const leftPercent = (offsetFromStart / totalViewportDuration) * 100;
-    const widthPercent = Math.max((barSpan / totalViewportDuration) * 100, 0.8);
-
-    const continuesLeft = itemStart < vStart;
-    const continuesRight = itemEnd > vEnd;
-
-    return {
-      visible: true,
-      marginLeft: `${leftPercent.toFixed(2)}%`,
-      width: `${widthPercent.toFixed(2)}%`,
-      continuesLeft,
-      continuesRight,
-    };
-  };
-
-  // Render Table Header Columns based on Scale
+  // Timeline Header Renderer based on selected view scale
   const renderScaleHeaders = () => {
     if (selectedScale === 'Days') {
-      const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
-      const headers = [];
-      for (let d = 1; d <= daysInMonth; d++) {
+      const totalDays = getDaysInMonth(selectedYear, selectedMonth);
+      const cols = [];
+      for (let d = 1; d <= totalDays; d++) {
         const dateObj = new Date(selectedYear, selectedMonth, d);
-        const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
-        headers.push(
-          <th key={d} className="text-center p-1 border-end" style={{ minWidth: '32px', fontSize: '10px' }}>
-            <div className="text-muted" style={{ fontSize: '9px' }}>{dayName}</div>
+        const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'narrow' });
+        const isWeekend = dateObj.getDay() === 0 || dateObj.getDay() === 6;
+        cols.push(
+          <th
+            key={d}
+            className={`text-center align-middle border-end ${isWeekend ? 'bg-light text-muted' : ''}`}
+            style={{ minWidth: '32px', width: '32px', fontSize: '11px', padding: '4px 0' }}
+          >
+            <div className="fw-normal text-secondary">{dayName}</div>
             <div className="fw-bold text-dark">{d}</div>
           </th>
         );
       }
-      return headers;
-    } else if (selectedScale === 'Month') {
-      return monthNames.map((m, idx) => (
-        <th key={idx} className="text-center p-2 border-end" style={{ minWidth: '70px', fontSize: '11px' }}>
-          {m.substr(0, 3)}
-        </th>
-      ));
-    } else if (selectedScale === 'Quarter') {
-      return ['Q1 (Jan-Mar)', 'Q2 (Apr-Jun)', 'Q3 (Jul-Sep)', 'Q4 (Oct-Dec)'].map((q, idx) => (
-        <th key={idx} className="text-center p-2 border-end" style={{ minWidth: '130px', fontSize: '11px' }}>
-          {q}
-        </th>
-      ));
-    } else {
-      const years = [selectedYear, selectedYear + 1, selectedYear + 2, selectedYear + 3, selectedYear + 4];
-      return years.map((y) => (
-        <th key={y} className="text-center p-2 border-end" style={{ minWidth: '150px', fontSize: '12px' }}>
-          {y}
+      return cols;
+    }
+
+    if (selectedScale === 'Month') {
+      const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return shortMonths.map((m, idx) => (
+        <th
+          key={m}
+          className={`text-center align-middle border-end ${idx === currentDate.getMonth() && selectedYear === currentDate.getFullYear() ? 'bg-primary-subtle text-primary' : ''}`}
+          style={{ minWidth: '70px', fontSize: '12px' }}
+        >
+          <div className="fw-bold">{m}</div>
+          <div className="text-secondary fw-normal" style={{ fontSize: '10px' }}>{selectedYear}</div>
         </th>
       ));
     }
+
+    if (selectedScale === 'Quarter') {
+      const quarters = ['Q1 (Jan-Mar)', 'Q2 (Apr-Jun)', 'Q3 (Jul-Sep)', 'Q4 (Oct-Dec)'];
+      return quarters.map((q) => (
+        <th key={q} className="text-center align-middle border-end" style={{ minWidth: '140px', fontSize: '12px' }}>
+          <div className="fw-bold text-dark">{q}</div>
+          <div className="text-secondary fw-normal" style={{ fontSize: '10.5px' }}>{selectedYear}</div>
+        </th>
+      ));
+    }
+
+    if (selectedScale === 'Year') {
+      const yearsRange = [selectedYear - 1, selectedYear, selectedYear + 1, selectedYear + 2];
+      return yearsRange.map((y) => (
+        <th key={y} className="text-center align-middle border-end" style={{ minWidth: '160px', fontSize: '13px' }}>
+          <div className="fw-bold text-dark">{y}</div>
+          <div className="text-secondary fw-normal" style={{ fontSize: '11px' }}>Full Year Timeline</div>
+        </th>
+      ));
+    }
+
+    return null;
   };
 
-  // Flatten Hierarchical Rows for Rendering
-  const flatRows = [];
-  projectsData.forEach((proj) => {
-    flatRows.push({ ...proj, isProject: true });
-    if (expandedProjects[proj.id] && proj.milestones) {
-      proj.milestones.forEach((mile) => {
-        flatRows.push({ ...mile, isMilestone: true, parentProjId: proj.id });
-        if (expandedMilestones[mile.id] && mile.tasks) {
-          mile.tasks.forEach((tsk) => {
-            flatRows.push({ ...tsk, isTask: true, parentMileId: mile.id, parentProjId: proj.id });
-          });
-        }
-      });
+  // Helper to compute Total Columns in Scale Header
+  const totalCols = useMemo(() => {
+    if (selectedScale === 'Days') return getDaysInMonth(selectedYear, selectedMonth);
+    if (selectedScale === 'Month') return 12;
+    if (selectedScale === 'Quarter') return 4;
+    if (selectedScale === 'Year') return 4;
+    return 12;
+  }, [selectedScale, selectedYear, selectedMonth]);
+
+  // Calculate Bar Position & Width based on Date Range and Scale
+  const calculateBarPosition = (startDateStr, endDateStr) => {
+    if (!startDateStr || !endDateStr) return { leftPct: 0, widthPct: 0 };
+    const dStart = new Date(startDateStr + 'T00:00:00');
+    const dEnd = new Date(endDateStr + 'T23:59:59');
+
+    if (selectedScale === 'Days') {
+      const totalDays = getDaysInMonth(selectedYear, selectedMonth);
+      const monthStart = new Date(selectedYear, selectedMonth, 1);
+      const monthEnd = new Date(selectedYear, selectedMonth, totalDays, 23, 59, 59);
+
+      if (dEnd < monthStart || dStart > monthEnd) return { leftPct: 0, widthPct: 0, visible: false };
+
+      const clampStart = dStart < monthStart ? monthStart : dStart;
+      const clampEnd = dEnd > monthEnd ? monthEnd : dEnd;
+
+      const startDay = clampStart.getDate();
+      const endDay = clampEnd.getDate();
+
+      const leftPct = ((startDay - 1) / totalDays) * 100;
+      const widthPct = Math.max(3, ((endDay - startDay + 1) / totalDays) * 100);
+
+      return { leftPct, widthPct, visible: true };
     }
-  });
+
+    if (selectedScale === 'Month') {
+      const yearStart = new Date(selectedYear, 0, 1);
+      const yearEnd = new Date(selectedYear, 11, 31, 23, 59, 59);
+
+      if (dEnd < yearStart || dStart > yearEnd) return { leftPct: 0, widthPct: 0, visible: false };
+
+      const clampStart = dStart < yearStart ? yearStart : dStart;
+      const clampEnd = dEnd > yearEnd ? yearEnd : dEnd;
+
+      const startMonthIndex = clampStart.getMonth() + clampStart.getDate() / 30;
+      const endMonthIndex = clampEnd.getMonth() + clampEnd.getDate() / 30;
+
+      const leftPct = (startMonthIndex / 12) * 100;
+      const widthPct = Math.max(4, ((endMonthIndex - startMonthIndex) / 12) * 100);
+
+      return { leftPct, widthPct, visible: true };
+    }
+
+    if (selectedScale === 'Quarter') {
+      const yearStart = new Date(selectedYear, 0, 1);
+      const yearEnd = new Date(selectedYear, 11, 31, 23, 59, 59);
+
+      if (dEnd < yearStart || dStart > yearEnd) return { leftPct: 0, widthPct: 0, visible: false };
+
+      const clampStart = dStart < yearStart ? yearStart : dStart;
+      const clampEnd = dEnd > yearEnd ? yearEnd : dEnd;
+
+      const startQ = (clampStart.getMonth() / 12) * 4;
+      const endQ = ((clampEnd.getMonth() + 1) / 12) * 4;
+
+      const leftPct = (startQ / 4) * 100;
+      const widthPct = Math.max(5, ((endQ - startQ) / 4) * 100);
+
+      return { leftPct, widthPct, visible: true };
+    }
+
+    if (selectedScale === 'Year') {
+      const startRange = selectedYear - 1;
+      const rangeStart = new Date(startRange, 0, 1);
+      const rangeEnd = new Date(startRange + 3, 11, 31, 23, 59, 59);
+
+      if (dEnd < rangeStart || dStart > rangeEnd) return { leftPct: 0, widthPct: 0, visible: false };
+
+      const clampStart = dStart < rangeStart ? rangeStart : dStart;
+      const clampEnd = dEnd > rangeEnd ? rangeEnd : dEnd;
+
+      const totalYearSpan = 4;
+      const startYearOffset = clampStart.getFullYear() - startRange + clampStart.getMonth() / 12;
+      const endYearOffset = clampEnd.getFullYear() - startRange + (clampEnd.getMonth() + 1) / 12;
+
+      const leftPct = (startYearOffset / totalYearSpan) * 100;
+      const widthPct = Math.max(5, ((endYearOffset - startYearOffset) / totalYearSpan) * 100);
+
+      return { leftPct, widthPct, visible: true };
+    }
+
+    return { leftPct: 0, widthPct: 0, visible: false };
+  };
+
+  // Flatten Hierarchical Data with Loading Row states for Async API fetch
+  const flatRows = useMemo(() => {
+    const rows = [];
+    projectsData.forEach((proj) => {
+      rows.push({
+        ...proj,
+        isProject: true,
+        level: 0,
+      });
+
+      if (loadingProjects[proj.id]) {
+        rows.push({
+          id: `loading-proj-${proj.id}`,
+          isLoader: true,
+          label: `Fetching milestones for ${proj.title}...`,
+          level: 1,
+        });
+      } else if (expandedProjects[proj.id]) {
+        const milestones = fetchedMilestonesMap[proj.id] || proj.milestones || [];
+        milestones.forEach((mile) => {
+          rows.push({
+            ...mile,
+            isMilestone: true,
+            projectId: proj.id,
+            level: 1,
+          });
+
+          if (loadingMilestones[mile.id]) {
+            rows.push({
+              id: `loading-mile-${mile.id}`,
+              isLoader: true,
+              label: `Loading tasks for ${mile.title}...`,
+              level: 2,
+            });
+          } else if (expandedMilestones[mile.id]) {
+            const tasksList = fetchedTasksMap[mile.id] || mile.tasks || [];
+            tasksList.forEach((task) => {
+              rows.push({
+                ...task,
+                isTask: true,
+                milestoneId: mile.id,
+                projectId: proj.id,
+                level: 2,
+              });
+            });
+          }
+        });
+      }
+    });
+
+    return rows;
+  }, [projectsData, expandedProjects, expandedMilestones, loadingProjects, loadingMilestones, fetchedMilestonesMap, fetchedTasksMap]);
+
+  // Handle Export Gantt to Excel with Graphical Timeline Column
+  const exportToExcelWithGraph = () => {
+    let csv = 'Level,Type,Reference Code,Title,Start Date,End Date,Range,Duration,Progress,Status,Planned Budget,Actual Budget,Critical Path,Assignee / Lead,Graphical Timeline\n';
+
+    flatRows.forEach((r) => {
+      if (r.isLoader) return;
+      const typeStr = r.isProject ? 'PROJECT' : r.isMilestone ? 'MILESTONE' : 'TASK';
+      const refCode = r.reference || r.code || '';
+      const titleClean = (r.title || '').replace(/"/g, '""');
+      const start = r.startDate || '';
+      const end = r.endDate || '';
+      const range = formatGanttBarDateRange(start, end);
+      const dur = r.duration || '';
+      const pct = r.percentage || '0%';
+      const status = r.status || '';
+      const pBudget = r.plannedBudget || '';
+      const aBudget = r.actualBudget || '';
+      const isCrit = r.criticalPath ? 'YES' : 'NO';
+      const leadName = r.domainLead?.name || r.lead?.name || r.assignee?.name || '';
+
+      const pos = calculateBarPosition(start, end);
+      let graphBar = '[                                                  ]';
+      if (pos.visible) {
+        const totalCharLength = 50;
+        const startIdx = Math.max(0, Math.floor((pos.leftPct / 100) * totalCharLength));
+        const fillLength = Math.max(1, Math.floor((pos.widthPct / 100) * totalCharLength));
+        const charArray = new Array(totalCharLength).fill(' ');
+        for (let i = startIdx; i < Math.min(totalCharLength, startIdx + fillLength); i++) {
+          charArray[i] = '█';
+        }
+        graphBar = `[${charArray.join('')}]`;
+      }
+
+      csv += `"${r.level}","${typeStr}","${refCode}","${titleClean}","${start}","${end}","${range}","${dur}","${pct}","${status}","${pBudget}","${aBudget}","${isCrit}","${leadName}","${graphBar}"\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Emaar_Gantt_Chart_Timeline_${selectedYear}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Handle Print / PDF Export
+  const handlePrintGantt = () => {
+    window.print();
+  };
+
+  // Floating Tooltip Mouse Tracker Handlers
+  const handleBarMouseMove = (e, item) => {
+    const posX = e.clientX + 16;
+    const posY = e.clientY + 16;
+
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    const adjustedX = posX + 340 > windowWidth ? windowWidth - 340 : posX;
+    const adjustedY = posY + 260 > windowHeight ? windowHeight - 270 : posY;
+
+    setTooltipData({ item, x: adjustedX, y: adjustedY });
+  };
+
+  const handleBarMouseLeave = () => {
+    setTooltipData(null);
+  };
+
+  const isFiltered = ganttSearch || ganttStatusFilter !== 'ALL' || ganttGroupFilter !== 'ALL' || ganttPriorityFilter !== 'ALL' || ganttAssigneeFilter !== 'ALL' || ganttSortBy !== 'DEFAULT' || highlightCriticalPath;
 
   return (
-    <div className="gantt active tab_content position-relative w-100 p-3">
-      {/* Title & Top Bar Header */}
-      <div className="mysticky h1fixed mb-3">
-        <div className="list-title d-flex justify-content-between align-items-center">
-          <h1 className="fs-3 fw-bold text-dark m-0">Projects Gantt Chart & Timeline</h1>
-          <div className="d-flex align-items-center gap-2">
-            <button
-              className="btn btn-sm btn-outline-primary fw-semibold"
-              onClick={handleJumpToDefault}
-            >
-              Today (Oct 2026)
-            </button>
-            <span className="text-secondary cursor-pointer border px-2 py-1 rounded bg-light small fw-semibold">
-              <i className="material-icons fs-6 align-middle me-1">file_download</i> Export
-            </span>
-          </div>
-        </div>
-      </div>
+    <Box sx={{ width: '100%', p: 2 }}>
+      {/* Material UI Filters & Controls Toolbar */}
+      <Paper elevation={0} sx={{ p: 2, mb: 2.5, border: '1px solid #e2e8f0', borderRadius: 3, backgroundColor: '#ffffff' }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justify: 'space-between', justifyContent: 'space-between', gap: 2 }}>
+          {/* Search TextField */}
+          <TextField
+            size="small"
+            placeholder="Search Gantt projects, milestones..."
+            value={ganttSearch}
+            onChange={(e) => setGanttSearch(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon fontSize="small" sx={{ color: 'text.secondary' }} />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ minWidth: 280, '& .MuiOutlinedInput-root': { height: 38 } }}
+          />
 
-      {/* Date & Scale Controls Bar (1990 - 2100) */}
-      <div className="row workloadrow mb-3 align-items-center bg-white p-3 border rounded shadow-sm">
-        <div className="col-md-12 d-flex justify-content-between align-items-center iconset p-0 flex-wrap gap-2">
-          <div className="d-flex align-items-center gap-2 flex-wrap">
-            <img src="/icons/arrowright.svg" alt="Back" style={{ transform: 'rotate(180deg)', width: '16px' }} />
-            <span className="text-secondary fs-5 fw-semibold me-2">Timeline Navigator</span>
-            
-            {/* Prev Arrow */}
-            <button
-              className="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center rounded-circle"
-              style={{ width: '32px', height: '32px' }}
-              onClick={handlePrev}
-              title="Previous period"
-            >
-              <i className="material-icons fs-6">chevron_left</i>
-            </button>
-
-            {/* Month Selector Dropdown (when scale is 'Days') */}
-            {selectedScale === 'Days' && (
-              <select
-                className="form-select form-select-sm border fw-bold text-primary"
-                style={{ width: '115px' }}
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(parseInt(e.target.value, 10))}
+          {/* Filter Controls Stack */}
+          <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
+            {/* Priority Filter */}
+            <FormControl size="small" sx={{ minWidth: 135 }}>
+              <Select
+                value={ganttPriorityFilter}
+                onChange={(e) => setGanttPriorityFilter(e.target.value)}
+                sx={{ height: 38, fontWeight: 600, color: ganttPriorityFilter !== 'ALL' ? 'primary.main' : 'text.primary' }}
               >
-                {monthNames.map((m, idx) => (
-                  <option key={idx} value={idx}>
-                    {m}
-                  </option>
-                ))}
-              </select>
+                <MenuItem value="ALL">All Priorities</MenuItem>
+                <MenuItem value="Critical">🔴 Critical</MenuItem>
+                <MenuItem value="High">🟠 High</MenuItem>
+                <MenuItem value="Medium">🔵 Medium</MenuItem>
+                <MenuItem value="Low">🟢 Low</MenuItem>
+              </Select>
+            </FormControl>
+
+            {/* Status Filter */}
+            <FormControl size="small" sx={{ minWidth: 130 }}>
+              <Select
+                value={ganttStatusFilter}
+                onChange={(e) => setGanttStatusFilter(e.target.value)}
+                sx={{ height: 38, fontWeight: 600, color: ganttStatusFilter !== 'ALL' ? 'primary.main' : 'text.primary' }}
+              >
+                <MenuItem value="ALL">All Statuses</MenuItem>
+                <MenuItem value="On Track">On Track</MenuItem>
+                <MenuItem value="At Risk">At Risk</MenuItem>
+                <MenuItem value="Approved">Approved</MenuItem>
+                <MenuItem value="In Progress">In Progress</MenuItem>
+                <MenuItem value="Planned">Planned</MenuItem>
+              </Select>
+            </FormControl>
+
+            {/* Critical Path Toggle Button */}
+            <Button
+              variant={highlightCriticalPath ? 'contained' : 'outlined'}
+              color="warning"
+              size="small"
+              startIcon={highlightCriticalPath ? <StarIcon fontSize="small" /> : <StarOutlineIcon fontSize="small" />}
+              onClick={() => setHighlightCriticalPath(!highlightCriticalPath)}
+              sx={{ height: 38, fontWeight: 700, px: 2 }}
+            >
+              {highlightCriticalPath ? 'Critical Active' : 'Critical Path'}
+            </Button>
+
+            {isFiltered && (
+              <Button
+                size="small"
+                color="error"
+                startIcon={<FilterListOffIcon fontSize="small" />}
+                onClick={() => {
+                  setGanttSearch('');
+                  setGanttStatusFilter('ALL');
+                  setGanttGroupFilter('ALL');
+                  setGanttPriorityFilter('ALL');
+                  setGanttAssigneeFilter('ALL');
+                  setGanttSortBy('DEFAULT');
+                  setHighlightCriticalPath(false);
+                }}
+                sx={{ fontWeight: 600 }}
+              >
+                Reset
+              </Button>
+            )}
+          </Stack>
+        </Box>
+      </Paper>
+
+      {/* Date & Scale Controls Bar with Export & Print */}
+      <Paper elevation={0} sx={{ p: 2, mb: 2.5, border: '1px solid #e2e8f0', borderRadius: 3, backgroundColor: '#ffffff' }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
+          {/* Left Controls: Timeline Navigator */}
+          <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
+            <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'text.secondary', mr: 1, fontSize: '0.9375rem' }}>
+              Timeline Navigator
+            </Typography>
+
+            <Tooltip title="Previous period">
+              <IconButton size="small" onClick={handlePrev} sx={{ border: '1px solid #cbd5e1', width: 34, height: 34 }}>
+                <ChevronLeftIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+
+            {selectedScale === 'Days' && (
+              <FormControl size="small" sx={{ width: 115 }}>
+                <Select
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(parseInt(e.target.value, 10))}
+                  sx={{ height: 34, fontWeight: 700, color: 'primary.main' }}
+                >
+                  {monthNames.map((m, idx) => (
+                    <MenuItem key={idx} value={idx}>
+                      {m}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             )}
 
-            {/* Year Selector Dropdown (1990 - 2100) */}
-            <select
-              className="form-select form-select-sm border fw-bold text-primary"
-              style={{ width: '95px' }}
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(parseInt(e.target.value, 10))}
-            >
-              {yearOptions.map((y) => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
+            <FormControl size="small" sx={{ width: 95 }}>
+              <Select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(parseInt(e.target.value, 10))}
+                sx={{ height: 34, fontWeight: 700, color: 'primary.main' }}
+              >
+                {yearOptions.map((y) => (
+                  <MenuItem key={y} value={y}>
+                    {y}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-            {/* Next Arrow */}
-            <button
-              className="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center rounded-circle"
-              style={{ width: '32px', height: '32px' }}
-              onClick={handleNext}
-              title="Next period"
-            >
-              <i className="material-icons fs-6">chevron_right</i>
-            </button>
-          </div>
+            <Tooltip title="Next period">
+              <IconButton size="small" onClick={handleNext} sx={{ border: '1px solid #cbd5e1', width: 34, height: 34 }}>
+                <ChevronRightIconMui fontSize="small" />
+              </IconButton>
+            </Tooltip>
 
-          {/* Time Scale Mode Selector */}
-          <div className="d-flex align-items-center gap-2">
-            <span className="small text-muted fw-semibold me-1">View Scale:</span>
-            <select
-              className="form-select form-select-sm border fw-semibold"
-              style={{ width: '110px' }}
-              value={selectedScale}
-              onChange={(e) => setSelectedScale(e.target.value)}
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              onClick={handleJumpToToday}
+              sx={{ height: 34, fontWeight: 600, px: 2 }}
             >
-              <option value="Days">Days</option>
-              <option value="Month">Month</option>
-              <option value="Quarter">Quarter</option>
-              <option value="Year">Year</option>
-            </select>
-          </div>
-        </div>
-      </div>
+              {getTodayButtonText()}
+            </Button>
+          </Stack>
 
-      {/* Gantt Chart Table Area */}
-      <div id="benefits2" className="tablecal tableganttr table-responsive tablecal1 bg-white rounded shadow-sm border p-2">
+          {/* Right Action Controls: Export Excel | Print | View Scale */}
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            <Button
+              variant="outlined"
+              color="success"
+              size="small"
+              startIcon={<TableChartIcon fontSize="small" />}
+              onClick={exportToExcelWithGraph}
+              sx={{ height: 34, fontWeight: 700, px: 2 }}
+            >
+              Export Excel
+            </Button>
+
+            <Tooltip title="Print or Export Gantt Chart to PDF">
+              <IconButton
+                size="small"
+                onClick={handlePrintGantt}
+                sx={{ border: '1px solid #cbd5e1', width: 34, height: 34 }}
+              >
+                <PrintIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>
+                View Scale:
+              </Typography>
+              <FormControl size="small" sx={{ width: 110 }}>
+                <Select
+                  value={selectedScale}
+                  onChange={(e) => setSelectedScale(e.target.value)}
+                  sx={{ height: 34, fontWeight: 700, color: 'primary.main' }}
+                >
+                  <MenuItem value="Days">Days</MenuItem>
+                  <MenuItem value="Month">Month</MenuItem>
+                  <MenuItem value="Quarter">Quarter</MenuItem>
+                  <MenuItem value="Year">Year</MenuItem>
+                </Select>
+              </FormControl>
+            </Stack>
+          </Stack>
+        </Box>
+      </Paper>
+
+      {/* Gantt Chart Table Canvas Area */}
+      <div id="benefits2" className="gantt-table-wrapper table-responsive bg-white rounded shadow-sm border p-2">
         <table className="table tablegantt align-middle m-0">
           <thead>
             <tr className="bg-light">
-              <th className="thspace text-start border-end" style={{ width: '280px', minWidth: '280px' }}>
+              <th className="thspace text-start border-end" style={{ width: '300px', minWidth: '300px' }}>
                 Project / Milestone / Task Hierarchy
               </th>
               {renderScaleHeaders()}
@@ -583,24 +1133,42 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
           </thead>
           <tbody>
             {flatRows.map((row) => {
+              if (row.isLoader) {
+                return (
+                  <tr key={row.id} style={{ height: '42px' }} className="bg-light bg-opacity-50">
+                    <td colSpan={totalCols + 1} className="ps-4">
+                      <div className="d-flex align-items-center gap-2 text-primary small fw-semibold gantt-loading-pulse">
+                        <Loader2 size={16} className="spin-anim flex-shrink-0" />
+                        <span>{row.label}</span>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              }
+
               const isExpanded = row.isProject
                 ? expandedProjects[row.id]
                 : row.isMilestone
                 ? expandedMilestones[row.id]
                 : false;
 
-              const hasChildren = row.isProject
-                ? row.milestones && row.milestones.length > 0
-                : row.isMilestone
-                ? row.tasks && row.tasks.length > 0
-                : false;
-
+              const hasChildren = row.isProject || row.isMilestone;
               const barPos = calculateBarPosition(row.startDate, row.endDate);
+              const formattedDateRange = formatGanttBarDateRange(row.startDate, row.endDate);
+
+              const isCriticalGlow = highlightCriticalPath && row.criticalPath;
+              const isDimmed = highlightCriticalPath && !row.criticalPath;
+
+              const rowClass = row.isProject
+                ? `gantt-row-project ${isDimmed ? 'gantt-dimmed' : ''}`
+                : row.isMilestone
+                ? `gantt-row-milestone ${isDimmed ? 'gantt-dimmed' : ''}`
+                : `gantt-row-task ${isDimmed ? 'gantt-dimmed' : ''}`;
 
               return (
-                <tr key={row.id} style={{ height: '48px' }} className={row.isProject ? 'fw-bold bg-light bg-opacity-25' : ''}>
-                  {/* Left Column: Title & Tree Expand Chevron */}
-                  <td className="border-end" style={{ maxWidth: '280px' }}>
+                <tr key={row.id} style={{ height: '48px' }} className={rowClass}>
+                  {/* Left Column: Title & Animated Tree Expand Chevron */}
+                  <td className="border-end" style={{ maxWidth: '300px' }}>
                     <div
                       className={`d-flex align-items-center gap-2 ${
                         row.isMilestone ? 'ps-3' : row.isTask ? 'ps-5' : ''
@@ -608,110 +1176,95 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
                     >
                       {hasChildren ? (
                         <span
-                          className="cursor-pointer text-secondary"
+                          className={`gantt-chevron ${isExpanded ? 'open' : ''}`}
                           onClick={() => (row.isProject ? toggleProject(row.id) : toggleMilestone(row.id))}
-                          style={{ cursor: 'pointer', userSelect: 'none', width: '16px' }}
+                          title={isExpanded ? 'Collapse' : 'Expand & fetch details'}
                         >
-                          {isExpanded ? '▼' : '►'}
+                          <ChevronRight size={15} />
                         </span>
                       ) : (
-                        <span style={{ width: '16px' }}></span>
+                        <span style={{ width: '20px' }}></span>
                       )}
 
-                      <span
-                        className={`text-truncate cursor-pointer ${
-                          row.isProject
-                            ? 'fw-bold text-dark fs-6'
-                            : row.isMilestone
-                            ? 'fw-semibold text-secondary small'
-                            : 'text-muted small'
-                        }`}
-                        style={{ maxWidth: '220px' }}
-                        onClick={() => onTaskClick && onTaskClick(row.rawTask || { title: row.title, status: row.status, group: row.group })}
-                        title="Click to open project details"
-                      >
-                        {row.title}
-                      </span>
+                      <div className="d-flex align-items-center gap-1 overflow-hidden">
+                        {row.isProject && <ShieldCheck size={15} className="text-primary flex-shrink-0" />}
+                        {row.isMilestone && <Tag size={14} className="text-secondary flex-shrink-0" />}
+
+                        <span
+                          className={`text-truncate cursor-pointer ${
+                            row.isProject
+                              ? 'fw-bold text-dark fs-6'
+                              : row.isMilestone
+                              ? 'fw-semibold text-slate-700 small'
+                              : 'text-secondary small'
+                          }`}
+                          style={{ maxWidth: '220px' }}
+                          onClick={() => {
+                            if (row.isProject) {
+                              toggleProject(row.id);
+                            } else if (row.isMilestone) {
+                              toggleMilestone(row.id);
+                            } else if (onTaskClick) {
+                              onTaskClick(row.rawTask || { title: row.title, status: row.status, group: row.group });
+                            }
+                          }}
+                          title={
+                            row.isProject || row.isMilestone
+                              ? 'Click to expand/collapse'
+                              : 'Click to view workspace details'
+                          }
+                        >
+                          {row.title}
+                        </span>
+
+                        {row.criticalPath && (
+                          <Star size={12} className="text-warning fill-warning flex-shrink-0" title="Critical Path Item" />
+                        )}
+                      </div>
                     </div>
                   </td>
 
-                  {/* Right Columns: Dynamic Date-based Timeline Bar */}
-                  <td colSpan={totalCols} className="p-0 position-relative" style={{ height: '44px' }}>
-                    {/* Column Gridlines in Background */}
-                    <div className="position-absolute top-0 bottom-0 start-0 end-0 d-flex pointer-events-none" style={{ zIndex: 1 }}>
-                      {Array.from({ length: totalCols }).map((_, i) => (
-                        <div key={i} className="flex-fill border-end border-light" style={{ height: '100%' }} />
-                      ))}
-                    </div>
-
-                    {/* Timeline Progress Bar */}
-                    {barPos.visible ? (
+                  {/* Right Timeline Grid Canvas Bar */}
+                  <td colSpan={totalCols} className="position-relative p-0" style={{ height: '48px' }}>
+                    {/* Live Red TODAY Vertical Line Indicator */}
+                    {selectedScale === 'Month' && selectedYear === currentDate.getFullYear() && (
                       <div
-                        className="position-absolute d-flex align-items-center justify-content-between px-2 text-white fw-semibold rounded-2 cursor-pointer shadow-sm"
+                        className="gantt-today-line"
                         style={{
-                          top: row.isProject ? '6px' : row.isMilestone ? '9px' : '12px',
-                          left: barPos.marginLeft,
-                          width: barPos.width,
-                          height: row.isProject ? '32px' : row.isMilestone ? '26px' : '20px',
-                          backgroundColor: row.barColor,
-                          fontSize: '11px',
-                          zIndex: 2,
-                          transition: 'all 0.2s ease-in-out',
-                          opacity: row.isTask ? 0.9 : 1,
-                          borderLeft: barPos.continuesLeft ? '3px dashed #ffffff' : 'none',
-                          borderRight: barPos.continuesRight ? '3px dashed #ffffff' : 'none',
-                          overflow: 'hidden',
-                          whiteSpace: 'nowrap',
+                          left: `${((currentDate.getMonth() + currentDate.getDate() / 30) / 12) * 100}%`,
                         }}
-                        onMouseEnter={() => setActiveItem(row)}
-                        onMouseLeave={() => setActiveItem(null)}
-                        onClick={() => setActiveItem(activeItem?.id === row.id ? null : row)}
                       >
-                        <span className="text-truncate">
-                          {barPos.continuesLeft && '◀ '}
-                          {row.title} ({row.range})
-                          {barPos.continuesRight && ' ▶'}
+                        <span className="gantt-today-badge">TODAY</span>
+                      </div>
+                    )}
+
+                    {barPos.visible && (
+                      <div
+                        className={`gantt-timeline-bar rounded-pill position-absolute d-flex align-items-center justify-content-between px-3 text-white fw-bold shadow-sm ${
+                          isCriticalGlow ? 'gantt-critical-glow' : ''
+                        }`}
+                        style={{
+                          left: `${barPos.leftPct}%`,
+                          width: `${barPos.widthPct}%`,
+                          top: '10px',
+                          height: '28px',
+                          backgroundColor: row.barColor || '#2563eb',
+                          fontSize: '11.5px',
+                          letterSpacing: '0.01em',
+                          zIndex: 10,
+                        }}
+                        onMouseMove={(e) => handleBarMouseMove(e, row)}
+                        onMouseLeave={handleBarMouseLeave}
+                      >
+                        <span className="text-truncate me-1" style={{ maxWidth: '75%' }}>
+                          {row.title} {formattedDateRange && `(${formattedDateRange})`}
                         </span>
-                        <span className="badge bg-dark bg-opacity-25 ms-1" style={{ fontSize: '9px' }}>
+                        <span
+                          className="badge bg-white text-dark rounded-pill shadow-xs flex-shrink-0"
+                          style={{ fontSize: '10px', padding: '2px 7px' }}
+                        >
                           {row.percentage}
                         </span>
-
-                        {/* Popover Description Card */}
-                        {activeItem?.id === row.id && (
-                          <div
-                            className="hide3 position-absolute bg-dark text-white p-3 rounded-3 shadow-lg border border-secondary"
-                            style={{
-                              top: '-155px',
-                              left: '20px',
-                              zIndex: 1060,
-                              minWidth: '270px',
-                              fontSize: '12px',
-                              pointerEvents: 'none',
-                            }}
-                          >
-                            <div className="d-flex justify-content-between align-items-center mb-1">
-                              <span className="badge bg-warning text-dark fw-bold">{row.type}</span>
-                              <span className="badge bg-primary">{row.status}</span>
-                            </div>
-                            <p className="fw-bold text-white mb-1">{row.title}</p>
-                            <hr className="my-1 border-secondary" />
-                            <p className="m-0 text-light"><strong>Timeline:</strong> {row.startDate} to {row.endDate}</p>
-                            <p className="m-0 text-light"><strong>Duration:</strong> {row.duration}</p>
-                            <p className="m-0 text-light"><strong>Progress:</strong> {row.percentage}</p>
-                            <p className="m-0 text-light"><strong>Planned Budget:</strong> {row.plannedBudget}</p>
-                            <p className="m-0 text-light"><strong>Actual Budget:</strong> {row.actualBudget}</p>
-                            {row.criticalPath && (
-                              <p className="text-warning fw-bold m-0 mt-1">★ Critical Path Item</p>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div
-                        className="position-absolute top-0 bottom-0 start-0 end-0 d-flex align-items-center justify-content-center text-muted"
-                        style={{ fontSize: '10px', opacity: 0.3, zIndex: 1 }}
-                      >
-                        Outside Range ({row.range})
                       </div>
                     )}
                   </td>
@@ -722,30 +1275,71 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
         </table>
       </div>
 
-      {/* Month / Scale Navigation Controls */}
-      <div className="d-flex justify-content-center align-items-center gap-3 mt-4">
-        <button
-          className="btn btn-light border rounded-circle d-flex align-items-center justify-content-center shadow-sm"
-          style={{ width: '40px', height: '40px' }}
-          onClick={handlePrev}
-          disabled={selectedYear === 1990 && selectedMonth === 0}
+      {/* Floating Tooltip Element */}
+      {tooltipData && tooltipData.item && (
+        <div
+          className="gantt-floating-tooltip"
+          style={{
+            left: `${tooltipData.x}px`,
+            top: `${tooltipData.y}px`,
+          }}
         >
-          <i className="material-icons">west</i>
-        </button>
+          <div className="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom border-secondary border-opacity-25">
+            <span
+              className={`badge rounded-pill px-2 py-1 text-uppercase font-extrabold ${
+                tooltipData.item.isProject
+                  ? 'gantt-tooltip-badge-project'
+                  : tooltipData.item.isMilestone
+                  ? 'gantt-tooltip-badge-milestone'
+                  : 'gantt-tooltip-badge-task'
+              }`}
+              style={{ fontSize: '10px', letterSpacing: '0.06em' }}
+            >
+              {tooltipData.item.type || 'ITEM'}
+            </span>
+            <span className="small text-secondary fw-semibold">{tooltipData.item.reference || tooltipData.item.code || ''}</span>
+          </div>
 
-        <span className="fw-bold text-dark">
-          {selectedYear} Timeline Navigator (1990 - 2100)
-        </span>
+          <h6 className="fw-bold text-white mb-2 fs-6 line-clamp-2">{tooltipData.item.title}</h6>
 
-        <button
-          className="btn btn-light border rounded-circle d-flex align-items-center justify-content-center shadow-sm"
-          style={{ width: '40px', height: '40px' }}
-          onClick={handleNext}
-          disabled={selectedYear === 2100 && selectedMonth === 11}
-        >
-          <i className="material-icons">east</i>
-        </button>
-      </div>
-    </div>
+          <div className="d-flex flex-column gap-1 mb-2 text-slate-300 small" style={{ fontSize: '12px' }}>
+            <div className="d-flex align-items-center gap-2">
+              <Calendar size={13} className="text-primary flex-shrink-0" />
+              <span>
+                Timeline: <strong className="text-white">{formatGanttBarDateRange(tooltipData.item.startDate, tooltipData.item.endDate)}</strong>
+              </span>
+            </div>
+
+            <div className="d-flex align-items-center gap-2">
+              <Clock size={13} className="text-info flex-shrink-0" />
+              <span>
+                Duration: <strong className="text-white">{tooltipData.item.duration || 'N/A'}</strong> ({tooltipData.item.percentage || '0%'} Done)
+              </span>
+            </div>
+
+            <div className="d-flex align-items-center gap-2">
+              <DollarSign size={13} className="text-success flex-shrink-0" />
+              <span>
+                Planned Budget: <strong className="text-emerald-400" style={{ color: '#34d399' }}>{tooltipData.item.plannedBudget || 'N/A'}</strong>
+              </span>
+            </div>
+
+            <div className="d-flex align-items-center gap-2">
+              <Building size={13} className="text-warning flex-shrink-0" />
+              <span>
+                Domain Lead: <strong className="text-white">{tooltipData.item.domainLead?.name || tooltipData.item.lead?.name || tooltipData.item.assignee?.name || 'Claire Bure'}</strong>
+              </span>
+            </div>
+          </div>
+
+          {tooltipData.item.criticalPath && (
+            <div className="badge bg-amber-500 bg-opacity-20 text-warning border border-warning border-opacity-40 w-100 py-1 d-flex align-items-center justify-content-center gap-1">
+              <Star size={12} className="fill-warning" />
+              <span>Critical Path Active Item</span>
+            </div>
+          )}
+        </div>
+      )}
+    </Box>
   );
 };

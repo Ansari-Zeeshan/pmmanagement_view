@@ -58,7 +58,7 @@ export const RequestsPage = () => {
             </div>
           </Link>
 
-          <Link to="/requests/new-it-project" className="text-decoration-none bg-light">
+          <Link to="/requests/project-closure" className="text-decoration-none">
             <div className="itproj_div">
               <div className="grid">
                 <div className="grid1">
@@ -70,8 +70,8 @@ export const RequestsPage = () => {
                   </span>
                 </div>
                 <div className="grid2">
-                  <h2>IT Project Closure</h2>
-                  <p>Initiate final signoff, asset handover, and financial reconciliation for completed projects.</p>
+                  <h2>IT Project Closure Report</h2>
+                  <p>Initiate final signoff, asset handover, performance ratings, and financial reconciliation for completed projects.</p>
                 </div>
                 <div className="grid3">
                   <div>
