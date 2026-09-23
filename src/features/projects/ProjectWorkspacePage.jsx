@@ -8,6 +8,7 @@ import { GanttView } from './views/GanttView';
 import { KanbanView } from './views/KanbanView';
 import { ListView } from './views/ListView';
 import { WorkloadView } from './views/WorkloadView';
+import { AddProjectModalPopup } from './modals/AddProjectModalPopup';
 
 export const ProjectWorkspacePage = () => {
   const queryClient = useQueryClient();
@@ -31,8 +32,7 @@ export const ProjectWorkspacePage = () => {
 
   // Add Project Modal State
   const [showAddProjectModal, setShowAddProjectModal] = useState(false);
-  const [newProjectName, setNewProjectName] = useState('');
-  const [newProjectGroup, setNewProjectGroup] = useState('Research');
+  const [addProjectInitialGroup, setAddProjectInitialGroup] = useState('Research');
 
   // Fetch Tasks List
   const { data: tasksRes } = useQuery({
@@ -137,10 +137,26 @@ export const ProjectWorkspacePage = () => {
     },
   ];
 
-  const [taskList, setTaskList] = useState(initialTasks);
+  const [taskList, setTaskList] = useState(() => {
+    const stored = localStorage.getItem('emaar_pm_workspace_tasks');
+    if (stored) {
+      try { return JSON.parse(stored); } catch (e) { console.error(e); }
+    }
+    return initialTasks;
+  });
+
+  // Save to localStorage on change
+  const handleUpdateTask = (updatedTask) => {
+    setTaskList((prev) => {
+      const next = prev.map((t) => (t._id === updatedTask._id ? updatedTask : t));
+      localStorage.setItem('emaar_pm_workspace_tasks', JSON.stringify(next));
+      return next;
+    });
+    queryClient.invalidateQueries({ queryKey: ['tasks'] });
+  };
 
   // Filter & Sort Tasks
-  let filteredTasks = (tasksRes?.data || taskList).filter((t) => {
+  let filteredTasks = (taskList || initialTasks).filter((t) => {
     if (search && !t.title.toLowerCase().includes(search.toLowerCase())) return false;
     if (selectedGroup && t.group !== selectedGroup) return false;
     if (selectedStatus && t.status !== selectedStatus) return false;
@@ -166,9 +182,11 @@ export const ProjectWorkspacePage = () => {
   });
 
   const handleTaskStatusChange = (taskId, newStatus) => {
-    setTaskList((prev) =>
-      prev.map((t) => (t._id === taskId ? { ...t, status: newStatus } : t))
-    );
+    setTaskList((prev) => {
+      const next = prev.map((t) => (t._id === taskId ? { ...t, status: newStatus } : t));
+      localStorage.setItem('emaar_pm_workspace_tasks', JSON.stringify(next));
+      return next;
+    });
     updateStatusMutation.mutate({ taskId, status: newStatus });
   };
 
@@ -598,65 +616,31 @@ export const ProjectWorkspacePage = () => {
         </div>
       </div>
 
-      {/* Add Project Modal */}
+      {/* Add Project Drawer Modal matching media_1790148113927.png */}
       {showAddProjectModal && (
-          <div className="modal d-block bg-dark bg-opacity-50" tabIndex="-1">
-            <div className="modal-dialog modal-dialog-centered">
-              <div className="modal-content border-0 shadow-lg rounded-3">
-                <div className="modal-header border-bottom">
-                  <h5 className="modal-title fw-bold text-dark">Add New Project</h5>
-                  <button type="button" className="btn-close" onClick={() => setShowAddProjectModal(false)}></button>
-                </div>
-                <form onSubmit={handleAddProjectSubmit}>
-                  <div className="modal-body p-4">
-                    <div className="mb-3">
-                      <label className="form-label fw-semibold text-dark small">Project Title</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Enter project name..."
-                        value={newProjectName}
-                        onChange={(e) => setNewProjectName(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label fw-semibold text-dark small">Group Category</label>
-                      <select
-                        className="form-select"
-                        value={newProjectGroup}
-                        onChange={(e) => setNewProjectGroup(e.target.value)}
-                      >
-                        <option value="Research">Research</option>
-                        <option value="Wireframe">Wireframe</option>
-                        <option value="Visual Studio">Visual Studio</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="modal-footer border-top">
-                    <button type="button" className="btn btn-secondary px-4" onClick={() => setShowAddProjectModal(false)}>
-                      Cancel
-                    </button>
-                    <button type="submit" className="btn btn-primary px-4">
-                      Create Project
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        )}
+        <AddProjectModalPopup
+          initialGroup={addProjectInitialGroup}
+          onClose={() => setShowAddProjectModal(false)}
+          onSave={(newProjectData) => {
+            setTaskList((prev) => [newProjectData, ...prev]);
+          }}
+        />
+      )}
 
-        {/* Active View Container */}
-        {activeView === 'LIST' && (
-          <ListView
-            tasks={filteredTasks}
-            onTaskStatusChange={handleTaskStatusChange}
-            onTaskClick={(task) => handleOpenRowDetails(task, 'UPDATES')}
-            onChatClick={(task) => handleOpenRowDetails(task, 'UPDATES')}
-            onAddProject={() => setShowAddProjectModal(true)}
-          />
-        )}
+      {/* Active View Container */}
+      {activeView === 'LIST' && (
+        <ListView
+          tasks={filteredTasks}
+          onTaskStatusChange={handleTaskStatusChange}
+          onTaskClick={(task) => handleOpenRowDetails(task, 'UPDATES')}
+          onChatClick={(task) => handleOpenRowDetails(task, 'UPDATES')}
+          onAddProject={(groupKey) => {
+            setAddProjectInitialGroup(groupKey || 'Research');
+            setShowAddProjectModal(true);
+          }}
+          onTaskUpdate={handleUpdateTask}
+        />
+      )}
         {activeView === 'KANBAN' && (
           <KanbanView
             tasks={filteredTasks}

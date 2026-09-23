@@ -14,6 +14,7 @@ import { LeadProfileModal } from '../../components/common/LeadProfileModal';
 import { getSavedTasks, saveTasks } from '../../lib/taskDatabase';
 import { useWorkspaceStore } from '../../store/useWorkspaceStore';
 import { ProjectDescriptionModal } from './ProjectDescriptionModal';
+import { AddProjectModalPopup } from './modals/AddProjectModalPopup';
 
 // Rich list of mock projects with all 12 column data fields
 const INITIAL_PROJECTS = [
@@ -108,8 +109,7 @@ export const ProjectListPage = () => {
   const [previewModalTask, setPreviewModalTask] = useState(null);
   const [selectedLeadProfile, setSelectedLeadProfile] = useState(null);
   const [showAddProjectModal, setShowAddProjectModal] = useState(false);
-  const [newProjectTitle, setNewProjectTitle] = useState('');
-  const [newCustomerName, setNewCustomerName] = useState('');
+  const [addProjectInitialGroup, setAddProjectInitialGroup] = useState('Research');
 
   // Extract unique clients & assignees for dropdown filter options
   const uniqueClients = useMemo(() => {
@@ -881,51 +881,15 @@ export const ProjectListPage = () => {
         />
       )}
 
-      {/* Add New Project Modal */}
+      {/* Add New Project Modal matching media_1790148113927.png */}
       {showAddProjectModal && (
-        <div className="modal d-block bg-dark bg-opacity-50" style={{ zIndex: 100020 }}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-              <div className="modal-header bg-dark text-white border-bottom">
-                <h5 className="modal-title fw-bold">Create New Construction Project</h5>
-                <button type="button" className="btn-close btn-close-white" onClick={() => setShowAddProjectModal(false)}></button>
-              </div>
-              <form onSubmit={handleCreateProject}>
-                <div className="modal-body p-4 bg-white">
-                  <div className="mb-3">
-                    <label className="form-label fw-semibold text-dark small">Project Title</label>
-                    <input
-                      type="text"
-                      className="form-control rounded-3"
-                      placeholder="e.g. Plumbing Installation Phase 2..."
-                      value={newProjectTitle}
-                      onChange={(e) => setNewProjectTitle(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label fw-semibold text-dark small">Client / Customer Name</label>
-                    <input
-                      type="text"
-                      className="form-control rounded-3"
-                      placeholder="e.g. Cody Fisher..."
-                      value={newCustomerName}
-                      onChange={(e) => setNewCustomerName(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="modal-footer bg-light border-top">
-                  <button type="button" className="btn btn-secondary px-4 fw-medium" onClick={() => setShowAddProjectModal(false)}>
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn btn-primary px-4 fw-bold" style={{ backgroundColor: '#2563eb' }}>
-                    Create Project
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
+        <AddProjectModalPopup
+          initialGroup={addProjectInitialGroup}
+          onClose={() => setShowAddProjectModal(false)}
+          onSave={(newProjectData) => {
+            setProjectsList((prev) => [newProjectData, ...prev]);
+          }}
+        />
       )}
 
       {/* PORTAL FOR ACTIONS MENU POPOVER */}

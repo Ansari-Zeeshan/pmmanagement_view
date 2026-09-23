@@ -27,12 +27,51 @@ export const loginWithEmail = async (email, password) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const token = await userCredential.user.getIdToken();
     localStorage.setItem('auth_token', token);
+    localStorage.setItem('logged_in_email', email);
+
+    const emailUsername = email.split('@')[0];
+    const formattedName = emailUsername
+      .split(/[._-]/)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ');
+
+    const userInfo = {
+      email: email,
+      displayName: userCredential.user.displayName || formattedName,
+      name: userCredential.user.displayName || formattedName,
+      firstName: formattedName.split(' ')[0] || 'User',
+      lastName: formattedName.split(' ').slice(1).join(' ') || '',
+      avatarUrl: userCredential.user.photoURL || '/icons/avatar1.svg',
+      uid: userCredential.user.uid,
+    };
+    localStorage.setItem('user_info', JSON.stringify(userInfo));
+
     return userCredential.user;
   } catch (error) {
     console.warn('Firebase email auth fallback:', error.message);
     const mockToken = 'mock-token-admin';
     localStorage.setItem('auth_token', mockToken);
-    return { email: email || 'admin@emaar.ae', displayName: 'Emaar Admin', uid: 'firebase-admin-1' };
+    const userEmail = email || 'admin@emaar.ae';
+    localStorage.setItem('logged_in_email', userEmail);
+
+    const emailUsername = userEmail.split('@')[0];
+    const formattedName = emailUsername
+      .split(/[._-]/)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ');
+
+    const userInfo = {
+      email: userEmail,
+      displayName: formattedName || 'Emaar Admin',
+      name: formattedName || 'Emaar Admin',
+      firstName: formattedName.split(' ')[0] || 'Emaar',
+      lastName: formattedName.split(' ').slice(1).join(' ') || 'Admin',
+      avatarUrl: '/icons/avatar1.svg',
+      uid: 'firebase-admin-1',
+    };
+    localStorage.setItem('user_info', JSON.stringify(userInfo));
+
+    return userInfo;
   }
 };
 
@@ -41,12 +80,42 @@ export const loginWithGoogle = async () => {
     const userCredential = await signInWithPopup(auth, googleProvider);
     const token = await userCredential.user.getIdToken();
     localStorage.setItem('auth_token', token);
-    return userCredential.user;
+
+    const u = userCredential.user;
+    localStorage.setItem('logged_in_email', u.email || 'admin.google@emaar.ae');
+
+    const nameParts = (u.displayName || 'Google User').split(' ');
+    const userInfo = {
+      email: u.email || 'admin.google@emaar.ae',
+      displayName: u.displayName || 'Google User',
+      name: u.displayName || 'Google User',
+      firstName: nameParts[0] || 'Google',
+      lastName: nameParts.slice(1).join(' ') || 'User',
+      avatarUrl: u.photoURL || '/icons/avatar1.svg',
+      uid: u.uid,
+    };
+    localStorage.setItem('user_info', JSON.stringify(userInfo));
+
+    return u;
   } catch (error) {
     console.warn('Firebase Google auth fallback:', error.message);
     const mockToken = 'mock-token-google-admin';
     localStorage.setItem('auth_token', mockToken);
-    return { email: 'admin.google@emaar.ae', displayName: 'Google Admin User', uid: 'firebase-google-admin-1' };
+    const userEmail = 'admin.google@emaar.ae';
+    localStorage.setItem('logged_in_email', userEmail);
+
+    const userInfo = {
+      email: userEmail,
+      displayName: 'Google Admin User',
+      name: 'Google Admin User',
+      firstName: 'Google Admin',
+      lastName: 'User',
+      avatarUrl: '/icons/avatar1.svg',
+      uid: 'firebase-google-admin-1',
+    };
+    localStorage.setItem('user_info', JSON.stringify(userInfo));
+
+    return userInfo;
   }
 };
 
@@ -57,5 +126,7 @@ export const logoutUser = async () => {
     // ignore
   } finally {
     localStorage.removeItem('auth_token');
+    localStorage.removeItem('logged_in_email');
+    localStorage.removeItem('user_info');
   }
 };

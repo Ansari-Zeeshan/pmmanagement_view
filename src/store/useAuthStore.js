@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { apiClient } from '../lib/axios';
 
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create((set, get) => ({
   user: null,
   isAuthenticated: !!localStorage.getItem('auth_token'),
   isLoading: true,
@@ -14,35 +14,143 @@ export const useAuthStore = create((set) => ({
         set({ user: null, isAuthenticated: false, isLoading: false });
         return;
       }
-      const res = await apiClient.get('/auth/me');
-      set({ user: res.data, isAuthenticated: true, isLoading: false });
-    } catch (error) {
-      // In dev fallback mode when backend API is offline
-      const token = localStorage.getItem('auth_token');
-      if (token) {
-        set({
-          user: {
-            _id: 'user-demo-id',
-            name: 'John Doe',
-            email: 'john.doe@emaar.ae',
-            role: 'ORG_ADMIN',
-            department: 'Project Management',
-            avatarUrl: 'icons/avatar1.svg',
-            organizationId: { name: 'Emaar Properties PJSC', code: 'EMAAR' },
-          },
-          isAuthenticated: true,
-          isLoading: false,
-        });
-      } else {
-        set({ user: null, isAuthenticated: false, isLoading: false });
+
+      let resData = null;
+      try {
+        const res = await apiClient.get('/auth/me');
+        resData = res.data;
+      } catch (err) {
+        // Backend offline or dev mode fallback
       }
+
+      // Read stored user profile from localStorage if saved during login
+      const savedUserStr = localStorage.getItem('user_info');
+      let savedUser = null;
+      if (savedUserStr) {
+        try {
+          savedUser = JSON.parse(savedUserStr);
+        } catch (e) {
+          // invalid json
+        }
+      }
+
+      const email =
+        resData?.email ||
+        savedUser?.email ||
+        localStorage.getItem('logged_in_email') ||
+        'admin@emaar.ae';
+
+      // Smart display name formatting from email if missing
+      const emailUsername = email.split('@')[0];
+      const formattedNameFromEmail = emailUsername
+        .split(/[._-]/)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' ');
+
+      const displayName =
+        resData?.name ||
+        savedUser?.displayName ||
+        savedUser?.name ||
+        formattedNameFromEmail ||
+        'Emaar Admin';
+
+      const nameParts = displayName.split(' ');
+      const firstName =
+        resData?.firstName ||
+        savedUser?.firstName ||
+        nameParts[0] ||
+        'Emaar';
+      const lastName =
+        resData?.lastName ||
+        savedUser?.lastName ||
+        (nameParts.length > 1 ? nameParts.slice(1).join(' ') : 'Admin');
+
+      const fullUserObj = {
+        _id: resData?._id || savedUser?._id || 'user-admin-id',
+        name: displayName,
+        displayName: displayName,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phone:
+          resData?.phone ||
+          savedUser?.phone ||
+          savedUser?.contactNumber ||
+          '+971 4 367 3333',
+        contactNumber:
+          resData?.contactNumber ||
+          resData?.phone ||
+          savedUser?.contactNumber ||
+          savedUser?.phone ||
+          '+971 4 367 3333',
+        role: resData?.role || savedUser?.role || 'ORG_ADMIN',
+        department:
+          resData?.department ||
+          savedUser?.department ||
+          'Project Management',
+        designation:
+          resData?.designation ||
+          savedUser?.designation ||
+          resData?.role ||
+          savedUser?.role ||
+          'Senior Project Director',
+        segment:
+          resData?.segment ||
+          savedUser?.segment ||
+          resData?.organizationId?.name ||
+          'Emaar Properties PJSC',
+        avatarUrl:
+          resData?.avatarUrl ||
+          savedUser?.avatarUrl ||
+          '/icons/avatar1.svg',
+        organizationId: resData?.organizationId || {
+          name: 'Emaar Properties PJSC',
+          code: 'EMAAR',
+        },
+      };
+
+      set({
+        user: fullUserObj,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+    } catch (error) {
+      set({ user: null, isAuthenticated: false, isLoading: false });
     }
   },
 
-  setUser: (user) => set({ user, isAuthenticated: !!user, isLoading: false }),
+  setUser: (userData) => {
+    const currentUser = get().user || {};
+    const updatedUser = { ...currentUser, ...userData };
+    localStorage.setItem('user_info', JSON.stringify(updatedUser));
+    set({ user: updatedUser, isAuthenticated: !!updatedUser, isLoading: false });
+  },
+
+  updateUserProfile: (updatedFields) => {
+    const currentUser = get().user || {};
+    const newUser = { ...currentUser, ...updatedFields };
+
+    if (updatedFields.firstName !== undefined || updatedFields.lastName !== undefined) {
+      const fn =
+        updatedFields.firstName !== undefined
+          ? updatedFields.firstName
+          : currentUser.firstName || '';
+      const ln =
+        updatedFields.lastName !== undefined
+          ? updatedFields.lastName
+          : currentUser.lastName || '';
+      newUser.name = `${fn} ${ln}`.trim();
+      newUser.displayName = newUser.name;
+    }
+
+    localStorage.setItem('user_info', JSON.stringify(newUser));
+    set({ user: newUser });
+  },
 
   logout: () => {
     localStorage.removeItem('auth_token');
+    localStorage.removeItem('logged_in_email');
+    localStorage.removeItem('user_info');
     set({ user: null, isAuthenticated: false, isLoading: false });
   },
 }));

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useWorkspaceStore } from '../../store/useWorkspaceStore';
 import { useNavigate } from 'react-router-dom';
+import { HelpCircle } from 'lucide-react';
 
 export const Header = () => {
   const { user, logout } = useAuthStore();
@@ -10,6 +11,7 @@ export const Header = () => {
     setSearchQuery,
     setNotificationDrawerOpen,
     setChatDrawerOpen,
+    setHelpModalOpen,
   } = useWorkspaceStore();
   const navigate = useNavigate();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -67,8 +69,16 @@ export const Header = () => {
         </div>
       </div>
 
-      {/* Right Controls (Notifications, Chat, User Profile) */}
-      <div className="d-flex align-items-center gap-3">
+      {/* Right Controls (Notifications, Chat, Help, User Profile) */}
+      <div className="d-flex align-items-center gap-2 gap-md-3">
+        {/* Help & Support Toggle */}
+        <button
+          className="btn btn-light btn-sm rounded-circle p-2 position-relative"
+          onClick={() => setHelpModalOpen(true, 'VIDEOS')}
+          title="Help & Support"
+        >
+          <HelpCircle size={19} className="text-secondary align-middle" />
+        </button>
         {/* Chat Drawer Toggle */}
         <button
           className="btn btn-light btn-sm rounded-circle p-2 position-relative"
@@ -129,6 +139,15 @@ export const Header = () => {
                 }}
               >
                 <i className="material-icons fs-5">person</i> Profile Settings
+              </button>
+              <button
+                className="dropdown-item px-3 py-2 d-flex align-items-center gap-2"
+                onClick={() => {
+                  setShowProfileMenu(false);
+                  setHelpModalOpen(true, 'VIDEOS');
+                }}
+              >
+                <i className="material-icons fs-5">help_outline</i> Help & Support
               </button>
               <div className="dropdown-divider my-1"></div>
               <button

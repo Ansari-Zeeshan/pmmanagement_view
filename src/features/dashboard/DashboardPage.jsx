@@ -1,4 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
+import {
+  Calendar,
+  CheckCircle2,
+  DollarSign,
+  Download,
+  Filter,
+  PieChart,
+  TrendingUp,
+  UserCheck,
+  Wallet,
+  X
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../../lib/axios';
@@ -35,6 +47,11 @@ export const DashboardPage = () => {
   const [ownerSearch, setOwnerSearch] = useState('');
   const [showSearchCard, setShowSearchCard] = useState(false);
 
+  // Modals state for "More +" and "See more +"
+  const [showBudgetModal, setShowBudgetModal] = useState(false);
+  const [showMilestoneModal, setShowMilestoneModal] = useState(false);
+  const [milestoneFilter, setMilestoneFilter] = useState('ALL');
+
   const { data: metricsRes } = useQuery({
     queryKey: ['dashboard-metrics'],
     queryFn: async () => await apiClient.get('/dashboard/metrics'),
@@ -50,12 +67,26 @@ export const DashboardPage = () => {
   ];
 
   const budgetProjects = [
-    { name: 'Major work permit', planned: '$85,000', actual: '$62,000', spent: '$41,000', pPct: 51, aPct: 100, sPct: 13 },
-    { name: 'RDT - Fitout Process', planned: '$95,000', actual: '$80,000', spent: '$55,000', pPct: 65, aPct: 80, sPct: 25 },
-    { name: 'Insurance', planned: '$60,000', actual: '$45,000', spent: '$30,000', pPct: 40, aPct: 60, sPct: 18 },
-    { name: 'Trade License', planned: '$120,000', actual: '$105,000', spent: '$75,000', pPct: 75, aPct: 90, sPct: 30 },
-    { name: 'Event proposal', planned: '$70,000', actual: '$50,000', spent: '$32,000', pPct: 40, aPct: 60, sPct: 18 },
-    { name: 'Raise Ticket', planned: '$110,000', actual: '$90,000', spent: '$65,000', pPct: 75, aPct: 90, sPct: 30 },
+    { name: 'Major work permit', planned: '$85,000', actual: '$62,000', spent: '$41,000', pPct: 51, aPct: 100, sPct: 13, status: 'ON_BUDGET' },
+    { name: 'RDT - Fitout Process', planned: '$95,000', actual: '$80,000', spent: '$55,000', pPct: 65, aPct: 80, sPct: 25, status: 'ON_BUDGET' },
+    { name: 'Insurance', planned: '$60,000', actual: '$45,000', spent: '$30,000', pPct: 40, aPct: 60, sPct: 18, status: 'ON_BUDGET' },
+    { name: 'Trade License', planned: '$120,000', actual: '$105,000', spent: '$75,000', pPct: 75, aPct: 90, sPct: 30, status: 'ON_BUDGET' },
+    { name: 'Event proposal', planned: '$70,000', actual: '$50,000', spent: '$32,000', pPct: 40, aPct: 60, sPct: 18, status: 'ON_BUDGET' },
+    { name: 'Raise Ticket', planned: '$110,000', actual: '$90,000', spent: '$65,000', pPct: 75, aPct: 90, sPct: 30, status: 'ON_BUDGET' },
+  ];
+
+  const milestonesData = [
+    { id: 1, name: 'Foundation & Substructure Sign-off', project: 'Dubai Mall Expansion', status: 'COMPLETED', progress: 100, targetDate: '15 Oct 2026', owner: 'Zeeshan Ansari' },
+    { id: 2, name: 'MEP First Fix Inspection', project: 'Burj Crown Residences', status: 'IN_PROGRESS', progress: 75, targetDate: '28 Oct 2026', owner: 'Sara Al-Maktoum' },
+    { id: 3, name: 'Structural Framing Approval', project: 'Emaar South Villa Phase II', status: 'IN_PROGRESS', progress: 60, targetDate: '10 Nov 2026', owner: 'Ahmed Hassan' },
+    { id: 4, name: 'Facade Glass Panel Installation', project: 'Dubai Marina Promenade', status: 'AT_RISK', progress: 40, targetDate: '05 Dec 2026', owner: 'Michael Chen' },
+    { id: 5, name: 'HVAC Ductwork & Chiller Commissioning', project: 'Creek Harbour Tower', status: 'IN_PROGRESS', progress: 50, targetDate: '18 Dec 2026', owner: 'Omar Al-Hassan' },
+    { id: 6, name: 'Interior Luxury Fitout - Lobby', project: 'Dubai Mall Expansion', status: 'COMPLETED', progress: 100, targetDate: '02 Sep 2026', owner: 'Zeeshan Ansari' },
+    { id: 7, name: 'Landscaping & Pool Deck Sign-off', project: 'Emaar Beachfront Oasis', status: 'AT_RISK', progress: 35, targetDate: '20 Jan 2027', owner: 'Elena Rostova' },
+    { id: 8, name: 'Fire Safety & Civil Defence License', project: 'Burj Crown Residences', status: 'IN_PROGRESS', progress: 85, targetDate: '15 Nov 2026', owner: 'Sara Al-Maktoum' },
+    { id: 9, name: 'Smart Elevator Systems Integration', project: 'Creek Harbour Tower', status: 'COMPLETED', progress: 100, targetDate: '30 Aug 2026', owner: 'Omar Al-Hassan' },
+    { id: 10, name: 'Solar Panel & Green Roof Audit', project: 'Emaar South Villa Phase II', status: 'IN_PROGRESS', progress: 45, targetDate: '12 Feb 2027', owner: 'Ahmed Hassan' },
+    { id: 11, name: 'Final Handover Certificate (TOC)', project: 'Downtown Views II', status: 'AT_RISK', progress: 20, targetDate: '28 Feb 2027', owner: 'Khadija Saeed' },
   ];
 
   const filteredOwners = owners.filter((o) =>
@@ -67,6 +98,11 @@ export const DashboardPage = () => {
     setShowSearchCard(false);
     navigate('/owner-dashboard');
   };
+
+  const filteredMilestonesModalList = milestonesData.filter((m) => {
+    if (milestoneFilter === 'ALL') return true;
+    return m.status === milestoneFilter;
+  });
 
   return (
     <div
@@ -369,17 +405,23 @@ export const DashboardPage = () => {
               </div>
             </div>
 
-            {/* More + Button Positioned Cleanly at Bottom Right */}
+            {/* More + Popup Action Trigger */}
             <div className="position-absolute" style={{ bottom: '15px', right: '20px' }}>
-              <a href="#more" onClick={(e) => e.preventDefault()} className="text-decoration-none">
-                <span className="fw-bold text-primary" style={{ fontSize: '14px' }}>More +</span>
-              </a>
+              <button
+                type="button"
+                className="btn btn-link text-decoration-none p-0 border-0"
+                onClick={() => setShowBudgetModal(true)}
+              >
+                <span className="fw-bold text-primary" style={{ fontSize: '14px', cursor: 'pointer' }}>
+                  More +
+                </span>
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Row 3: Recent Project, Pending Approvals, Premium Milestone */}
+      {/* Row 3: Recent Project, Pending Approvals, Milestone */}
       <div className="row g-4 mb-4">
         {/* Card 1: Recent Project */}
         <div className="col-md-4">
@@ -480,7 +522,7 @@ export const DashboardPage = () => {
           </div>
         </div>
 
-        {/* Card 3: Premium Milestone Card */}
+        {/* Card 3: Milestone Card */}
         <div className="col-md-4 milestone">
           <div className="card1 milestone1 bg-white p-4 rounded-3 border-0 h-100 d-flex flex-column justify-content-between shadow-sm" style={{ borderRadius: '12px', minHeight: '440px' }}>
             <div>
@@ -489,7 +531,7 @@ export const DashboardPage = () => {
                 <span className="badge bg-primary bg-opacity-10 text-primary rounded-pill px-2 py-1 fw-bold" style={{ fontSize: '12px' }}>11 Total</span>
               </div>
               <div className="d-flex align-items-center justify-content-between gap-3 my-2">
-                {/* Premium Pill Legend List */}
+                {/* Pill Legend List */}
                 <ul className="list-unstyled p-0 m-0 d-flex flex-column flex-grow-1" style={{ gap: '12px' }}>
                   <li className="d-flex align-items-center justify-content-between px-3 py-2 rounded-3" style={{ backgroundColor: '#F4F7FF' }}>
                     <div className="d-flex align-items-center gap-2">
@@ -517,7 +559,7 @@ export const DashboardPage = () => {
                   </li>
                 </ul>
 
-                {/* Premium Donut Ring Chart */}
+                {/* Donut Ring Chart */}
                 <div className="position-relative text-center flex-shrink-0" style={{ width: '150px', height: '150px' }}>
                   <svg width="150" height="150" viewBox="0 0 42 42" className="donut" style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.06))' }}>
                     <circle className="donut-hole" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
@@ -534,12 +576,398 @@ export const DashboardPage = () => {
               </div>
             </div>
 
+            {/* See more + Popup Action Trigger */}
             <div className="text-end mt-3">
-              <a href="#seemore" onClick={(e) => e.preventDefault()} className="text-primary fw-bold small text-decoration-none">See more +</a>
+              <button
+                type="button"
+                className="btn btn-link text-decoration-none p-0 border-0"
+                onClick={() => setShowMilestoneModal(true)}
+              >
+                <span className="text-primary fw-bold" style={{ fontSize: '14px', cursor: 'pointer' }}>
+                  See more +
+                </span>
+              </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* ======================================================== */}
+      {/* ULTRA-PREMIUM MODAL 1: BUDGET & FINANCIAL ANALYTICS      */}
+      {/* ======================================================== */}
+      {showBudgetModal && (
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          style={{ backgroundColor: 'rgba(15, 23, 42, 0.75)', backdropFilter: 'blur(8px)', zIndex: 9999 }}
+        >
+          <div className="modal-dialog modal-xl modal-dialog-centered">
+            <div className="modal-content border-0 rounded-4 shadow-2xl overflow-hidden" style={{ backgroundColor: '#ffffff', border: '1px solid #1e293b' }}>
+              {/* Luxury Header Banner */}
+              <div
+                className="p-4 text-white d-flex align-items-center justify-content-between position-relative"
+                style={{
+                  background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #2563eb 100%)',
+                  borderTopLeftRadius: '15px',
+                  borderTopRightRadius: '15px',
+                }}
+              >
+                <div className="d-flex align-items-center gap-3">
+                  <div
+                    className="rounded-3 p-3 d-flex align-items-center justify-content-center"
+                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255, 255, 255, 0.25)' }}
+                  >
+                    <DollarSign size={28} className="text-white" />
+                  </div>
+                  <div>
+                    <div className="d-flex align-items-center gap-2">
+                      <h4 className="fw-bold m-0 text-white" style={{ fontSize: '22px', letterSpacing: '-0.3px' }}>
+                        Budget Insight & Financial Analytics
+                      </h4>
+                      <span className="badge rounded-pill text-white px-2.5 py-1 small fw-semibold" style={{ backgroundColor: 'rgba(255, 255, 255, 0.18)', border: '1px solid rgba(255, 255, 255, 0.3)' }}>
+                        Emaar Enterprise PMO
+                      </span>
+                    </div>
+                    <p className="m-0 mt-1 small text-white-50" style={{ fontSize: '13px' }}>
+                      Detailed financial breakdown, budget utilization, and planned vs. spent allocation
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="btn btn-sm btn-light rounded-circle p-2 d-flex align-items-center justify-content-center text-dark border-0 shadow-sm"
+                  style={{ width: '36px', height: '36px', opacity: 0.95 }}
+                  onClick={() => setShowBudgetModal(false)}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="modal-body p-4 bg-light" style={{ backgroundColor: '#f8fafc' }}>
+                {/* 4 Luxury KPI Stat Cards */}
+                <div className="row g-3 mb-4">
+                  {/* Card 1 */}
+                  <div className="col-12 col-sm-6 col-md-3">
+                    <div className="p-3 bg-white rounded-3 border shadow-xs transition-all hover-shadow" style={{ borderTop: '4px solid #3b82f6' }}>
+                      <div className="d-flex align-items-center justify-content-between mb-1">
+                        <span className="text-muted fw-bold small text-uppercase" style={{ fontSize: '11px', letterSpacing: '0.5px' }}>PLANNED BUDGET</span>
+                        <div className="p-1.5 rounded-circle bg-primary bg-opacity-10 text-primary">
+                          <TrendingUp size={16} />
+                        </div>
+                      </div>
+                      <h3 className="fw-bold m-0 text-dark" style={{ fontSize: '24px', letterSpacing: '-0.5px' }}>$1,044,300</h3>
+                      <span className="text-muted small" style={{ fontSize: '11.5px' }}>Approved Baseline</span>
+                    </div>
+                  </div>
+
+                  {/* Card 2 */}
+                  <div className="col-12 col-sm-6 col-md-3">
+                    <div className="p-3 bg-white rounded-3 border shadow-xs transition-all hover-shadow" style={{ borderTop: '4px solid #1e3a8a' }}>
+                      <div className="d-flex align-items-center justify-content-between mb-1">
+                        <span className="text-muted fw-bold small text-uppercase" style={{ fontSize: '11px', letterSpacing: '0.5px' }}>ACTUAL ALLOCATION</span>
+                        <div className="p-1.5 rounded-circle bg-info bg-opacity-10 text-info">
+                          <Wallet size={16} />
+                        </div>
+                      </div>
+                      <h3 className="fw-bold m-0 text-primary" style={{ fontSize: '24px', letterSpacing: '-0.5px' }}>$890,000</h3>
+                      <span className="text-primary small fw-semibold" style={{ fontSize: '11.5px' }}>85.2% Committed</span>
+                    </div>
+                  </div>
+
+                  {/* Card 3 */}
+                  <div className="col-12 col-sm-6 col-md-3">
+                    <div className="p-3 bg-white rounded-3 border shadow-xs transition-all hover-shadow" style={{ borderTop: '4px solid #10b981' }}>
+                      <div className="d-flex align-items-center justify-content-between mb-1">
+                        <span className="text-muted fw-bold small text-uppercase" style={{ fontSize: '11px', letterSpacing: '0.5px' }}>TOTAL SPENT AMOUNT</span>
+                        <div className="p-1.5 rounded-circle bg-success bg-opacity-10 text-success">
+                          <CheckCircle2 size={16} />
+                        </div>
+                      </div>
+                      <h3 className="fw-bold m-0 text-success" style={{ fontSize: '24px', letterSpacing: '-0.5px' }}>$580,000</h3>
+                      <span className="text-success small fw-semibold" style={{ fontSize: '11.5px' }}>55.5% Executed</span>
+                    </div>
+                  </div>
+
+                  {/* Card 4 */}
+                  <div className="col-12 col-sm-6 col-md-3">
+                    <div className="p-3 bg-white rounded-3 border shadow-xs transition-all hover-shadow" style={{ borderTop: '4px solid #06b6d4' }}>
+                      <div className="d-flex align-items-center justify-content-between mb-1">
+                        <span className="text-muted fw-bold small text-uppercase" style={{ fontSize: '11px', letterSpacing: '0.5px' }}>REMAINING SURPLUS</span>
+                        <div className="p-1.5 rounded-circle bg-cyan bg-opacity-10 text-cyan">
+                          <PieChart size={16} />
+                        </div>
+                      </div>
+                      <h3 className="fw-bold m-0 text-info" style={{ fontSize: '24px', letterSpacing: '-0.5px' }}>$310,000</h3>
+                      <span className="text-info small fw-semibold" style={{ fontSize: '11.5px' }}>Available Balance</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Financial Breakdown Table Container */}
+                <div className="bg-white rounded-3 border shadow-sm overflow-hidden">
+                  <div className="p-3 px-4 border-bottom bg-light d-flex justify-content-between align-items-center">
+                    <div className="d-flex align-items-center gap-2">
+                      <h6 className="fw-bold m-0 text-dark" style={{ fontSize: '15px' }}>Category Financial Breakdown</h6>
+                      <span className="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-20 px-2.5 py-1 small">
+                        6 Active Projects
+                      </span>
+                    </div>
+                    <span className="text-muted small fw-semibold">Currency: USD ($)</span>
+                  </div>
+
+                  <div className="table-responsive">
+                    <table className="table align-middle table-hover m-0">
+                      <thead style={{ backgroundColor: '#f8fafc' }}>
+                        <tr className="small text-muted border-bottom">
+                          <th className="py-3 px-4 fw-bold">Project Category</th>
+                          <th className="py-3 fw-bold">Planned Budget</th>
+                          <th className="py-3 fw-bold">Actual Budget</th>
+                          <th className="py-3 fw-bold">Spent Amount</th>
+                          <th className="py-3 fw-bold text-center">Variance</th>
+                          <th className="py-3 px-4 fw-bold" style={{ width: '220px' }}>Budget Utilization %</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {budgetProjects.map((item, idx) => (
+                          <tr key={idx} className="border-bottom">
+                            <td className="py-3 px-4">
+                              <span className="fw-bold text-dark d-block" style={{ fontSize: '14px' }}>{item.name}</span>
+                            </td>
+                            <td className="py-3 fw-semibold text-secondary" style={{ fontSize: '13.5px' }}>{item.planned}</td>
+                            <td className="py-3 fw-bold text-primary" style={{ fontSize: '13.5px' }}>{item.actual}</td>
+                            <td className="py-3 fw-bold text-success" style={{ fontSize: '13.5px' }}>{item.spent}</td>
+                            <td className="py-3 text-center">
+                              <span className="badge rounded-pill bg-success bg-opacity-10 text-success border border-success border-opacity-20 px-3 py-1.5 fw-semibold" style={{ fontSize: '11.5px' }}>
+                                ✓ On Budget
+                              </span>
+                            </td>
+                            <td className="py-3 px-4">
+                              <div className="d-flex align-items-center gap-2">
+                                <div className="progress flex-grow-1" style={{ height: '8px', backgroundColor: '#e2e8f0', borderRadius: '4px' }}>
+                                  <div
+                                    className="progress-bar"
+                                    role="progressbar"
+                                    style={{
+                                      width: `${item.pPct}%`,
+                                      background: 'linear-gradient(90deg, #2563eb 0%, #3b82f6 100%)',
+                                      borderRadius: '4px',
+                                    }}
+                                  ></div>
+                                </div>
+                                <span className="fw-bold text-dark small" style={{ fontSize: '12px', minWidth: '32px' }}>{item.pPct}%</span>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="modal-footer bg-white border-top p-3 px-4 d-flex justify-content-between align-items-center">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary px-3.5 py-2 rounded-2 fw-semibold d-inline-flex align-items-center gap-2"
+                  onClick={() => alert('Exporting Financial Report (CSV)...')}
+                  style={{ fontSize: '13px' }}
+                >
+                  <Download size={16} /> Export Financial CSV
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary px-4 py-2 rounded-2 fw-semibold shadow-sm"
+                  onClick={() => setShowBudgetModal(false)}
+                  style={{ fontSize: '13px', backgroundColor: '#2563eb', borderColor: '#2563eb' }}
+                >
+                  Close Window
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================= */}
+      {/* ULTRA-PREMIUM MODAL 2: ENTERPRISE MILESTONES OVERVIEW     */}
+      {/* ========================================================= */}
+      {showMilestoneModal && (
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          style={{ backgroundColor: 'rgba(15, 23, 42, 0.75)', backdropFilter: 'blur(8px)', zIndex: 9999 }}
+        >
+          <div className="modal-dialog modal-xl modal-dialog-centered">
+            <div className="modal-content border-0 rounded-4 shadow-2xl overflow-hidden" style={{ backgroundColor: '#ffffff', border: '1px solid #1e293b' }}>
+              {/* Luxury Header Banner */}
+              <div
+                className="p-4 text-white d-flex align-items-center justify-content-between position-relative"
+                style={{
+                  background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #2563eb 100%)',
+                  borderTopLeftRadius: '15px',
+                  borderTopRightRadius: '15px',
+                }}
+              >
+                <div className="d-flex align-items-center gap-3">
+                  <div
+                    className="rounded-3 p-3 d-flex align-items-center justify-content-center"
+                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255, 255, 255, 0.25)' }}
+                  >
+                    <PieChart size={28} className="text-white" />
+                  </div>
+                  <div>
+                    <div className="d-flex align-items-center gap-2">
+                      <h4 className="fw-bold m-0 text-white" style={{ fontSize: '22px', letterSpacing: '-0.3px' }}>
+                        Milestones Analytics & Detailed Breakdown
+                      </h4>
+                      <span className="badge rounded-pill text-white px-2.5 py-1 small fw-semibold" style={{ backgroundColor: 'rgba(255, 255, 255, 0.18)', border: '1px solid rgba(255, 255, 255, 0.3)' }}>
+                        Delivery Health
+                      </span>
+                    </div>
+                    <p className="m-0 mt-1 small text-white-50" style={{ fontSize: '13px' }}>
+                      Track milestone schedules, target completion dates, and status health across Emaar portfolio
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="btn btn-sm btn-light rounded-circle p-2 d-flex align-items-center justify-content-center text-dark border-0 shadow-sm"
+                  style={{ width: '36px', height: '36px', opacity: 0.95 }}
+                  onClick={() => setShowMilestoneModal(false)}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="modal-body p-4 bg-light" style={{ backgroundColor: '#f8fafc' }}>
+                {/* Filter Tabs Toolbar */}
+                <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 bg-white p-3 rounded-3 border shadow-xs mb-4">
+                  <div className="d-flex align-items-center gap-2 flex-wrap">
+                    <span className="text-muted fw-semibold small me-2 d-flex align-items-center gap-1">
+                      <Filter size={14} /> Filter Status:
+                    </span>
+                    <button
+                      type="button"
+                      className={`btn btn-sm rounded-pill px-3 py-1 fw-semibold ${milestoneFilter === 'ALL' ? 'btn-primary text-white shadow-sm' : 'btn-outline-secondary bg-white text-secondary border'}`}
+                      style={{ fontSize: '12.5px' }}
+                      onClick={() => setMilestoneFilter('ALL')}
+                    >
+                      All Milestones (11)
+                    </button>
+                    <button
+                      type="button"
+                      className={`btn btn-sm rounded-pill px-3 py-1 fw-semibold ${milestoneFilter === 'IN_PROGRESS' ? 'btn-primary text-white shadow-sm' : 'btn-outline-secondary bg-white text-secondary border'}`}
+                      style={{ fontSize: '12.5px' }}
+                      onClick={() => setMilestoneFilter('IN_PROGRESS')}
+                    >
+                      In Progress (5)
+                    </button>
+                    <button
+                      type="button"
+                      className={`btn btn-sm rounded-pill px-3 py-1 fw-semibold ${milestoneFilter === 'COMPLETED' ? 'btn-success text-white shadow-sm' : 'btn-outline-secondary bg-white text-secondary border'}`}
+                      style={{ fontSize: '12.5px' }}
+                      onClick={() => setMilestoneFilter('COMPLETED')}
+                    >
+                      Completed (3)
+                    </button>
+                    <button
+                      type="button"
+                      className={`btn btn-sm rounded-pill px-3 py-1 fw-semibold ${milestoneFilter === 'AT_RISK' ? 'btn-warning text-dark shadow-sm' : 'btn-outline-secondary bg-white text-secondary border'}`}
+                      style={{ fontSize: '12.5px' }}
+                      onClick={() => setMilestoneFilter('AT_RISK')}
+                    >
+                      At Risk (3)
+                    </button>
+                  </div>
+                </div>
+
+                {/* Milestone Table */}
+                <div className="bg-white rounded-3 border shadow-sm overflow-hidden">
+                  <div className="table-responsive">
+                    <table className="table align-middle table-hover m-0">
+                      <thead style={{ backgroundColor: '#f8fafc' }}>
+                        <tr className="small text-muted border-bottom">
+                          <th className="py-3 px-4 fw-bold">Milestone Name</th>
+                          <th className="py-3 fw-bold">Project Name</th>
+                          <th className="py-3 fw-bold">Lead Owner</th>
+                          <th className="py-3 fw-bold">Target Date</th>
+                          <th className="py-3 fw-bold">Status</th>
+                          <th className="py-3 px-4 fw-bold" style={{ width: '180px' }}>Completion %</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredMilestonesModalList.map((m) => (
+                          <tr key={m.id} className="border-bottom">
+                            <td className="py-3 px-4">
+                              <span className="fw-bold text-dark d-block" style={{ fontSize: '14px' }}>{m.name}</span>
+                            </td>
+                            <td className="py-3 fw-semibold text-primary" style={{ fontSize: '13.5px' }}>{m.project}</td>
+                            <td className="py-3 text-muted small">
+                              <span className="d-inline-flex align-items-center gap-1.5">
+                                <UserCheck size={14} className="text-secondary" /> {m.owner}
+                              </span>
+                            </td>
+                            <td className="py-3 text-muted small">
+                              <span className="d-inline-flex align-items-center gap-1.5">
+                                <Calendar size={14} /> {m.targetDate}
+                              </span>
+                            </td>
+                            <td className="py-3">
+                              {m.status === 'COMPLETED' && (
+                                <span className="badge rounded-pill bg-success bg-opacity-10 text-success border border-success border-opacity-20 px-3 py-1 fw-semibold" style={{ fontSize: '11.5px' }}>
+                                  ✓ Completed
+                                </span>
+                              )}
+                              {m.status === 'IN_PROGRESS' && (
+                                <span className="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-20 px-3 py-1 fw-semibold" style={{ fontSize: '11.5px' }}>
+                                  ⚡ In Progress
+                                </span>
+                              )}
+                              {m.status === 'AT_RISK' && (
+                                <span className="badge rounded-pill bg-warning bg-opacity-10 text-warning border border-warning border-opacity-20 px-3 py-1 fw-semibold" style={{ fontSize: '11.5px' }}>
+                                  ⚠ At Risk
+                                </span>
+                              )}
+                            </td>
+                            <td className="py-3 px-4">
+                              <div className="d-flex align-items-center gap-2">
+                                <div className="progress flex-grow-1" style={{ height: '7px', backgroundColor: '#e2e8f0', borderRadius: '4px' }}>
+                                  <div
+                                    className={`progress-bar ${m.status === 'COMPLETED' ? 'bg-success' : m.status === 'AT_RISK' ? 'bg-warning' : 'bg-primary'}`}
+                                    style={{ width: `${m.progress}%`, borderRadius: '4px' }}
+                                  ></div>
+                                </div>
+                                <span className="fw-bold text-dark small" style={{ fontSize: '12px', minWidth: '32px' }}>{m.progress}%</span>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="modal-footer bg-white border-top p-3 px-4 d-flex justify-content-end">
+                <button
+                  type="button"
+                  className="btn btn-primary px-4 py-2 rounded-2 fw-semibold shadow-sm"
+                  onClick={() => setShowMilestoneModal(false)}
+                  style={{ fontSize: '13px', backgroundColor: '#2563eb', borderColor: '#2563eb' }}
+                >
+                  Close Window
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

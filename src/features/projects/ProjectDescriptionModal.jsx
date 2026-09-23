@@ -68,7 +68,7 @@ export const ProjectDescriptionModal = ({ task, onClose }) => {
 
           <div className="pe-5">
             <div className="d-flex align-items-center gap-2 mb-1">
-              <span className="badge bg-white bg-opacity-20 text-white border border-white border-opacity-25 px-2 py-1 rounded small font-monospace">
+              <span className="badge text-white px-2 py-1 rounded small font-monospace" style={{ backgroundColor: 'rgba(255, 255, 255, 0.18)', border: '1px solid rgba(255, 255, 255, 0.3)' }}>
                 PRJ-{task._id || '1024'}
               </span>
               <span className="text-white-50 small">• Submitted: {task.submittedDate || '31/07/2026'}</span>

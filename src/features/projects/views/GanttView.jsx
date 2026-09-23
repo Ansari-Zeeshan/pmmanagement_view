@@ -435,6 +435,87 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
         const titleLower = (t.title || '').toLowerCase();
         if (t.title && !existingTitles.has(titleLower)) {
           existingTitles.add(titleLower);
+
+          const mappedMilestones = (t.milestones && Array.isArray(t.milestones) && t.milestones.length > 0)
+            ? t.milestones.map((m, mIdx) => ({
+                id: m.id || `m-${idx}-${mIdx}`,
+                code: `MS-${101 + mIdx}`,
+                title: m.title || `Milestone ${mIdx + 1}`,
+                type: 'MILESTONE',
+                startDate: '2026-11-01',
+                endDate: m.dueDate || m.date || '2027-01-15',
+                range: m.date || m.dueDate || 'Nov 3',
+                duration: '45 Days',
+                percentage: m.status === 'Completed' || m.status === 'Approved' ? '100%' : m.status === 'In Progress' ? '50%' : '0%',
+                status: m.status || 'In Progress',
+                plannedBudget: 'AED 150,000',
+                actualBudget: 'AED 50,000',
+                barColor: '#f59e0b',
+                criticalPath: mIdx === 0,
+                lead: { name: m.owner || t.projectLead || 'Claire Bure', role: 'Milestone Lead', avatar: '/img/client1.jpg' },
+                tasks: (m.tasks && Array.isArray(m.tasks) && m.tasks.length > 0)
+                  ? m.tasks.map((st, stIdx) => ({
+                      id: st.id || `st-${mIdx}-${stIdx}`,
+                      code: `TSK-${201 + stIdx}`,
+                      title: st.title || `Subtask ${stIdx + 1}`,
+                      type: 'TASK',
+                      startDate: '2026-11-01',
+                      endDate: st.date || '2026-12-15',
+                      range: st.date || 'Nov 10',
+                      duration: '30 Days',
+                      percentage: st.status === 'Completed' || st.status === 'Approved' ? '100%' : st.status === 'In Progress' ? '50%' : '0%',
+                      status: st.status || 'Pending',
+                      priority: 'Medium',
+                      plannedBudget: 'AED 50,000',
+                      actualBudget: 'AED 20,000',
+                      barColor: '#b45309',
+                      criticalPath: false,
+                      assignee: { name: st.assignee || 'Claire Bure', role: 'Assignee', avatar: '/img/client1.jpg' },
+                    }))
+                  : [],
+              }))
+            : [
+                {
+                  id: `store-m-${idx}`,
+                  code: `MS-${500 + idx}`,
+                  title: `${t.title} - Phase 1 Delivery`,
+                  type: 'MILESTONE',
+                  startDate: '2026-11-01',
+                  endDate: '2027-03-31',
+                  range: '01 Nov 2026 - 31 Mar 2027',
+                  duration: '150 Days',
+                  percentage: `${t.progress || 35}%`,
+                  status: t.status || 'In Progress',
+                  plannedBudget: t.plannedBudget || 'AED 150,000',
+                  actualBudget: t.actualBudget || 'AED 50,000',
+                  barColor: '#8b5cf6',
+                  criticalPath: idx % 2 === 0,
+                  lead: { name: 'Ajmal Khan', role: 'Governance Lead', avatar: '/img/client2.jpg' },
+                  tasks: [
+                    {
+                      id: `store-t-${idx}`,
+                      code: `TSK-${600 + idx}`,
+                      title: `${t.title} - Operational Execution`,
+                      type: 'TASK',
+                      startDate: '2026-11-01',
+                      endDate: '2027-01-31',
+                      range: '01 Nov 2026 - 31 Jan 2027',
+                      duration: '91 Days',
+                      percentage: `${t.progress || 35}%`,
+                      status: t.status || 'In Progress',
+                      priority: t.priority || 'Medium',
+                      plannedBudget: t.plannedBudget || 'AED 100,000',
+                      actualBudget: t.actualBudget || 'AED 40,000',
+                      barColor: '#6d28d9',
+                      criticalPath: idx % 2 === 0,
+                      assignee: t.assignees && t.assignees[0]
+                        ? { name: t.assignees[0].name, role: 'Assignee', avatar: t.assignees[0].avatarUrl || '/img/client1.jpg' }
+                        : { name: 'Ajmal Khan', role: 'Governance Lead', avatar: '/img/client2.jpg' },
+                    },
+                  ],
+                },
+              ];
+
           combined.push({
             id: t._id || `store-proj-${idx}`,
             reference: `PRJ-${4000 + idx}`,
@@ -452,47 +533,7 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
             barColor: '#7c3aed',
             criticalPath: idx % 2 === 0,
             domainLead: { name: 'Claire Bure', role: 'Technical Lead', avatar: '/img/client1.jpg' },
-            milestones: [
-              {
-                id: `store-m-${idx}`,
-                code: `MS-${500 + idx}`,
-                title: `${t.title} - Phase 1 Delivery`,
-                type: 'MILESTONE',
-                startDate: '2026-11-01',
-                endDate: '2027-03-31',
-                range: '01 Nov 2026 - 31 Mar 2027',
-                duration: '150 Days',
-                percentage: `${t.progress || 35}%`,
-                status: t.status || 'In Progress',
-                plannedBudget: t.plannedBudget || 'AED 150,000',
-                actualBudget: t.actualBudget || 'AED 50,000',
-                barColor: '#8b5cf6',
-                criticalPath: idx % 2 === 0,
-                lead: { name: 'Ajmal Khan', role: 'Governance Lead', avatar: '/img/client2.jpg' },
-                tasks: [
-                  {
-                    id: `store-t-${idx}`,
-                    code: `TSK-${600 + idx}`,
-                    title: `${t.title} - Operational Execution`,
-                    type: 'TASK',
-                    startDate: '2026-11-01',
-                    endDate: '2027-01-31',
-                    range: '01 Nov 2026 - 31 Jan 2027',
-                    duration: '91 Days',
-                    percentage: `${t.progress || 35}%`,
-                    status: t.status || 'In Progress',
-                    priority: t.priority || 'Medium',
-                    plannedBudget: t.plannedBudget || 'AED 100,000',
-                    actualBudget: t.actualBudget || 'AED 40,000',
-                    barColor: '#6d28d9',
-                    criticalPath: idx % 2 === 0,
-                    assignee: t.assignees && t.assignees[0]
-                      ? { name: t.assignees[0].name, role: 'Assignee', avatar: t.assignees[0].avatarUrl || '/img/client1.jpg' }
-                      : { name: 'Ajmal Khan', role: 'Governance Lead', avatar: '/img/client2.jpg' },
-                  },
-                ],
-              },
-            ],
+            milestones: mappedMilestones,
           });
         }
       });
@@ -986,7 +1027,7 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
               size="small"
               startIcon={highlightCriticalPath ? <StarIcon fontSize="small" /> : <StarOutlineIcon fontSize="small" />}
               onClick={() => setHighlightCriticalPath(!highlightCriticalPath)}
-              sx={{ height: 38, fontWeight: 700, px: 2 }}
+              sx={{ height: 38, fontWeight: 700, px: 2, fontSize: '11px' }}
             >
               {highlightCriticalPath ? 'Critical Active' : 'Critical Path'}
             </Button>
@@ -1005,7 +1046,7 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
                   setGanttSortBy('DEFAULT');
                   setHighlightCriticalPath(false);
                 }}
-                sx={{ fontWeight: 600 }}
+                sx={{ fontWeight: 600, fontSize: '11px' }}
               >
                 Reset
               </Button>
@@ -1019,7 +1060,7 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
           {/* Left Controls: Timeline Navigator */}
           <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
-            <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'text.secondary', mr: 1, fontSize: '0.9375rem' }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'text.secondary', mr: 1, fontSize: '11px' }}>
               Timeline Navigator
             </Typography>
 
@@ -1034,10 +1075,10 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
                 <Select
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(parseInt(e.target.value, 10))}
-                  sx={{ height: 34, fontWeight: 700, color: 'primary.main' }}
+                  sx={{ height: 34, fontWeight: 700, color: 'primary.main', fontSize: '11px' }}
                 >
                   {monthNames.map((m, idx) => (
-                    <MenuItem key={idx} value={idx}>
+                    <MenuItem key={idx} value={idx} sx={{ fontSize: '11px' }}>
                       {m}
                     </MenuItem>
                   ))}
@@ -1049,10 +1090,10 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
               <Select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(parseInt(e.target.value, 10))}
-                sx={{ height: 34, fontWeight: 700, color: 'primary.main' }}
+                sx={{ height: 34, fontWeight: 700, color: 'primary.main', fontSize: '11px' }}
               >
                 {yearOptions.map((y) => (
-                  <MenuItem key={y} value={y}>
+                  <MenuItem key={y} value={y} sx={{ fontSize: '11px' }}>
                     {y}
                   </MenuItem>
                 ))}
@@ -1070,7 +1111,7 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
               color="primary"
               size="small"
               onClick={handleJumpToToday}
-              sx={{ height: 34, fontWeight: 600, px: 2 }}
+              sx={{ height: 34, fontWeight: 600, px: 2, fontSize: '11px' }}
             >
               {getTodayButtonText()}
             </Button>
@@ -1084,7 +1125,7 @@ export const GanttView = ({ tasks = [], onTaskClick }) => {
               size="small"
               startIcon={<TableChartIcon fontSize="small" />}
               onClick={exportToExcelWithGraph}
-              sx={{ height: 34, fontWeight: 700, px: 2 }}
+              sx={{ height: 34, fontWeight: 700, px: 2, fontSize: '11px' }}
             >
               Export Excel
             </Button>

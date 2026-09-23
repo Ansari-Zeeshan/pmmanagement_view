@@ -133,7 +133,7 @@ export const LeadProfileModal = ({ leadName, leadType = 'Project Lead', onClose 
                 <BadgeCheck size={18} color="#60a5fa" className="ms-1" />
               </div>
               <p className="pm-profile-role m-0 text-white-50 small mt-0.5 fw-medium">{profile.role}</p>
-              <span className="pm-profile-badge badge bg-white bg-opacity-20 text-white border border-white border-opacity-25 mt-1 px-2 py-1 rounded-pill small">
+              <span className="pm-profile-badge badge text-white mt-1 px-2 py-1 rounded-pill small" style={{ backgroundColor: 'rgba(255, 255, 255, 0.18)', border: '1px solid rgba(255, 255, 255, 0.3)' }}>
                 {leadType}
               </span>
             </div>

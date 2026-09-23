@@ -202,12 +202,12 @@ export const ProjectListView = ({ tasks = [], onTaskStatusChange, onTaskClick, o
                   <thead className="workspace-group-thead pm-workspace-group-thead">
                     <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
                       {/* 1. Sequence No. */}
-                      <th className="head-no text-center py-2 px-2" style={{ width: '45px', minWidth: '45px', fontSize: '12px', fontWeight: 700, color: '#475569' }}>
+                      <th className="head-no text-center py-2 px-2" style={{ position: 'sticky', left: 0, zIndex: 30, backgroundColor: '#f8fafc', boxShadow: '2px 0 6px rgba(0,0,0,0.06)', width: '45px', minWidth: '45px', fontSize: '12px', fontWeight: 700, color: '#475569' }}>
                         No.
                       </th>
 
                       {/* 2. Project & Customer */}
-                      <th className="head-title text-start py-2 px-3" style={{ minWidth: '240px', fontSize: '12px', fontWeight: 700, color: '#475569' }}>
+                      <th className="head-title text-start py-2 px-3" style={{ position: 'sticky', left: '45px', zIndex: 30, backgroundColor: '#f8fafc', boxShadow: '2px 0 6px rgba(0,0,0,0.06)', minWidth: '240px', fontSize: '12px', fontWeight: 700, color: '#475569' }}>
                         <div className="d-flex align-items-center gap-2">
                           <span onClick={() => toggleGroup(group.key)} style={{ cursor: 'pointer' }} className="d-inline-flex align-items-center justify-content-center">
                             <img
@@ -293,12 +293,12 @@ export const ProjectListView = ({ tasks = [], onTaskStatusChange, onTaskClick, o
                             style={{ transition: 'background-color 0.15s ease' }}
                           >
                             {/* 1. Sequence No */}
-                            <td className="text-center align-middle py-3 px-2 fw-semibold font-monospace" style={{ fontSize: '12.5px', color: '#64748b' }}>
+                            <td className="text-center align-middle py-3 px-2 fw-semibold font-monospace" style={{ position: 'sticky', left: 0, zIndex: 10, backgroundColor: '#ffffff', boxShadow: '2px 0 6px rgba(0,0,0,0.06)', fontSize: '12.5px', color: '#64748b' }}>
                               {seqNo}
                             </td>
 
                             {/* 2. Project Name (Clickable link to /projects/:projectId) + Customer Subtitle */}
-                            <td className="align-middle py-3 px-3">
+                            <td className="align-middle py-3 px-3" style={{ position: 'sticky', left: '45px', zIndex: 10, backgroundColor: '#ffffff', boxShadow: '2px 0 6px rgba(0,0,0,0.06)' }}>
                               <div className="d-flex align-items-center justify-content-between w-100" style={{ overflow: 'hidden' }}>
                                 <div className="pe-2 overflow-hidden" style={{ maxWidth: 'calc(100% - 30px)' }}>
                                   <Link
@@ -481,7 +481,7 @@ export const ProjectListView = ({ tasks = [], onTaskStatusChange, onTaskClick, o
                         <td colSpan={12} className="py-2 px-3">
                           <p
                             className="text-primary fw-bold cursor-pointer m-0 d-inline-flex align-items-center gap-1"
-                            onClick={onAddProject}
+                            onClick={() => onAddProject && onAddProject(group.key)}
                             style={{ cursor: 'pointer', fontSize: '13px' }}
                           >
                             <Plus size={14} />

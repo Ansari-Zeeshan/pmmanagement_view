@@ -1,10 +1,12 @@
 import React, { useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from './store/useAuthStore';
+import { useWorkspaceStore } from './store/useWorkspaceStore';
 import { Sidebar } from './components/layout/Sidebar';
 import { Header } from './components/layout/Header';
 import { NotificationDrawer } from './components/notifications/NotificationDrawer';
 import { ChatDrawer } from './features/chat/ChatDrawer';
+import { HelpSupportModal } from './features/help/HelpSupportModal';
 
 // Lazy Loaded Feature Routes
 const LoginPage = lazy(() => import('./features/auth/LoginPage').then((m) => ({ default: m.LoginPage })));
@@ -32,6 +34,7 @@ const LoadingFallback = () => (
 
 const ProtectedLayout = () => {
   const { isAuthenticated, isLoading, fetchCurrentUser, logout } = useAuthStore();
+  const { sidebarExpanded } = useWorkspaceStore();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -84,8 +87,26 @@ const ProtectedLayout = () => {
     sectionClass = 'manage_view proj_filter search';
   }
 
+  const sidebarWidth = sidebarExpanded ? 230 : 72;
+
   return (
     <section className={sectionClass}>
+      <style>{`
+        @media (max-width: 768px) {
+          .app-main-content {
+            margin-left: 0 !important;
+            max-width: 100% !important;
+            padding-bottom: 74px !important;
+          }
+        }
+        @media (min-width: 769px) {
+          .app-main-content {
+            margin-left: ${sidebarWidth}px !important;
+            max-width: calc(100% - ${sidebarWidth}px) !important;
+            transition: margin-left 0.25s cubic-bezier(0.16, 1, 0.3, 1), max-width 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+          }
+        }
+      `}</style>
       <div className="container-fluid p-0">
         <div className="row g-0">
           <div className="myoverlay"></div>
@@ -97,12 +118,11 @@ const ProtectedLayout = () => {
 
           {/* Main Body Area */}
           <div
+            className="app-main-content"
             style={{
-              flex: '1 0 94.5%',
-              maxWidth: '94.5%',
               minHeight: '100vh',
               width: '100%',
-              marginLeft: '5.5%',
+              transition: 'all 0.2s ease',
             }}
           >
             <Suspense fallback={<LoadingFallback />}>
@@ -129,6 +149,7 @@ const ProtectedLayout = () => {
       </div>
       <NotificationDrawer />
       <ChatDrawer />
+      <HelpSupportModal />
     </section>
   );
 };

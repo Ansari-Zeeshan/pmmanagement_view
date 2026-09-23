@@ -288,7 +288,7 @@ export const CalendarAddWorkOrderModal = ({
           style={{ background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)' }}
         >
           <div className="d-flex align-items-center gap-2">
-            <div className="p-2 bg-white bg-opacity-20 rounded-3 d-flex align-items-center justify-content-center">
+            <div className="p-2 rounded-3 d-flex align-items-center justify-content-center" style={{ backgroundColor: 'rgba(255, 255, 255, 0.18)' }}>
               <Plus size={20} color="#ffffff" strokeWidth={2.5} />
             </div>
             <h5 className="m-0 fw-bold text-white fs-6" style={{ fontSize: '16.5px', letterSpacing: '-0.2px' }}>

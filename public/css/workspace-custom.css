@@ -31,9 +31,9 @@
   background-color: #f8fafc !important;
 }
 
-.pm-workspace-group-table td > div {
+/* .pm-workspace-group-table td > div {
   justify-content: flex-start !important;
-}
+} */
 
 /* Enforce stable scrollbar gutter for table scroll wrappers */
 .table-scroll-wrapper,
@@ -193,7 +193,9 @@
   position: fixed;
   background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.18),
+    0 2px 8px rgba(0, 0, 0, 0.08);
   border: 1px solid #e2e8f0;
   padding: 10px;
   z-index: 999999;

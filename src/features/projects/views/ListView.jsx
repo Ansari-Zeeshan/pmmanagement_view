@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { LeadProfileModal } from '../../../components/common/LeadProfileModal';
 import { useWorkspaceStore } from '../../../store/useWorkspaceStore';
+import { MilestoneModalPopup } from '../modals/MilestoneModalPopup';
 
 const calculateTotalDays = (dateStr) => {
   if (!dateStr || typeof dateStr !== 'string') return '';
@@ -133,13 +134,13 @@ const TruncatedCellText = ({
             bottom: '100%',
             left: 0,
             marginBottom: '4px',
-            zIndex: 99999,
+            zIndex: 9999999,
             fontSize: '11.5px',
             fontWeight: '500',
             whiteSpace: 'normal',
             wordBreak: 'break-word',
             pointerEvents: 'none',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
             maxWidth: '320px',
           }}
         >
@@ -150,7 +151,7 @@ const TruncatedCellText = ({
   );
 };
 
-export const ListView = ({ tasks = [], onTaskStatusChange, onTaskClick, onChatClick, onAddProject }) => {
+export const ListView = ({ tasks = [], onTaskStatusChange, onTaskClick, onChatClick, onAddProject, onTaskUpdate }) => {
   const { setChatDrawerOpen, setActiveTaskDetail } = useWorkspaceStore();
   const [collapsedGroups, setCollapsedGroups] = useState({});
   const [activeStatusDropdown, setActiveStatusDropdown] = useState(null); // taskId
@@ -159,6 +160,185 @@ export const ListView = ({ tasks = [], onTaskStatusChange, onTaskClick, onChatCl
   const [columnDropdownPos, setColumnDropdownPos] = useState(null); // { groupKey, top, left }
   const [hoveredPlannedDateTaskId, setHoveredPlannedDateTaskId] = useState(null);
   const [selectedLeadProfile, setSelectedLeadProfile] = useState(null);
+
+  // Subitems & Milestones Expansion States
+  const [expandedSubitemsMap, setExpandedSubitemsMap] = useState({});
+  const [expandedMilestoneTasksMap, setExpandedMilestoneTasksMap] = useState({});
+  const [showAddMilestoneMap, setShowAddMilestoneMap] = useState({});
+  const [newMilestoneTitleMap, setNewMilestoneTitleMap] = useState({});
+  const [showAddSubtaskMap, setShowAddSubtaskMap] = useState({});
+  const [newSubtaskTitleMap, setNewSubtaskTitleMap] = useState({});
+  const [newSubtaskDateMap, setNewSubtaskDateMap] = useState({});
+
+  // Milestone Modal State
+  const [modalTargetTask, setModalTargetTask] = useState(null);
+  const [modalTargetMilestone, setModalTargetMilestone] = useState(null);
+
+  const pastelPalette = [
+    { bg: '#FDF0E6', accent: '#E05A47' }, // Soft Peach / Coral Diamond
+    { bg: '#F1EDFA', accent: '#8B5CF6' }, // Soft Lavender / Purple Diamond
+    { bg: '#FAF5E8', accent: '#D97706' }, // Soft Cream / Amber Diamond
+    { bg: '#FBEFEF', accent: '#E11D48' }, // Soft Rose / Rose Diamond
+    { bg: '#EBF5F0', accent: '#10B981' }, // Soft Mint / Emerald Diamond
+  ];
+
+  const toggleSubitemsExpand = (taskId) => {
+    setExpandedSubitemsMap((prev) => ({ ...prev, [taskId]: !prev[taskId] }));
+  };
+
+  const getMilestonesList = (task) => {
+    if (task.milestones && Array.isArray(task.milestones) && task.milestones.length > 0) {
+      return task.milestones;
+    }
+    return [
+      {
+        id: `${task._id}-m1`,
+        title: 'Milestone Name',
+        owner: 'Claire Bure',
+        dueDate: 'Nov 3',
+        date: 'Nov 3',
+        timeline: 'Nov 20',
+        status: 'On Track',
+        tasks: [
+          { id: `${task._id}-sub1`, title: 'Scope definition & technical specification sign-off', status: 'Completed', assignee: 'Claire Bure', date: '2026-11-10' },
+          { id: `${task._id}-sub2`, title: 'UI/UX Wireframing & Design System review', status: 'Completed', assignee: 'Ajmal Khan', date: '2026-11-15' },
+        ],
+      },
+      {
+        id: `${task._id}-m2`,
+        title: 'Milestone Name',
+        owner: 'Ajmal Khan',
+        dueDate: 'Nov 3',
+        date: 'Nov 3',
+        timeline: 'Nov 20',
+        status: 'On Track',
+        tasks: [
+          { id: `${task._id}-sub3`, title: 'Kanban board & drag and drop architecture', status: 'In Progress', assignee: 'Claire Bure', date: '2026-11-18' },
+          { id: `${task._id}-sub4`, title: 'Gantt timeline & calendar synchronization', status: 'In Progress', assignee: 'Smith', date: '2026-11-20' },
+        ],
+      },
+      {
+        id: `${task._id}-m3`,
+        title: 'Milestone Name',
+        owner: 'Logan Harrington',
+        dueDate: 'Nov 3',
+        date: 'Nov 3',
+        timeline: 'Nov 20',
+        status: 'On Track',
+        tasks: [
+          { id: `${task._id}-sub5`, title: 'UAT testing, security compliance & production launch', status: 'Pending', assignee: 'Ajmal Khan', date: '2026-11-25' },
+        ],
+      },
+    ];
+  };
+
+  const handleSaveMilestoneModal = (updatedMilestone) => {
+    if (!modalTargetTask) return;
+    const currentMilestones = getMilestonesList(modalTargetTask);
+    const exists = currentMilestones.some((m) => m.id === updatedMilestone.id);
+    let updatedMilestones;
+    if (exists) {
+      updatedMilestones = currentMilestones.map((m) => (m.id === updatedMilestone.id ? updatedMilestone : m));
+    } else {
+      updatedMilestones = [...currentMilestones, updatedMilestone];
+    }
+    const updatedTask = {
+      ...modalTargetTask,
+      milestones: updatedMilestones,
+    };
+    if (onTaskUpdate) onTaskUpdate(updatedTask);
+    setModalTargetTask(null);
+    setModalTargetMilestone(null);
+  };
+
+  const handleAddMilestone = (task, milestoneTitle) => {
+    if (!milestoneTitle || !milestoneTitle.trim()) return;
+    const currentMilestones = getMilestonesList(task);
+    const newMilestone = {
+      id: `m-${Date.now()}`,
+      title: milestoneTitle.trim(),
+      dueDate: '2026-11-30',
+      status: 'In Progress',
+      tasks: [],
+    };
+    const updatedTask = {
+      ...task,
+      milestones: [...currentMilestones, newMilestone],
+    };
+    if (onTaskUpdate) onTaskUpdate(updatedTask);
+    setNewMilestoneTitleMap((prev) => ({ ...prev, [task._id]: '' }));
+    setShowAddMilestoneMap((prev) => ({ ...prev, [task._id]: false }));
+  };
+
+  const handleAddSubTask = (task, milestoneId, subTaskTitle, targetDate) => {
+    if (!subTaskTitle || !subTaskTitle.trim()) return;
+    const currentMilestones = getMilestonesList(task);
+    const newSubTask = {
+      id: `sub-${Date.now()}`,
+      title: subTaskTitle.trim(),
+      status: 'Pending',
+      assignee: 'Claire Bure',
+      date: targetDate || '2026-11-20',
+    };
+    const updatedMilestones = currentMilestones.map((m) => {
+      if (m.id === milestoneId) {
+        return { ...m, tasks: [...(m.tasks || []), newSubTask] };
+      }
+      return m;
+    });
+    const updatedTask = {
+      ...task,
+      milestones: updatedMilestones,
+    };
+    if (onTaskUpdate) onTaskUpdate(updatedTask);
+    setNewSubtaskTitleMap((prev) => ({ ...prev, [milestoneId]: '' }));
+    setNewSubtaskDateMap((prev) => ({ ...prev, [milestoneId]: '' }));
+    setShowAddSubtaskMap((prev) => ({ ...prev, [milestoneId]: false }));
+    setExpandedMilestoneTasksMap((prev) => ({ ...prev, [milestoneId]: true }));
+  };
+
+  const updateSubtaskField = (task, milestoneId, subTaskId, field, value) => {
+    const currentMilestones = getMilestonesList(task);
+    const updatedMilestones = currentMilestones.map((m) => {
+      if (m.id === milestoneId) {
+        const updatedTasks = (m.tasks || []).map((st) => {
+          if (st.id === subTaskId) {
+            return { ...st, [field]: value };
+          }
+          return st;
+        });
+        return { ...m, tasks: updatedTasks };
+      }
+      return m;
+    });
+    const updatedTask = {
+      ...task,
+      milestones: updatedMilestones,
+    };
+    if (onTaskUpdate) onTaskUpdate(updatedTask);
+  };
+
+  const toggleSubtaskStatus = (task, milestoneId, subTaskId) => {
+    const currentMilestones = getMilestonesList(task);
+    const updatedMilestones = currentMilestones.map((m) => {
+      if (m.id === milestoneId) {
+        const updatedTasks = (m.tasks || []).map((st) => {
+          if (st.id === subTaskId) {
+            const nextStatus = st.status === 'Completed' ? 'In Progress' : st.status === 'In Progress' ? 'Pending' : 'Completed';
+            return { ...st, status: nextStatus };
+          }
+          return st;
+        });
+        return { ...m, tasks: updatedTasks };
+      }
+      return m;
+    });
+    const updatedTask = {
+      ...task,
+      milestones: updatedMilestones,
+    };
+    if (onTaskUpdate) onTaskUpdate(updatedTask);
+  };
 
   // Close active portal dropdowns on global click outside or window scroll
   useEffect(() => {
@@ -288,7 +468,16 @@ export const ListView = ({ tasks = [], onTaskStatusChange, onTaskClick, onChatCl
                   >
                     <tr>
                       {/* Project Title Header Column */}
-                      <th className="head1 th-project-group-title mysticky2 col-w-title">
+                      <th
+                        className="head1 th-project-group-title col-w-title"
+                        style={{
+                          position: 'sticky',
+                          left: 0,
+                          zIndex: 30,
+                          backgroundColor: '#ffffff',
+                          boxShadow: '2px 0 6px rgba(0,0,0,0.06)',
+                        }}
+                      >
                         <div className="d-flex align-items-center gap-2">
                           <span onClick={() => toggleGroup(group.key)} style={{ cursor: 'pointer' }} className="d-inline-flex align-items-center justify-content-center">
                             <img
@@ -411,16 +600,24 @@ export const ListView = ({ tasks = [], onTaskStatusChange, onTaskClick, onChatCl
                       {groupTasks.map((task, idx) => {
                         const isStatusOpen = activeStatusDropdown === task._id;
                         return (
-                          <tr
-                            key={task._id || idx}
-                            className="border-bottom project-row-item"
-                            style={{ position: 'relative', zIndex: isStatusOpen ? 99999 : 1 }}
-                          >
+                          <React.Fragment key={task._id || idx}>
+                            <tr
+                              className="border-bottom project-row-item"
+                              style={{ position: 'relative', zIndex: isStatusOpen ? 99999 : 1 }}
+                            >
                             {/* Project Title Cell */}
                             <td
-                              className="divcon1 cell-project-title mysticky2 col-w-title position-relative cursor-pointer"
+                              className="divcon1 cell-project-title col-w-title cursor-pointer"
                               onClick={() => onTaskClick && onTaskClick(task)}
-                              style={{ paddingLeft: '12px', fontSize: '13px' }}
+                              style={{
+                                position: 'sticky',
+                                left: 0,
+                                zIndex: 10,
+                                backgroundColor: '#ffffff',
+                                boxShadow: '2px 0 6px rgba(0,0,0,0.06)',
+                                paddingLeft: '12px',
+                                fontSize: '13px',
+                              }}
                             >
                               <div className="d-flex align-items-center justify-content-between w-100 pe-2" style={{ overflow: 'hidden' }}>
                                 <TruncatedCellText text={task.title || ''} fontSize="13px" />
@@ -478,16 +675,47 @@ export const ListView = ({ tasks = [], onTaskStatusChange, onTaskClick, onChatCl
                             )}
 
                             {/* Subitems Cell - Left / Start Aligned */}
-                            {visibleColumns.subitems && (
-                              <td className="divcon3 cell-subitems subitems col-w-subitems">
-                                <div className="d-flex align-items-center justify-content-start gap-1">
-                                  <span id="tree_open" className="d-inline-flex align-items-center justify-content-center">
-                                    <img src="/icons/subitm.svg" alt="subitem" style={{ width: '14px', height: '14px' }} />
-                                  </span>
-                                  <span style={{ fontSize: '13px' }}>{idx === 0 ? '1' : ''}</span>
-                                </div>
-                              </td>
-                            )}
+                            {visibleColumns.subitems && (() => {
+                              const milestonesList = getMilestonesList(task);
+                              const hasMilestones = milestonesList && milestonesList.length > 0;
+                              return (
+                                <td
+                                  className={`divcon3 cell-subitems subitems col-w-subitems ${hasMilestones ? 'cursor-pointer' : ''}`}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (hasMilestones) {
+                                      toggleSubitemsExpand(task._id);
+                                    }
+                                  }}
+                                  title={hasMilestones ? "Click to view & manage Milestones and Sub-tasks" : "No milestones created"}
+                                  style={{ cursor: hasMilestones ? 'pointer' : 'default' }}
+                                >
+                                  <div className="d-flex align-items-center justify-content-start gap-1 ms-1">
+                                    <span
+                                      style={{
+                                        fontSize: '10px',
+                                        color: hasMilestones ? '#64748b' : '#cbd5e1',
+                                        transition: 'transform 0.2s ease',
+                                        display: 'inline-block',
+                                        transform: expandedSubitemsMap[task._id] ? 'rotate(90deg)' : 'rotate(0deg)',
+                                        userSelect: 'none',
+                                        cursor: hasMilestones ? 'pointer' : 'default',
+                                      }}
+                                    >
+                                      ▶
+                                    </span>
+                                    <img
+                                      src="/icons/subitm.svg"
+                                      alt="subitem"
+                                      style={{ width: '14px', height: '14px', cursor: hasMilestones ? 'pointer' : 'default', opacity: hasMilestones ? 1 : 0.4 }}
+                                    />
+                                    <span className="font-monospace fw-bold text-dark ms-0.5" style={{ fontSize: '13px', cursor: hasMilestones ? 'pointer' : 'default' }}>
+                                      {milestonesList.length}
+                                    </span>
+                                  </div>
+                                </td>
+                              );
+                            })()}
 
                             {/* Planned Date Cell - Left / Start Aligned */}
                             {visibleColumns.plannedDate && (
@@ -510,12 +738,12 @@ export const ListView = ({ tasks = [], onTaskStatusChange, onTaskClick, onChatCl
                                       left: '50%',
                                       transform: 'translateX(-50%)',
                                       marginBottom: '6px',
-                                      zIndex: 99999,
+                                      zIndex: 9999999,
                                       fontSize: '11.5px',
                                       fontWeight: '600',
                                       whiteSpace: 'nowrap',
                                       pointerEvents: 'none',
-                                      boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+                                      boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
                                     }}
                                   >
                                     {calculateTotalDays(task.plannedDate || 'Oct 20 - 28')}
@@ -623,24 +851,369 @@ export const ListView = ({ tasks = [], onTaskStatusChange, onTaskClick, onChatCl
                                 </div>
                               </td>
                             )}
+
+                            {/* 11. Column Toggle Spacer Cell to perfectly match the 11-column <thead> header width */}
+                            <td className="divcon11 cell-column-toggle col-w-toggle"></td>
                           </tr>
-                        );
-                      })}
+
+                          {/* Inline Subitems / Milestones & Tasks Expansion Row */}
+                          {expandedSubitemsMap[task._id] && (
+                            <tr className="border-bottom">
+                              <td colSpan={11} className="p-0" style={{ backgroundColor: '#ffffff' }}>
+                                <div className="w-100" style={{ borderTop: '1px solid #e2e8f0', overflowX: 'auto', position: 'relative' }}>
+                                  {/* Milestone Sub-Table Header matching media_1790015780654.png */}
+                                  <table className="table table-borderless align-middle m-0" style={{ tableLayout: 'fixed', minWidth: '780px', width: '100%' }}>
+                                    <thead>
+                                      <tr style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #f1f5f9', height: '40px' }}>
+                                        <th className="ps-4 text-dark fw-bold position-sticky start-0 bg-white" style={{ fontSize: '13px', width: '28%', minWidth: '220px', left: 0, zIndex: 10, boxShadow: '2px 0 6px rgba(0,0,0,0.06)' }}>Milestone Name</th>
+                                        <th className="text-dark fw-bold" style={{ fontSize: '13px', width: '12%' }}>Subitems</th>
+                                        <th className="text-dark fw-bold" style={{ fontSize: '13px', width: '15%' }}>Owner</th>
+                                        <th className="text-dark fw-bold text-center" style={{ fontSize: '13px', width: '15%' }}>Status</th>
+                                        <th className="text-dark fw-bold" style={{ fontSize: '13px', width: '13%' }}>Date</th>
+                                        <th className="text-dark fw-bold text-center pe-4" style={{ fontSize: '13px', width: '17%' }}>
+                                          <div className="d-flex align-items-center justify-content-between">
+                                            <span>Timeline</span>
+                                            <button
+                                              type="button"
+                                              className="btn btn-sm btn-outline-primary rounded-pill px-2.5 py-1 fw-bold d-inline-flex align-items-center justify-content-center gap-1"
+                                              style={{ fontSize: '11px', height: '26px', cursor: 'pointer' }}
+                                              onClick={() => {
+                                                setModalTargetTask(task);
+                                                setModalTargetMilestone(null);
+                                              }}
+                                            >
+                                              <Plus size={12} /> Add Milestone
+                                            </button>
+                                          </div>
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {getMilestonesList(task).map((m, mIdx) => {
+                                        const palette = pastelPalette[mIdx % pastelPalette.length];
+                                        const isMilestoneExpanded = Boolean(expandedMilestoneTasksMap[m.id]);
+                                        return (
+                                          <React.Fragment key={m.id || mIdx}>
+                                            <tr
+                                              style={{
+                                                backgroundColor: palette.bg,
+                                                borderBottom: '1px solid rgba(0,0,0,0.04)',
+                                                height: '46px',
+                                              }}
+                                            >
+                                              {/* Milestone Name - Rock-Solid Sticky Column 1 */}
+                                              <td className="ps-4 py-2 position-sticky start-0" style={{ width: '28%', minWidth: '220px', left: 0, zIndex: 5, backgroundColor: palette.bg, boxShadow: '2px 0 6px rgba(0,0,0,0.06)' }}>
+                                                <div
+                                                  className="d-flex align-items-center gap-2 cursor-pointer"
+                                                  onClick={() => {
+                                                    setModalTargetTask(task);
+                                                    setModalTargetMilestone(m);
+                                                  }}
+                                                  title="Click to edit milestone"
+                                                  style={{ cursor: 'pointer' }}
+                                                >
+                                                  <span style={{ color: palette.accent, fontSize: '13px', lineHeight: 1 }}>♦</span>
+                                                  <span className="fw-medium" style={{ fontSize: '13px', color: '#1e293b' }}>
+                                                    {m.title || 'Milestone Name'}
+                                                  </span>
+                                                </div>
+                                              </td>
+
+                                              {/* Subitems */}
+                                              {(() => {
+                                                const subtasksCount = (m.tasks || []).length;
+                                                const hasSubtasks = subtasksCount > 0;
+                                                return (
+                                                  <td className="py-2" style={{ width: '12%' }}>
+                                                    <div
+                                                      className="d-flex align-items-center gap-1"
+                                                      onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        if (hasSubtasks) {
+                                                          setExpandedMilestoneTasksMap((prev) => ({
+                                                            ...prev,
+                                                            [m.id]: !prev[m.id],
+                                                          }));
+                                                        }
+                                                      }}
+                                                      style={{ cursor: hasSubtasks ? 'pointer' : 'default' }}
+                                                      title={hasSubtasks ? "Click to view & manage sub-tasks" : "No sub-tasks defined"}
+                                                    >
+                                                      <span
+                                                        style={{
+                                                          fontSize: '11px',
+                                                          color: hasSubtasks ? '#64748b' : '#cbd5e1',
+                                                          transition: 'transform 0.2s ease',
+                                                          display: 'inline-flex',
+                                                          alignItems: 'center',
+                                                          transform: isMilestoneExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+                                                          cursor: hasSubtasks ? 'pointer' : 'default',
+                                                        }}
+                                                      >
+                                                        ▶
+                                                      </span>
+                                                      <img
+                                                        src="/icons/subitm.svg"
+                                                        alt=""
+                                                        style={{ width: '14px', height: '14px', cursor: hasSubtasks ? 'pointer' : 'default', opacity: hasSubtasks ? 1 : 0.4 }}
+                                                      />
+                                                      <span
+                                                        className="badge rounded-pill bg-white text-dark border ms-1 fw-bold"
+                                                        style={{ fontSize: '10.5px', cursor: hasSubtasks ? 'pointer' : 'default' }}
+                                                      >
+                                                        {subtasksCount}
+                                                      </span>
+                                                    </div>
+                                                  </td>
+                                                );
+                                              })()}
+
+                                              {/* Owner */}
+                                              <td className="py-2" style={{ width: '15%' }}>
+                                                <div
+                                                  className="d-flex align-items-center gap-1 cursor-pointer"
+                                                  onClick={() => {
+                                                    setModalTargetTask(task);
+                                                    setModalTargetMilestone(m);
+                                                  }}
+                                                  style={{ cursor: 'pointer' }}
+                                                  title="Click to change owner"
+                                                >
+                                                  <div className="pm-avatar-circle" style={{ width: '24px', height: '24px' }}>
+                                                    <img
+                                                      src="/img/client1.jpg"
+                                                      alt="Owner"
+                                                      className="pm-avatar-img"
+                                                      onError={(e) => { e.target.src = '/icons/avatar1.svg'; }}
+                                                    />
+                                                  </div>
+                                                  <button
+                                                    type="button"
+                                                    className="btn btn-sm p-0 rounded-circle border border-dashed text-muted d-inline-flex align-items-center justify-content-center"
+                                                    style={{ width: '22px', height: '22px', borderColor: '#94a3b8', fontSize: '11px', lineHeight: 1, cursor: 'pointer' }}
+                                                  >
+                                                    +
+                                                  </button>
+                                                </div>
+                                              </td>
+
+                                              {/* Status - Properly Centered */}
+                                              <td className="py-2 text-center" style={{ width: '15%' }}>
+                                                <div
+                                                  className="d-inline-flex align-items-center justify-content-center px-3 py-1 text-white fw-semibold cursor-pointer mx-auto"
+                                                  style={{
+                                                    backgroundColor:
+                                                      m.status === 'Completed' || m.status === 'Approved'
+                                                        ? '#10B981'
+                                                        : m.status === 'At Risk'
+                                                        ? '#EF4444'
+                                                        : '#E5A65E',
+                                                    fontSize: '12.5px',
+                                                    minWidth: '96px',
+                                                    height: '28px',
+                                                    borderRadius: '4px',
+                                                    textAlign: 'center',
+                                                    cursor: 'pointer',
+                                                  }}
+                                                  onClick={() => {
+                                                    setModalTargetTask(task);
+                                                    setModalTargetMilestone(m);
+                                                  }}
+                                                  title="Click to update milestone status"
+                                                >
+                                                  {m.status || 'On Track'}
+                                                </div>
+                                              </td>
+
+                                              {/* Date */}
+                                              <td className="py-2" style={{ width: '13%' }}>
+                                                <span className="fw-semibold" style={{ fontSize: '13px', color: '#1e293b' }}>
+                                                  {m.date || m.dueDate || 'Nov 3'}
+                                                </span>
+                                              </td>
+
+                                              {/* Timeline - Properly Centered */}
+                                              <td className="py-2 pe-4 text-center" style={{ width: '17%' }}>
+                                                <div
+                                                  className="d-inline-flex align-items-center justify-content-center px-3 py-1 text-white fw-bold rounded-pill mx-auto"
+                                                  style={{
+                                                    backgroundColor: '#1E293B',
+                                                    fontSize: '12px',
+                                                    minWidth: '100px',
+                                                    height: '26px',
+                                                    textAlign: 'center',
+                                                  }}
+                                                >
+                                                  {m.timeline || 'Nov 20'}
+                                                </div>
+                                              </td>
+                                            </tr>
+
+                                            {/* Nested Sub-tasks Row */}
+                                            {isMilestoneExpanded && (
+                                              <tr className="bg-white border-bottom">
+                                                <td colSpan={6} className="p-3 ps-5 bg-white">
+                                                  <div className="bg-light rounded-3 border p-3">
+                                                    <div className="d-flex align-items-center justify-content-between mb-3">
+                                                      <div className="d-flex align-items-center gap-2">
+                                                        <span className="fw-bold text-dark small">Sub-tasks for {m.title || 'Milestone'}</span>
+                                                        <span className="badge bg-primary bg-opacity-10 text-primary rounded-pill px-2.5 py-0.5 font-monospace fw-bold" style={{ fontSize: '11px' }}>
+                                                          {(m.tasks || []).length} tasks
+                                                        </span>
+                                                      </div>
+                                                      <div className="d-flex align-items-center gap-2">
+                                                        <button
+                                                          type="button"
+                                                          className="btn btn-sm btn-primary rounded-pill px-3 py-1 fw-bold d-inline-flex align-items-center justify-content-center gap-1 shadow-sm"
+                                                          style={{ fontSize: '11.5px', height: '28px', backgroundColor: '#2563eb', borderColor: '#2563eb', cursor: 'pointer' }}
+                                                          onClick={() => {
+                                                            setShowAddSubtaskMap((prev) => ({ ...prev, [m.id]: !prev[m.id] }));
+                                                          }}
+                                                        >
+                                                          <Plus size={13} /> Add Sub-task
+                                                        </button>
+                                                        <button
+                                                          type="button"
+                                                          className="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center justify-content-center"
+                                                          style={{ fontSize: '11.5px', height: '28px', cursor: 'pointer' }}
+                                                          onClick={() => {
+                                                            setModalTargetTask(task);
+                                                            setModalTargetMilestone(m);
+                                                          }}
+                                                        >
+                                                          Edit Milestone Popup
+                                                        </button>
+                                                      </div>
+                                                    </div>
+
+                                                    {/* Inline Add Sub-task Input Form */}
+                                                    {(showAddSubtaskMap[m.id] || (m.tasks || []).length === 0) && (
+                                                      <div className="d-flex align-items-center gap-2 mb-3 bg-white p-2.5 rounded-3 border shadow-sm">
+                                                        <input
+                                                          type="text"
+                                                          className="form-control form-control-sm rounded-3 px-3"
+                                                          placeholder="Type new sub-task title and press Enter..."
+                                                          value={newSubtaskTitleMap[m.id] || ''}
+                                                          onChange={(e) => setNewSubtaskTitleMap((prev) => ({ ...prev, [m.id]: e.target.value }))}
+                                                          onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                              e.preventDefault();
+                                                              handleAddSubTask(task, m.id, newSubtaskTitleMap[m.id], newSubtaskDateMap[m.id]);
+                                                            }
+                                                          }}
+                                                          style={{ fontSize: '13px', height: '36px', borderColor: '#cbd5e1' }}
+                                                          autoFocus
+                                                        />
+                                                        <input
+                                                          type="date"
+                                                          className="form-control form-control-sm rounded-3 px-2 flex-shrink-0"
+                                                          value={newSubtaskDateMap[m.id] || '2026-11-20'}
+                                                          onChange={(e) => setNewSubtaskDateMap((prev) => ({ ...prev, [m.id]: e.target.value }))}
+                                                          style={{ fontSize: '12px', height: '36px', width: '140px', borderColor: '#cbd5e1', cursor: 'pointer' }}
+                                                          title="Choose target date for sub-task"
+                                                        />
+                                                        <button
+                                                          type="button"
+                                                          className="btn btn-sm btn-success rounded-3 px-3.5 fw-bold flex-shrink-0 d-inline-flex align-items-center justify-content-center gap-1"
+                                                          style={{ fontSize: '12.5px', height: '36px', backgroundColor: '#10b981', borderColor: '#10b981', cursor: 'pointer' }}
+                                                          onClick={() => handleAddSubTask(task, m.id, newSubtaskTitleMap[m.id], newSubtaskDateMap[m.id])}
+                                                        >
+                                                          <Plus size={14} /> Add Sub-task
+                                                        </button>
+                                                      </div>
+                                                    )}
+
+                                                    {/* Sub-tasks Table */}
+                                                    {m.tasks && m.tasks.length > 0 ? (
+                                                      <div className="table-responsive bg-white rounded-3 border">
+                                                        <table className="table table-sm table-hover m-0 align-middle" style={{ fontSize: '12px' }}>
+                                                          <thead className="bg-light">
+                                                            <tr className="text-muted">
+                                                              <th className="ps-3 py-2">Sub-task Title</th>
+                                                              <th className="py-2" style={{ width: '160px' }}>Assignee</th>
+                                                              <th className="py-2" style={{ width: '150px' }}>Target Date</th>
+                                                              <th className="pe-3 py-2 text-center" style={{ width: '130px' }}>Status</th>
+                                                            </tr>
+                                                          </thead>
+                                                          <tbody>
+                                                            {m.tasks.map((st) => (
+                                                              <tr key={st.id}>
+                                                                <td className="ps-3 fw-medium text-dark">{st.title}</td>
+                                                                <td>
+                                                                  <div className="d-flex align-items-center gap-1.5">
+                                                                    <img src="/img/client1.jpg" alt="" className="rounded-circle" style={{ width: '20px', height: '20px' }} />
+                                                                    <span className="text-secondary">{st.assignee || 'Claire Bure'}</span>
+                                                                  </div>
+                                                                </td>
+                                                                <td>
+                                                                  <input
+                                                                    type="date"
+                                                                    className="form-control form-control-sm border-0 bg-transparent text-dark p-0 shadow-none fw-medium"
+                                                                    style={{ fontSize: '12px', width: '135px', cursor: 'pointer' }}
+                                                                    value={st.date && st.date.includes('-') ? st.date : '2026-11-10'}
+                                                                    onChange={(e) => updateSubtaskField(task, m.id, st.id, 'date', e.target.value)}
+                                                                    title="Click to choose target date for sub-task"
+                                                                  />
+                                                                </td>
+                                                                <td className="pe-3 text-center">
+                                                                  <span
+                                                                    className={`badge rounded-pill px-3 py-1 cursor-pointer fw-semibold ${
+                                                                      st.status === 'Completed' || st.status === 'Approved'
+                                                                        ? 'bg-success text-white'
+                                                                        : st.status === 'In Progress'
+                                                                        ? 'bg-primary text-white'
+                                                                        : 'bg-secondary text-white'
+                                                                    }`}
+                                                                    style={{ fontSize: '11px', display: 'inline-block', minWidth: '90px', textAlign: 'center', cursor: 'pointer' }}
+                                                                    onClick={() => toggleSubtaskStatus(task, m.id, st.id)}
+                                                                    title="Click to toggle sub-task status"
+                                                                  >
+                                                                    {st.status || 'Pending'}
+                                                                  </span>
+                                                                </td>
+                                                              </tr>
+                                                            ))}
+                                                          </tbody>
+                                                        </table>
+                                                      </div>
+                                                    ) : (
+                                                      <div className="text-muted small fst-italic p-3 bg-white rounded-3 border text-center">
+                                                        No sub-tasks present yet under this milestone. Enter sub-task title above and choose a target date to add your first sub-task.
+                                                      </div>
+                                                    )}
+                                                  </div>
+                                                </td>
+                                              </tr>
+                                            )}
+                                          </React.Fragment>
+                                        );
+                                      })}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
 
                       {/* Add Row Button */}
                       <tr className="border-bottom">
                         <td
-                          className="divcon1 mysticky2 col-w-title"
+                          className="divcon1 col-w-title"
                           style={{
                             position: 'sticky',
                             left: 0,
                             zIndex: 10,
+                            backgroundColor: '#ffffff',
+                            boxShadow: '2px 0 6px rgba(0,0,0,0.06)',
                             paddingLeft: '12px',
                           }}
                         >
                           <p
                             className="text-primary fw-bold cursor-pointer m-0"
-                            onClick={onAddProject}
+                            onClick={() => onAddProject && onAddProject(group.key)}
                             style={{ cursor: 'pointer', fontSize: '13px' }}
                           >
                             + Add
@@ -662,6 +1235,19 @@ export const ListView = ({ tasks = [], onTaskStatusChange, onTaskClick, onChatCl
           leadName={selectedLeadProfile.name}
           leadType={selectedLeadProfile.type}
           onClose={() => setSelectedLeadProfile(null)}
+        />
+      )}
+
+      {/* Milestone Creation / Editing Modal Popup */}
+      {modalTargetTask && (
+        <MilestoneModalPopup
+          task={modalTargetTask}
+          milestone={modalTargetMilestone}
+          onClose={() => {
+            setModalTargetTask(null);
+            setModalTargetMilestone(null);
+          }}
+          onSave={handleSaveMilestoneModal}
         />
       )}
 

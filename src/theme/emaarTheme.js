@@ -265,7 +265,7 @@ export const emaarTheme = createTheme({
         },
         'input[type="date"]::-webkit-calendar-picker-indicator': {
           display: 'none !important',
-          '-webkit-appearance': 'none !important',
+          WebkitAppearance: 'none !important',
         },
         '::-webkit-scrollbar': {
           width: '8px',
