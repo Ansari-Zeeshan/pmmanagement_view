@@ -1,12 +1,14 @@
+import { INITIAL_NOTIFICATIONS, INITIAL_PROJECTS } from '../data/initialData';
 import { apiClient } from './axios';
 
-const TASKS_STORAGE_KEY = 'emaar_pm_database_tasks_v1';
-const CALENDAR_EVENTS_STORAGE_KEY = 'emaar_pm_database_calendar_events_v1';
+const TASKS_STORAGE_KEY = 'emaar_pm_database_tasks_v2';
+const CALENDAR_EVENTS_STORAGE_KEY = 'emaar_pm_database_calendar_events_v2';
+const NOTIFICATIONS_STORAGE_KEY = 'emaar_pm_database_notifications_v2';
 
 /**
  * Retrieve saved projects/tasks from persistent storage (or fallback seed data)
  */
-export const getSavedTasks = (fallbackTasks = []) => {
+export const getSavedTasks = (fallbackTasks = INITIAL_PROJECTS) => {
   try {
     const raw = localStorage.getItem(TASKS_STORAGE_KEY);
     if (raw) {
@@ -18,7 +20,7 @@ export const getSavedTasks = (fallbackTasks = []) => {
   } catch (err) {
     console.warn('Error reading tasks from LocalStorage database:', err);
   }
-  return fallbackTasks;
+  return fallbackTasks && fallbackTasks.length > 0 ? fallbackTasks : INITIAL_PROJECTS;
 };
 
 /**
@@ -47,6 +49,22 @@ export const saveNewTask = (newTask, currentTasks = []) => {
 };
 
 /**
+ * Update an existing task in persistent storage
+ */
+export const updateTaskInDatabase = (updatedTask, currentTasks = []) => {
+  const existingTasks = currentTasks && currentTasks.length > 0 ? currentTasks : getSavedTasks();
+  const exists = existingTasks.some((t) => t._id === updatedTask._id);
+  let updatedList;
+  if (exists) {
+    updatedList = existingTasks.map((t) => (t._id === updatedTask._id ? { ...t, ...updatedTask } : t));
+  } else {
+    updatedList = [updatedTask, ...existingTasks];
+  }
+  saveTasks(updatedList);
+  return updatedList;
+};
+
+/**
  * Retrieve saved calendar events from persistent storage
  */
 export const getSavedCalendarEvents = (fallbackEvents = []) => {
@@ -55,7 +73,6 @@ export const getSavedCalendarEvents = (fallbackEvents = []) => {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        // Re-hydrate Date objects
         return parsed.map((ev) => ({
           ...ev,
           start: ev.start ? new Date(ev.start) : new Date(),
@@ -79,17 +96,42 @@ export const saveCalendarEvents = (events) => {
     console.error('Error saving calendar events to LocalStorage database:', err);
   }
 
-  // Background sync attempt with backend
-  apiClient.post('/calendar/sync', { events }).catch(() => {
-    // Graceful silent fallback in offline/demo mode
-  });
+  apiClient.post('/calendar/sync', { events }).catch(() => {});
 };
 
 /**
- * Save single new calendar event
+ * Retrieve saved notifications from persistent storage
  */
-export const saveNewCalendarEvent = (newEvent, currentEvents = []) => {
-  const updated = [newEvent, ...currentEvents];
-  saveCalendarEvents(updated);
+export const getSavedNotifications = () => {
+  try {
+    const raw = localStorage.getItem(NOTIFICATIONS_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (err) {
+    console.warn('Error reading notifications:', err);
+  }
+  return INITIAL_NOTIFICATIONS;
+};
+
+/**
+ * Save notification array
+ */
+export const saveNotifications = (notifications) => {
+  try {
+    localStorage.setItem(NOTIFICATIONS_STORAGE_KEY, JSON.stringify(notifications));
+  } catch (err) {
+    console.error('Error saving notifications:', err);
+  }
+};
+
+/**
+ * Push new notification
+ */
+export const addNotificationToDatabase = (notification) => {
+  const current = getSavedNotifications();
+  const updated = [notification, ...current];
+  saveNotifications(updated);
   return updated;
 };

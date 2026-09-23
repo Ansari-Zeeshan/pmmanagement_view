@@ -5,10 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc && vite build",
     "preview": "vite preview",
     "server": "npm --prefix server run dev",
-    "dev:all": "concurrently \"npm run dev\" \"npm run server\""
+    "dev:all": "concurrently \"npm run dev\" \"npm run server\"",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "type-check": "tsc --noEmit",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -35,10 +38,18 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.2",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@typescript-eslint/eslint-plugin": "^8.70.1",
+    "@typescript-eslint/parser": "^8.70.1",
     "@vitejs/plugin-react": "^4.3.4",
     "concurrently": "^9.1.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "typescript": "^6.0.3",
     "vite": "^6.0.5"
   }
 }
