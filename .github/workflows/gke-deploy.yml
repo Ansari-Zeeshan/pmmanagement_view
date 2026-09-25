@@ -15,32 +15,34 @@ env:
 jobs:
   build-and-deploy:
     name: Build & Deploy to GKE
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
-    # 1. Checkout repository using latest v4 action
+    # 1. Checkout repository
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    # 2. Authenticate to GCP using latest v2 auth action
+    # 2. Authenticate to GCP using Service Account Key secret
     - id: 'auth'
       name: Authenticate with Google Cloud
       uses: google-github-actions/auth@v2
       with:
         credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-    # 3. Setup gcloud CLI using latest v2 action
+    # 3. Setup gcloud CLI
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
 
-    # 4. Configure Docker for GCR
+    # 4. Configure Docker Authentication for GCR
     - name: Configure Docker Authentication
       run: |-
-        gcloud --quiet auth configure-docker
+        gcloud --quiet auth configure-docker gcr.io
 
-    # 5. Ensure GKE APIs & GKE Cluster exist
+    # 5. Enable Required GCP Services & Ensure GKE Cluster Exists
     - name: Ensure GKE Cluster Exists
       run: |-
+        echo "Enabling GCP APIs..."
         gcloud services enable container.googleapis.com artifactregistry.googleapis.com compute.googleapis.com --project="$PROJECT_ID"
+        echo "Checking if GKE cluster $GKE_CLUSTER exists..."
         if ! gcloud container clusters describe "$GKE_CLUSTER" --zone="$GKE_ZONE" --project="$PROJECT_ID" >/dev/null 2>&1; then
           echo "Cluster $GKE_CLUSTER not found. Creating GKE cluster in $GKE_ZONE..."
           gcloud container clusters create "$GKE_CLUSTER" \
@@ -49,24 +51,24 @@ jobs:
             --machine-type=e2-medium \
             --project="$PROJECT_ID"
         else
-          echo "Cluster $GKE_CLUSTER exists and ready."
+          echo "GKE Cluster $GKE_CLUSTER is active."
         fi
 
-    # 6. Get GKE Credentials using official v2 credentials action
+    # 6. Get GKE Credentials for kubectl
     - name: Get GKE Credentials
       uses: google-github-actions/get-gke-credentials@v2
       with:
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_ZONE }}
 
-    # 7. Build & Push Backend Container Image
+    # 7. Build & Push Backend Docker Image
     - name: Build & Push Backend Image
       run: |-
         docker build -t "$BACKEND_IMAGE:$GITHUB_SHA" -t "$BACKEND_IMAGE:latest" ./backend
         docker push "$BACKEND_IMAGE:$GITHUB_SHA"
         docker push "$BACKEND_IMAGE:latest"
 
-    # 8. Build & Push Frontend Container Image
+    # 8. Build & Push Frontend Docker Image
     - name: Build & Push Frontend Image
       run: |-
         docker build -t "$FRONTEND_IMAGE:$GITHUB_SHA" -t "$FRONTEND_IMAGE:latest" ./frontend
@@ -79,5 +81,5 @@ jobs:
         kubectl apply -f gke/backend-deployment.yaml
         kubectl apply -f gke/frontend-deployment.yaml
         kubectl apply -f gke/ingress.yaml
-        kubectl rollout status deployment/backend-deployment --timeout=120s
-        kubectl rollout status deployment/frontend-deployment --timeout=120s
+        kubectl rollout status deployment/backend-deployment --timeout=180s
+        kubectl rollout status deployment/frontend-deployment --timeout=180s
