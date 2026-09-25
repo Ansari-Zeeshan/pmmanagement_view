@@ -1,71 +1,77 @@
-# Deploying to Google Kubernetes Engine (GKE)
+# 🚀 Google Kubernetes Engine (GKE) Deployment Guide
 
-This document provides step-by-step instructions to build, push, and deploy the **Frontend** and **Backend** microservices to Google Kubernetes Engine (GKE).
-
----
-
-## 🏗️ Project Architecture
-
-```
-pmmanagement_view/
-├── frontend/               # React + Vite application & static UI assets
-│   ├── Dockerfile          # Multi-stage production build (Node + Nginx)
-│   ├── nginx.conf          # Nginx routing & API proxy configuration
-│   └── src/                # React source code
-├── backend/                # Node.js + Express backend service
-│   ├── Dockerfile          # Production Node.js server image
-│   └── src/                # Express controllers, models, routes & sockets
-├── common/                 # Shared resources & Postman API Collection
-├── gke/                    # Kubernetes manifests for GKE deployment
-│   ├── frontend-deployment.yaml
-│   ├── backend-deployment.yaml
-│   └── ingress.yaml
-└── docker-compose.yml      # Local multi-container orchestrator
-```
+**GCP Project ID**: `pmmainview`  
+**GCP Project Number**: `929959382758`
 
 ---
 
-## 🚀 Step 1: Set Up Google Cloud SDK & Authenticate
+## 📋 Overview
 
+The project has been fully configured for Google Cloud & GKE multi-container deployment:
+- **`backend/Dockerfile`** $\rightarrow$ Builds production Node.js/Express API container (`gcr.io/pmmainview/pmmanagement-backend:latest`).
+- **`frontend/Dockerfile`** $\rightarrow$ Multi-stage React + Vite compile into production Nginx container (`gcr.io/pmmainview/pmmanagement-frontend:latest`).
+- **`gke/backend-deployment.yaml`** $\rightarrow$ GKE Deployment & Service for backend API.
+- **`gke/frontend-deployment.yaml`** $\rightarrow$ GKE Deployment & LoadBalancer Service for public frontend access.
+- **`gke/ingress.yaml`** $\rightarrow$ Ingress controller routing rules.
+
+---
+
+## 💻 Method A: Deploy using Google Cloud Shell (Easiest - 1 Click)
+
+1. Open your browser in Google Cloud Console: **https://console.cloud.google.com/welcome?project=pmmainview**
+2. Click the **Activate Cloud Shell** icon `>_` at the top right header.
+3. In Cloud Shell, run:
 ```bash
-# 1. Login to Google Cloud
-gcloud auth login
+# Clone or upload project repository to Cloud Shell, then navigate to root
+cd pmmanagement_view
 
-# 2. Set your GCP Project ID
-gcloud config set project YOUR_GCP_PROJECT_ID
+# Run automated deployment script
+chmod +x gke/deploy-to-gke.sh
+./gke/deploy-to-gke.sh
+```
 
-# 3. Authenticate Docker with GCP Artifact Registry / GCR
+---
+
+## 🛠️ Method B: Deploy from Local Terminal (Step-by-Step)
+
+### Step 1: Enable GCP APIs
+```bash
+gcloud services enable container.googleapis.com artifactregistry.googleapis.com compute.googleapis.com --project=pmmainview
+```
+
+### Step 2: Configure GCP Project & Docker Authentication
+```bash
+gcloud config set project pmmainview
 gcloud auth configure-docker
 ```
 
----
-
-## 📦 Step 2: Build & Push Container Images to GCP
-
+### Step 3: Create GKE Cluster
 ```bash
-# Define your GCP Project ID variable
-export PROJECT_ID="YOUR_GCP_PROJECT_ID"
-
-# Build & Tag Frontend Image
-docker build -t gcr.io/${PROJECT_ID}/pmmanagement-frontend:latest ./frontend
-docker push gcr.io/${PROJECT_ID}/pmmanagement-frontend:latest
-
-# Build & Tag Backend Image
-docker build -t gcr.io/${PROJECT_ID}/pmmanagement-backend:latest ./backend
-docker push gcr.io/${PROJECT_ID}/pmmanagement-backend:latest
+gcloud container clusters create pmmanagement-cluster \
+    --zone=asia-south1-a \
+    --num-nodes=2 \
+    --machine-type=e2-medium \
+    --project=pmmainview
 ```
 
----
-
-## ☸️ Step 3: Connect to your GKE Cluster & Deploy
-
+### Step 4: Get GKE Cluster Credentials
 ```bash
-# Get GKE cluster credentials
-gcloud container clusters get-credentials YOUR_CLUSTER_NAME --zone YOUR_CLUSTER_ZONE --project ${PROJECT_ID}
+gcloud container clusters get-credentials pmmanagement-cluster --zone=asia-south1-a --project=pmmainview
+```
 
-# Update image URLs in gke/frontend-deployment.yaml and gke/backend-deployment.yaml with your PROJECT_ID
+### Step 5: Build & Push Images to Container Registry
+```bash
+# Build & Push Backend
+docker build -t gcr.io/pmmainview/pmmanagement-backend:latest ./backend
+docker push gcr.io/pmmainview/pmmanagement-backend:latest
 
-# Deploy Backend & Frontend services to GKE
+# Build & Push Frontend
+docker build -t gcr.io/pmmainview/pmmanagement-frontend:latest ./frontend
+docker push gcr.io/pmmainview/pmmanagement-frontend:latest
+```
+
+### Step 6: Deploy Manifests to GKE
+```bash
 kubectl apply -f gke/backend-deployment.yaml
 kubectl apply -f gke/frontend-deployment.yaml
 kubectl apply -f gke/ingress.yaml
@@ -73,15 +79,14 @@ kubectl apply -f gke/ingress.yaml
 
 ---
 
-## 🔍 Step 4: Verify Deployment
+## 🌐 Step 7: Verify Live Application & Get Public IP
 
 ```bash
-# Check running pods
+# View LoadBalancer external IP for frontend
+kubectl get svc frontend-service
+
+# Check running pods status
 kubectl get pods
-
-# Check services and external IP
-kubectl get services
-
-# Check GKE ingress status
-kubectl get ingress
 ```
+
+Once `EXTERNAL-IP` is assigned by Google Cloud, open `http://<EXTERNAL-IP>` in your browser!
