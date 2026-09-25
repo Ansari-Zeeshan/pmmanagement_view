@@ -3,6 +3,7 @@ name: Deploy to Google Kubernetes Engine (GKE)
 on:
   push:
     branches: [ "main", "master" ]
+  workflow_dispatch:
 
 env:
   PROJECT_ID: pmmainview
@@ -12,52 +13,71 @@ env:
   FRONTEND_IMAGE: gcr.io/pmmainview/pmmanagement-frontend
 
 jobs:
-  setup-build-publish-deploy:
+  build-and-deploy:
     name: Build & Deploy to GKE
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+    # 1. Checkout repository using latest v4 action
+    - name: Checkout Code
+      uses: actions/checkout@v4
 
-    # Authenticate with Google Cloud
+    # 2. Authenticate to GCP using latest v2 auth action
     - id: 'auth'
-      uses: 'google-github-actions/auth@v1'
+      name: Authenticate with Google Cloud
+      uses: google-github-actions/auth@v2
       with:
         credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-    # Setup gcloud CLI
+    # 3. Setup gcloud CLI using latest v2 action
     - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v1
+      uses: google-github-actions/setup-gcloud@v2
 
-    # Configure Docker with GCP GCR
-    - name: Configure Docker
+    # 4. Configure Docker for GCR
+    - name: Configure Docker Authentication
       run: |-
         gcloud --quiet auth configure-docker
 
-    # Get GKE Credentials
-    - name: Get GKE Credentials
+    # 5. Ensure GKE APIs & GKE Cluster exist
+    - name: Ensure GKE Cluster Exists
       run: |-
-        gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE" --project "$PROJECT_ID"
+        gcloud services enable container.googleapis.com artifactregistry.googleapis.com compute.googleapis.com --project="$PROJECT_ID"
+        if ! gcloud container clusters describe "$GKE_CLUSTER" --zone="$GKE_ZONE" --project="$PROJECT_ID" >/dev/null 2>&1; then
+          echo "Cluster $GKE_CLUSTER not found. Creating GKE cluster in $GKE_ZONE..."
+          gcloud container clusters create "$GKE_CLUSTER" \
+            --zone="$GKE_ZONE" \
+            --num-nodes=2 \
+            --machine-type=e2-medium \
+            --project="$PROJECT_ID"
+        else
+          echo "Cluster $GKE_CLUSTER exists and ready."
+        fi
 
-    # Build & Push Backend Docker Image
+    # 6. Get GKE Credentials using official v2 credentials action
+    - name: Get GKE Credentials
+      uses: google-github-actions/get-gke-credentials@v2
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_ZONE }}
+
+    # 7. Build & Push Backend Container Image
     - name: Build & Push Backend Image
       run: |-
         docker build -t "$BACKEND_IMAGE:$GITHUB_SHA" -t "$BACKEND_IMAGE:latest" ./backend
         docker push "$BACKEND_IMAGE:$GITHUB_SHA"
         docker push "$BACKEND_IMAGE:latest"
 
-    # Build & Push Frontend Docker Image
+    # 8. Build & Push Frontend Container Image
     - name: Build & Push Frontend Image
       run: |-
         docker build -t "$FRONTEND_IMAGE:$GITHUB_SHA" -t "$FRONTEND_IMAGE:latest" ./frontend
         docker push "$FRONTEND_IMAGE:$GITHUB_SHA"
         docker push "$FRONTEND_IMAGE:latest"
 
-    # Deploy to GKE
-    - name: Deploy Manifests to GKE
+    # 9. Apply Kubernetes Manifests to GKE
+    - name: Deploy to Kubernetes Cluster
       run: |-
         kubectl apply -f gke/backend-deployment.yaml
         kubectl apply -f gke/frontend-deployment.yaml
         kubectl apply -f gke/ingress.yaml
-        kubectl rollout status deployment/backend-deployment
-        kubectl rollout status deployment/frontend-deployment
+        kubectl rollout status deployment/backend-deployment --timeout=120s
+        kubectl rollout status deployment/frontend-deployment --timeout=120s
