@@ -1,0 +1,63 @@
+name: Deploy to Google Kubernetes Engine (GKE)
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+env:
+  PROJECT_ID: pmmainview
+  GKE_CLUSTER: pmmanagement-cluster
+  GKE_ZONE: asia-south1-a
+  BACKEND_IMAGE: gcr.io/pmmainview/pmmanagement-backend
+  FRONTEND_IMAGE: gcr.io/pmmainview/pmmanagement-frontend
+
+jobs:
+  setup-build-publish-deploy:
+    name: Build & Deploy to GKE
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    # Authenticate with Google Cloud
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+    # Setup gcloud CLI
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+
+    # Configure Docker with GCP GCR
+    - name: Configure Docker
+      run: |-
+        gcloud --quiet auth configure-docker
+
+    # Get GKE Credentials
+    - name: Get GKE Credentials
+      run: |-
+        gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE" --project "$PROJECT_ID"
+
+    # Build & Push Backend Docker Image
+    - name: Build & Push Backend Image
+      run: |-
+        docker build -t "$BACKEND_IMAGE:$GITHUB_SHA" -t "$BACKEND_IMAGE:latest" ./backend
+        docker push "$BACKEND_IMAGE:$GITHUB_SHA"
+        docker push "$BACKEND_IMAGE:latest"
+
+    # Build & Push Frontend Docker Image
+    - name: Build & Push Frontend Image
+      run: |-
+        docker build -t "$FRONTEND_IMAGE:$GITHUB_SHA" -t "$FRONTEND_IMAGE:latest" ./frontend
+        docker push "$FRONTEND_IMAGE:$GITHUB_SHA"
+        docker push "$FRONTEND_IMAGE:latest"
+
+    # Deploy to GKE
+    - name: Deploy Manifests to GKE
+      run: |-
+        kubectl apply -f gke/backend-deployment.yaml
+        kubectl apply -f gke/frontend-deployment.yaml
+        kubectl apply -f gke/ingress.yaml
+        kubectl rollout status deployment/backend-deployment
+        kubectl rollout status deployment/frontend-deployment
