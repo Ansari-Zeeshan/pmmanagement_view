@@ -40,8 +40,8 @@ jobs:
     # 5. Enable Required GCP Services & Ensure GKE Cluster Exists
     - name: Ensure GKE Cluster Exists
       run: |-
-        echo "Enabling GCP APIs..."
-        gcloud services enable container.googleapis.com artifactregistry.googleapis.com compute.googleapis.com --project="$PROJECT_ID"
+        echo "Enabling GCP APIs (if permitted)..."
+        gcloud services enable container.googleapis.com artifactregistry.googleapis.com compute.googleapis.com --project="$PROJECT_ID" || true
         echo "Checking if GKE cluster $GKE_CLUSTER exists..."
         if ! gcloud container clusters describe "$GKE_CLUSTER" --zone="$GKE_ZONE" --project="$PROJECT_ID" >/dev/null 2>&1; then
           echo "Cluster $GKE_CLUSTER not found. Creating GKE cluster in $GKE_ZONE..."
