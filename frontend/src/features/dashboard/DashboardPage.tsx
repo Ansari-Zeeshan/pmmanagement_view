@@ -12,7 +12,7 @@ import {
   X
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LEAD_PROFILES_DIRECTORY } from '../../data/initialData';
 import { apiClient } from '../../lib/axios';
 import { useWorkspaceStore } from '../../store/useWorkspaceStore';
@@ -44,6 +44,95 @@ const AnimatedCounter = ({ target, duration = 1200 }) => {
   return <>{count}</>;
 };
 
+const TruncatedTextCell = ({
+  text,
+  maxLength = 100,
+  className = '',
+  style = {},
+  isLink,
+}: {
+  text: string;
+  maxLength?: number;
+  className?: string;
+  style?: React.CSSProperties;
+  isLink?: string;
+}) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+  const textStr = String(text || '');
+  const isOverLength = textStr.length > maxLength;
+  const displayText = isOverLength ? `${textStr.slice(0, maxLength)}...` : textStr;
+
+  const content = (
+    <span
+      className={className}
+      style={{
+        display: 'inline-block',
+        maxWidth: '100%',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        verticalAlign: 'middle',
+        ...style,
+      }}
+    >
+      {displayText}
+    </span>
+  );
+
+  return (
+    <div
+      className="position-relative d-inline-block mw-100"
+      onMouseEnter={() => setShowTooltip(true)}
+      onMouseLeave={() => setShowTooltip(false)}
+      title={textStr}
+      style={{ maxWidth: '100%', verticalAlign: 'middle' }}
+    >
+      {isLink ? (
+        <Link to={isLink} className="text-decoration-none">
+          {content}
+        </Link>
+      ) : (
+        content
+      )}
+
+      {showTooltip && (
+        <div
+          className="position-absolute bg-dark text-white rounded-3 px-3 py-2 shadow-lg"
+          style={{
+            bottom: '125%',
+            left: '0',
+            zIndex: 999999,
+            fontSize: '12px',
+            fontWeight: 500,
+            whiteSpace: 'normal',
+            maxWidth: '360px',
+            minWidth: '180px',
+            width: 'max-content',
+            pointerEvents: 'none',
+            lineHeight: 1.4,
+            boxShadow: '0 10px 25px -5px rgba(15, 23, 42, 0.45), 0 8px 10px -6px rgba(15, 23, 42, 0.35)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+          }}
+        >
+          {textStr}
+          <div
+            className="position-absolute"
+            style={{
+              bottom: '-5px',
+              left: '16px',
+              width: '0',
+              height: '0',
+              borderLeft: '6px solid transparent',
+              borderRight: '6px solid transparent',
+              borderTop: '6px solid #212529',
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
 const AdvancedDonutChart = ({ completedCount, onTrackCount, plannedCount, atRiskCount, totalProjectsCount }) => {
   const [hoveredSegment, setHoveredSegment] = useState(null);
 
@@ -51,22 +140,22 @@ const AdvancedDonutChart = ({ completedCount, onTrackCount, plannedCount, atRisk
   const segments = [
     { id: 'completed', label: 'Completed', count: completedCount, color: '#10B981', gradId: 'grad-completed', bg: '#F0FDF4', border: '#DCFCE7' },
     { id: 'onTrack', label: 'On Task', count: onTrackCount, color: '#2563EB', gradId: 'grad-onTrack', bg: '#EFF6FF', border: '#DBEAFE' },
-    { id: 'planned', label: 'Planned', count: plannedCount, color: '#FF5454', gradId: 'grad-planned', bg: '#FEF2F2', border: '#FEE2E2' },
+    { id: 'planned', label: 'Planned', count: plannedCount, color: '#EF4444', gradId: 'grad-planned', bg: '#FEF2F2', border: '#FEE2E2' },
     { id: 'atRisk', label: 'At Risk', count: atRiskCount, color: '#F59E0B', gradId: 'grad-atRisk', bg: '#FFFBEB', border: '#FEF3C7' },
   ];
 
   const CIRCUMFERENCE = 427.25;
   const activeSegments = segments.filter((s) => s.count > 0);
-  const totalGaps = activeSegments.length > 1 ? activeSegments.length * 8 : 0;
+  const totalGaps = activeSegments.length > 1 ? activeSegments.length * 10 : 0;
   const availableLength = CIRCUMFERENCE - totalGaps;
 
   let cumulativeOffset = 0;
   const arcSegments = segments.map((seg) => {
     const pct = seg.count / total;
-    const arcLen = seg.count > 0 ? pct * availableLength : 0;
+    const arcLen = seg.count > 0 ? Math.max(12, pct * availableLength) : 0;
     const offset = cumulativeOffset;
     if (seg.count > 0) {
-      cumulativeOffset += arcLen + 8;
+      cumulativeOffset += arcLen + 10;
     }
     return {
       ...seg,
@@ -79,84 +168,124 @@ const AdvancedDonutChart = ({ completedCount, onTrackCount, plannedCount, atRisk
 
   const activeInfo = hoveredSegment
     ? arcSegments.find((s) => s.id === hoveredSegment)
-    : { label: 'Projects', count: totalProjectsCount, pct: 100, color: '#171E48' };
+    : { label: 'Projects', count: totalProjectsCount, pct: 100, color: '#0F172A' };
 
   return (
     <div className="row align-items-center g-3 my-auto w-100 m-0 pe-2">
-      {/* Donut Chart Ring */}
+      {/* Premium Donut Ring with Ambient Glow & Glass Center */}
       <div className="col-5 text-center position-relative">
-        <div className="position-relative d-inline-block" style={{ width: '160px', height: '160px' }}>
-          <svg width="160" height="160" viewBox="0 0 180 180" style={{ transform: 'rotate(-90deg)', overflow: 'visible' }}>
+        <div className="position-relative d-inline-block" style={{ width: '175px', height: '175px' }}>
+          <svg width="175" height="175" viewBox="0 0 180 180" style={{ transform: 'rotate(-90deg)', overflow: 'visible' }}>
             <defs>
               <linearGradient id="grad-completed" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#34D399" />
+                <stop offset="50%" stopColor="#10B981" />
                 <stop offset="100%" stopColor="#059669" />
               </linearGradient>
               <linearGradient id="grad-onTrack" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#60A5FA" />
+                <stop offset="50%" stopColor="#2563EB" />
                 <stop offset="100%" stopColor="#1D4ED8" />
               </linearGradient>
               <linearGradient id="grad-planned" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#F87171" />
-                <stop offset="100%" stopColor="#DC2626" />
+                <stop offset="50%" stopColor="#EF4444" />
+                <stop offset="100%" stopColor="#B91C1C" />
               </linearGradient>
               <linearGradient id="grad-atRisk" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#FBBF24" />
-                <stop offset="100%" stopColor="#D97706" />
+                <stop offset="0%" stopColor="#FDE047" />
+                <stop offset="50%" stopColor="#F59E0B" />
+                <stop offset="100%" stopColor="#B45309" />
               </linearGradient>
-              <filter id="donut-glow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#000" floodOpacity="0.15" />
+
+              {/* Ambient Glow Filters */}
+              <filter id="premium-glow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="5" result="blur" />
+                <feComponentTransfer in="blur" result="glow">
+                  <feFuncA type="linear" slope="0.6" />
+                </feComponentTransfer>
+                <feMerge>
+                  <feMergeNode in="glow" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              <filter id="donut-drop-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="6" stdDeviation="6" floodColor="#0F172A" floodOpacity="0.18" />
               </filter>
             </defs>
 
-            {/* Background Track Circle */}
-            <circle cx="90" cy="90" r="68" fill="none" stroke="#F1F5F9" strokeWidth="20" />
+            {/* Subtle Outer Ambient Background Track Circle */}
+            <circle cx="90" cy="90" r="68" fill="none" stroke="#F1F5F9" strokeWidth="18" />
 
-            {/* Segment Arc Slices */}
+            {/* Active Arc Segments */}
             {arcSegments.map((seg) => {
               if (seg.count === 0) return null;
               const isHovered = hoveredSegment === seg.id;
               const isDimmed = hoveredSegment && hoveredSegment !== seg.id;
               return (
-                <circle
-                  key={seg.id}
-                  cx="90"
-                  cy="90"
-                  r="68"
-                  fill="none"
-                  stroke={`url(#${seg.gradId})`}
-                  strokeWidth={isHovered ? 26 : 20}
-                  strokeLinecap="round"
-                  strokeDasharray={seg.dasharray}
-                  strokeDashoffset={seg.dashoffset}
-                  filter={isHovered ? 'url(#donut-glow)' : undefined}
-                  style={{
-                    cursor: 'pointer',
-                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                    opacity: isDimmed ? 0.35 : 1,
-                    transformOrigin: '90px 90px',
-                    transform: isHovered ? 'scale(1.03)' : 'scale(1)',
-                  }}
-                  onMouseEnter={() => setHoveredSegment(seg.id)}
-                  onMouseLeave={() => setHoveredSegment(null)}
-                />
+                <g key={seg.id}>
+                  {/* Subtle Ambient Glow Underlayer for Hovered Arc */}
+                  {isHovered && (
+                    <circle
+                      cx="90"
+                      cy="90"
+                      r="68"
+                      fill="none"
+                      stroke={`url(#${seg.gradId})`}
+                      strokeWidth="28"
+                      strokeLinecap="round"
+                      strokeDasharray={seg.dasharray}
+                      strokeDashoffset={seg.dashoffset}
+                      filter="url(#premium-glow)"
+                      style={{ opacity: 0.7 }}
+                    />
+                  )}
+                  <circle
+                    cx="90"
+                    cy="90"
+                    r="68"
+                    fill="none"
+                    stroke={`url(#${seg.gradId})`}
+                    strokeWidth={isHovered ? 24 : 18}
+                    strokeLinecap="round"
+                    strokeDasharray={seg.dasharray}
+                    strokeDashoffset={seg.dashoffset}
+                    filter={isHovered ? 'url(#donut-drop-shadow)' : undefined}
+                    style={{
+                      cursor: 'pointer',
+                      transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+                      opacity: isDimmed ? 0.3 : 1,
+                    }}
+                    onMouseEnter={() => setHoveredSegment(seg.id)}
+                    onMouseLeave={() => setHoveredSegment(null)}
+                  />
+                </g>
               );
             })}
           </svg>
 
-          {/* Dynamic Donut Hole Content */}
+          {/* Ultra-Premium Center Glassmorphism Hub */}
           <div
             className="position-absolute top-50 start-50 translate-middle text-center pointer-events-none d-flex flex-column align-items-center justify-content-center"
-            style={{ width: '92px', height: '92px', borderRadius: '50%', backgroundColor: '#ffffff', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
+            style={{
+              width: '98px',
+              height: '98px',
+              borderRadius: '50%',
+              backgroundColor: '#FFFFFF',
+              background: 'radial-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%)',
+              boxShadow: 'inset 0 2px 6px rgba(255,255,255,0.8), 0 8px 24px -4px rgba(15, 23, 42, 0.12)',
+              border: '1px solid #E2E8F0',
+              transition: 'all 0.3s ease',
+            }}
           >
-            <h4 className="fw-bold m-0 lh-1" style={{ fontSize: '24px', color: activeInfo.color, transition: 'color 0.2s ease' }}>
+            <h4 className="fw-extrabold m-0 lh-1" style={{ fontSize: '26px', color: activeInfo.color, transition: 'color 0.25s ease', letterSpacing: '-0.5px' }}>
               <AnimatedCounter target={activeInfo.count} />
             </h4>
-            <span className="text-muted d-block mt-1 fw-bold" style={{ fontSize: '10.5px', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
+            <span className="text-muted d-block mt-1 fw-bold" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.6px', color: '#64748B' }}>
               {activeInfo.label}
             </span>
             {hoveredSegment && (
-              <span className="badge rounded-pill mt-1" style={{ backgroundColor: activeInfo.color, color: '#ffffff', fontSize: '9px', padding: '2px 6px' }}>
+              <span className="badge rounded-pill mt-1 shadow-xs" style={{ backgroundColor: activeInfo.color, color: '#FFFFFF', fontSize: '9.5px', padding: '3px 8px', fontWeight: 700 }}>
                 {activeInfo.pct}%
               </span>
             )}
@@ -164,7 +293,7 @@ const AdvancedDonutChart = ({ completedCount, onTrackCount, plannedCount, atRisk
         </div>
       </div>
 
-      {/* Right Interactive Status Cards */}
+      {/* Right Side Glassmorphic Legend Status Cards */}
       <div className="col-7">
         <div className="d-flex flex-column gap-2">
           {arcSegments.map((seg) => {
@@ -174,25 +303,25 @@ const AdvancedDonutChart = ({ completedCount, onTrackCount, plannedCount, atRisk
                 key={seg.id}
                 className="d-flex align-items-center justify-content-between p-2 px-3 rounded-3"
                 style={{
-                  backgroundColor: seg.bg,
-                  border: `1px solid ${isHovered ? seg.color : seg.border}`,
-                  boxShadow: isHovered ? `0 4px 12px ${seg.color}25` : 'none',
-                  transform: isHovered ? 'translateX(4px)' : 'translateX(0)',
-                  transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                  backgroundColor: isHovered ? seg.bg : '#FFFFFF',
+                  border: `1px solid ${isHovered ? seg.color : '#F1F5F9'}`,
+                  boxShadow: isHovered ? `0 6px 16px -2px ${seg.color}35` : '0 1px 3px rgba(0,0,0,0.04)',
+                  transform: isHovered ? 'translateX(6px)' : 'translateX(0)',
+                  transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
                   cursor: 'pointer',
                 }}
                 onMouseEnter={() => setHoveredSegment(seg.id)}
                 onMouseLeave={() => setHoveredSegment(null)}
               >
-                <div className="d-flex align-items-center gap-2">
-                  <span className="rounded-circle d-inline-block" style={{ width: '9px', height: '9px', backgroundColor: seg.color }}></span>
-                  <span className="fw-bold text-dark" style={{ fontSize: '13px' }}>{seg.label}</span>
+                <div className="d-flex align-items-center gap-2.5">
+                  <span className="rounded-circle d-inline-block shadow-xs" style={{ width: '10px', height: '10px', backgroundColor: seg.color }}></span>
+                  <span className="fw-bold text-dark" style={{ fontSize: '13.5px', color: '#0F172A' }}>{seg.label}</span>
                 </div>
                 <div className="d-flex align-items-center gap-2">
-                  <span className="badge rounded-pill fw-bold" style={{ backgroundColor: seg.color, color: '#FFFFFF', fontSize: '11px' }}>
+                  <span className="badge rounded-pill fw-bold" style={{ backgroundColor: seg.color, color: '#FFFFFF', fontSize: '11px', padding: '4px 9px' }}>
                     {seg.pct}%
                   </span>
-                  <span className="fw-bold text-secondary font-monospace" style={{ fontSize: '12px' }}>
+                  <span className="fw-bold text-slate-700 font-monospace" style={{ fontSize: '13px', color: '#334155' }}>
                     {seg.count}
                   </span>
                 </div>
@@ -1100,10 +1229,12 @@ export const DashboardPage = () => {
                       <tbody>
                         {filteredMilestonesModalList.map((m) => (
                           <tr key={m.id} className="border-bottom">
-                            <td className="py-3 px-4">
-                              <span className="fw-bold text-dark d-block" style={{ fontSize: '14px' }}>{m.name}</span>
+                            <td className="py-3 px-4" style={{ maxWidth: '280px' }}>
+                              <TruncatedTextCell text={m.name} className="fw-bold text-dark d-block" style={{ fontSize: '14px' }} />
                             </td>
-                            <td className="py-3 fw-semibold text-primary" style={{ fontSize: '13.5px' }}>{m.project}</td>
+                            <td className="py-3" style={{ maxWidth: '240px' }}>
+                              <TruncatedTextCell text={m.project} className="fw-semibold text-primary d-block" style={{ fontSize: '13.5px' }} />
+                            </td>
                             <td className="py-3 text-muted small">
                               <span className="d-inline-flex align-items-center gap-1.5">
                                 <UserCheck size={14} className="text-secondary" /> {m.owner}

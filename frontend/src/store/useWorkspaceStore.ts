@@ -10,6 +10,7 @@ export interface WorkspaceState {
   isNotificationDrawerOpen: boolean;
   isProjectModalOpen: boolean;
   activeTaskDetail: any | null;
+  activeChatTask: any | null;
   isChatDrawerOpen: boolean;
   isHelpModalOpen: boolean;
   helpModalDefaultTab: string;
@@ -25,7 +26,7 @@ export interface WorkspaceState {
   setNotificationDrawerOpen: (isOpen: boolean) => void;
   setProjectModalOpen: (isOpen: boolean) => void;
   setActiveTaskDetail: (task: any) => void;
-  setChatDrawerOpen: (isOpen: boolean) => void;
+  setChatDrawerOpen: (isOpen: boolean, chatTask?: any) => void;
   setHelpModalOpen: (isOpen: boolean, tab?: string) => void;
   setSidebarExpanded: (expanded: boolean) => void;
   toggleSidebar: () => void;
@@ -47,6 +48,7 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   isNotificationDrawerOpen: false,
   isProjectModalOpen: false,
   activeTaskDetail: null,
+  activeChatTask: null,
   isChatDrawerOpen: false,
   isHelpModalOpen: false,
   helpModalDefaultTab: 'VIDEOS',
@@ -69,8 +71,17 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   setSearchQuery: (searchQuery) => set({ searchQuery }),
   setNotificationDrawerOpen: (isOpen) => set({ isNotificationDrawerOpen: isOpen }),
   setProjectModalOpen: (isOpen) => set({ isProjectModalOpen: isOpen }),
-  setActiveTaskDetail: (task) => set({ activeTaskDetail: task }),
-  setChatDrawerOpen: (isOpen) => set({ isChatDrawerOpen: isOpen }),
+  setActiveTaskDetail: (task) =>
+    set((state) => ({
+      activeTaskDetail: task,
+      isChatDrawerOpen: task ? false : state.isChatDrawerOpen,
+    })),
+  setChatDrawerOpen: (isOpen, chatTask) =>
+    set((state) => ({
+      isChatDrawerOpen: isOpen,
+      activeChatTask: isOpen ? (chatTask !== undefined ? chatTask : state.activeChatTask) : null,
+      activeTaskDetail: isOpen ? null : state.activeTaskDetail,
+    })),
   setHelpModalOpen: (isOpen, tab = 'VIDEOS') => set({ isHelpModalOpen: isOpen, helpModalDefaultTab: tab }),
   setSidebarExpanded: (expanded) => set({ sidebarExpanded: expanded }),
   toggleSidebar: () => set((state) => ({ sidebarExpanded: !state.sidebarExpanded })),

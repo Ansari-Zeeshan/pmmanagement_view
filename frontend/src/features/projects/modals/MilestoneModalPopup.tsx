@@ -325,18 +325,17 @@ export const SubTaskModalPopup = ({
                       AED
                     </span>
                     <input
-                      type="number"
+                      type="text"
+                      inputMode="numeric"
                       className="form-control fw-semibold"
                       style={{ ...fieldStyle, paddingLeft: '52px' }}
                       placeholder="Enter sub-task budget..."
                       value={budget}
                       onChange={(e) => {
                         const val = e.target.value;
-                        setBudget(val === '' ? '' : Number(val));
+                        setBudget(val);
                         setErrorMsg(validateSubTask(startDate, endDate, val));
                       }}
-                      min={0}
-                      max={maxSubTaskBudget}
                       required
                     />
                   </div>
@@ -717,18 +716,17 @@ export const MilestoneModalPopup = ({
                         AED
                       </span>
                       <input
-                        type="number"
+                        type="text"
+                        inputMode="numeric"
                         className="form-control fw-semibold"
                         style={{ ...fieldStyle, paddingLeft: '54px' }}
                         placeholder="Enter milestone budget amount..."
                         value={budget}
                         onChange={(e) => {
                           const val = e.target.value;
-                          setBudget(val === '' ? '' : Number(val));
+                          setBudget(val);
                           setValidationError(validateInputs(startDate, endDate, val));
                         }}
-                        min={0}
-                        max={maxMilestoneBudget}
                         required
                       />
                     </div>

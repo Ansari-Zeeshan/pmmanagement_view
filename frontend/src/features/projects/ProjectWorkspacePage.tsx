@@ -18,6 +18,7 @@ export const ProjectWorkspacePage = () => {
     selectedProjectId,
     activeTaskDetail,
     setActiveTaskDetail,
+    setChatDrawerOpen,
     tasks,
     updateTask,
     addProject,
@@ -504,7 +505,7 @@ export const ProjectWorkspacePage = () => {
           tasks={filteredTasks}
           onTaskStatusChange={handleTaskStatusChange}
           onTaskClick={(task) => handleOpenRowDetails(task, 'UPDATES')}
-          onChatClick={(task) => handleOpenRowDetails(task, 'UPDATES')}
+          onChatClick={(task) => setChatDrawerOpen(true, task)}
           onAddProject={(groupKey) => {
             setAddProjectInitialGroup(groupKey || 'Research');
             setShowAddProjectModal(true);

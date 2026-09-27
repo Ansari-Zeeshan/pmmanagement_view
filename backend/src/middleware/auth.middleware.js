@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { verifyIdToken } from '../config/firebaseAdmin.js';
 import { User, ROLES } from '../modules/user/user.model.js';
+import { Organization } from '../modules/organization/organization.model.js';
 import { ApiResponse } from '../utils/apiResponse.js';
 import logger from '../utils/logger.js';
 
@@ -19,24 +20,28 @@ export const authenticate = async (req, res, next) => {
     const decodedToken = await verifyIdToken(idToken);
     
     let user = null;
-    // Check if MongoDB connection is open (readyState === 1)
+    let dbOrg = null;
+
+    // Fetch primary seeded organization from Atlas database
     if (mongoose.connection.readyState === 1) {
       try {
-        user = await User.findOne({ firebaseUid: decodedToken.uid })
-          .populate('organizationId');
+        dbOrg = await Organization.findOne({ code: 'EMAAR' }) || await Organization.findOne();
+        user = await User.findOne({
+          $or: [{ firebaseUid: decodedToken.uid }, { email: decodedToken.email || 'admin@emaar.ae' }]
+        }).populate('organizationId');
       } catch (dbErr) {
-        logger.warn(`User lookup failed: ${dbErr.message}`);
+        logger.warn(`User / Org lookup failed: ${dbErr.message}`);
       }
     }
 
-    // Dev / Test fallback when MongoDB is offline
+    // Dev / Test fallback when user is not found or Mongo lookup fails
     if (!user) {
       user = {
         _id: new mongoose.Types.ObjectId('60f7a2b9f1d2c34567890123'),
         firebaseUid: decodedToken.uid,
-        organizationId: new mongoose.Types.ObjectId('60f7a2b9f1d2c34567890124'),
+        organizationId: dbOrg ? dbOrg._id : new mongoose.Types.ObjectId('60f7a2b9f1d2c34567890124'),
         email: decodedToken.email || 'admin@emaar.ae',
-        name: decodedToken.name || 'Demo Admin User',
+        name: decodedToken.name || 'Emaar Admin',
         avatarUrl: 'icons/avatar1.svg',
         role: ROLES.ORG_ADMIN,
         isActive: true,

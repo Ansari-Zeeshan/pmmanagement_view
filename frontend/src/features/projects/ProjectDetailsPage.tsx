@@ -175,8 +175,7 @@ export const ProjectDetailsPage = () => {
 
   const handleOpenChat = () => {
     if (project) {
-      setActiveTaskDetail({ _id: project._id, title: project.title });
-      setChatDrawerOpen(true);
+      setChatDrawerOpen(true, { _id: project._id, title: project.title });
     }
   };
 

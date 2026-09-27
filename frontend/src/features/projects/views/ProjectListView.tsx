@@ -156,6 +156,40 @@ export const ProjectListView = ({ tasks = [], onTaskStatusChange, onTaskClick, o
     <div className="project-list tab_content pm-list-view-container position-relative active w-100">
       {/* Print Friendly CSS Overrides */}
       <style>{`
+        .pm-table-scroll-wrapper,
+        .table-scroll-wrapper,
+        .table-responsive {
+          overflow-x: auto !important;
+          scrollbar-width: thin !important;
+          scrollbar-color: #94a3b8 #f1f5f9 !important;
+          padding-bottom: 6px !important;
+        }
+        .pm-table-scroll-wrapper::-webkit-scrollbar,
+        .table-scroll-wrapper::-webkit-scrollbar,
+        .table-responsive::-webkit-scrollbar {
+          height: 9px !important;
+          width: 9px !important;
+          display: block !important;
+        }
+        .pm-table-scroll-wrapper::-webkit-scrollbar-track,
+        .table-scroll-wrapper::-webkit-scrollbar-track,
+        .table-responsive::-webkit-scrollbar-track {
+          background: #f1f5f9 !important;
+          border-radius: 6px !important;
+        }
+        .pm-table-scroll-wrapper::-webkit-scrollbar-thumb,
+        .table-scroll-wrapper::-webkit-scrollbar-thumb,
+        .table-responsive::-webkit-scrollbar-thumb {
+          background: #94a3b8 !important;
+          border-radius: 6px !important;
+          border: 2px solid #f1f5f9 !important;
+        }
+        .pm-table-scroll-wrapper::-webkit-scrollbar-thumb:hover,
+        .table-scroll-wrapper::-webkit-scrollbar-thumb:hover,
+        .table-responsive::-webkit-scrollbar-thumb:hover {
+          background: #64748b !important;
+        }
+
         @media print {
           .sidebar, .top_up, .divfilter2, .pm-workspace-sticky-container, .btn, .no-print, th.col-w-actions, td.cell-actions {
             display: none !important;
@@ -328,9 +362,8 @@ export const ProjectListView = ({ tasks = [], onTaskStatusChange, onTaskClick, o
                                   }}
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    setActiveTaskDetail(task);
-                                    setChatDrawerOpen(true);
                                     if (onChatClick) onChatClick(task);
+                                    setChatDrawerOpen(true, task);
                                   }}
                                   title={`Chat about ${task.title}`}
                                 >

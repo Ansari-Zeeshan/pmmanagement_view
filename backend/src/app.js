@@ -10,9 +10,33 @@ const app = express();
 
 // Security Middlewares
 app.use(helmet({ contentSecurityPolicy: false }));
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3003',
+  'http://localhost:5173',
+  'http://localhost:8080',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:3003',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:8080',
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (
+        allowedOrigins.includes(origin) ||
+        origin.startsWith('http://localhost:') ||
+        origin.startsWith('http://127.0.0.1:') ||
+        process.env.NODE_ENV !== 'production'
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
     credentials: true,
   })
 );

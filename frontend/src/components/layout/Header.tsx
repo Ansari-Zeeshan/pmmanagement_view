@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useWorkspaceStore } from '../../store/useWorkspaceStore';
 import { useNavigate } from 'react-router-dom';
-import { HelpCircle } from 'lucide-react';
+import { HelpCircle, MessageSquare } from 'lucide-react';
 
 export const Header = () => {
   const { user, logout } = useAuthStore();
@@ -85,7 +85,7 @@ export const Header = () => {
           onClick={() => setChatDrawerOpen(true)}
           title="Live Chat"
         >
-          <img src="/icons/3linemail.svg" alt="Chat" style={{ width: '20px', height: '20px' }} />
+          <MessageSquare size={19} className="text-secondary align-middle" />
         </button>
 
         {/* Notification Bell */}

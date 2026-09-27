@@ -170,7 +170,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.15s ease;
+  transition: all 0.15s ease;
 }
 
 .pm-avatar-circle:hover {
@@ -249,7 +249,14 @@
   border: 1px solid #e2e8f0;
 }
 
+.pm-chat-drawer-backdrop {
+  z-index: 2000000 !important;
+  pointer-events: auto !important;
+}
+
 .pm-chat-drawer-panel {
-  width: 450px;
-  z-index: 1065 !important;
+  width: 520px !important;
+  max-width: 90vw !important;
+  z-index: 2000005 !important;
+  pointer-events: auto !important;
 }

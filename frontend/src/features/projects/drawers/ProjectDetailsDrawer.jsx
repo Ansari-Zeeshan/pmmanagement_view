@@ -3,9 +3,13 @@ import {
   AtSign,
   Bell,
   Bold,
+  Briefcase,
+  Calendar,
+  CheckCircle2,
   Clock,
   Code,
   CornerDownRight,
+  DollarSign,
   Download,
   Edit2,
   ExternalLink,
@@ -24,12 +28,14 @@ import {
   Paperclip,
   Plus,
   RefreshCw,
+  Save,
   Search,
   Send,
   Smile,
   Sparkles,
   Strikethrough,
   Table,
+  Tag,
   ThumbsUp,
   Trash2,
   Underline,
@@ -38,6 +44,7 @@ import {
 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { LeadProfileModal } from '../../../components/common/LeadProfileModal';
+import { MuiPremiumDatePicker } from '../../../components/common/MuiPremiumDatePicker';
 
 export const ProjectDetailsDrawer = ({ task, onClose, onSave, defaultTab = 'UPDATES' }) => {
   const [activeTab, setActiveTab] = useState(defaultTab); // 'UPDATES' | 'FILES' | 'LOG' | 'DETAILS'
@@ -88,6 +95,12 @@ export const ProjectDetailsDrawer = ({ task, onClose, onSave, defaultTab = 'UPDA
     { name: 'Smith', email: 'Smith@emaar.com', avatar: '/img/client2.jpg' },
     { name: 'Muhammad Ali', email: 'Ali@emaar.com', avatar: '/img/client3.jpg' },
   ]);
+
+  const filteredSubscribers = subscribers.filter(
+    (sub) =>
+      sub.name.toLowerCase().includes(subscriberSearch.toLowerCase()) ||
+      sub.email.toLowerCase().includes(subscriberSearch.toLowerCase())
+  );
 
   const availableMembers = [
     { name: 'Claire Bure', email: 'Clair@emaar.com', avatarUrl: '/img/client1.jpg' },
@@ -607,9 +620,9 @@ export const ProjectDetailsDrawer = ({ task, onClose, onSave, defaultTab = 'UPDA
           position: 'fixed',
           top: 0,
           right: 0,
-          width: '50vw',
-          minWidth: '660px',
-          maxWidth: '1000px',
+          width: '60vw',
+          minWidth: '720px',
+          maxWidth: '1200px',
           height: '100vh',
           backgroundColor: '#ffffff',
           zIndex: 100005,
@@ -665,55 +678,60 @@ export const ProjectDetailsDrawer = ({ task, onClose, onSave, defaultTab = 'UPDA
             {/* TEAM SUBSCRIBER POPOVER */}
             {showSubscriberPopover && (
               <div
-                className="position-absolute end-0 top-100 mt-2 bg-white border rounded-3 shadow-lg p-3"
-                style={{ width: '340px', zIndex: 1080 }}
+                className="position-absolute end-0 top-100 mt-2 bg-white border rounded-4 shadow-2xl p-3"
+                style={{ width: '360px', zIndex: 1080, borderRadius: '14px', boxShadow: '0 12px 36px -6px rgba(15, 23, 42, 0.22)' }}
               >
-                <div className="d-flex justify-content-between align-items-center pb-2 border-bottom mb-2">
-                  <h6 className="m-0 fw-bold text-dark fs-6 d-flex align-items-center gap-1">
-                    <Plus size={16} color="#4868DD" /> Add Team Subscribers
+                <div className="d-flex justify-content-between align-items-center pb-2.5 border-bottom mb-3">
+                  <h6 className="m-0 fw-bold text-dark fs-6 d-flex align-items-center gap-2" style={{ fontSize: '14px' }}>
+                    <Plus size={16} className="text-primary" /> Add Team Subscribers
                   </h6>
                   <button
                     type="button"
-                    className="btn btn-sm btn-light p-1 border-0"
+                    className="btn btn-sm btn-light rounded-circle p-1 border-0"
                     onClick={() => setShowSubscriberPopover(false)}
                   >
-                    <X size={14} />
+                    <X size={15} />
                   </button>
                 </div>
 
                 <div className="mb-3">
                   <div className="position-relative">
+                    <Search
+                      size={15}
+                      className="position-absolute text-muted"
+                      style={{ left: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#94a3b8' }}
+                    />
                     <input
                       type="text"
-                      className="form-control form-control-sm ps-4"
+                      className="form-control form-control-sm rounded-3"
                       placeholder="Enter Name or Email"
                       value={subscriberSearch}
                       onChange={(e) => setSubscriberSearch(e.target.value)}
+                      style={{ paddingLeft: '38px', height: '36px', fontSize: '13px' }}
                     />
-                    <Search size={14} className="position-absolute start-0 top-50 translate-middle-y ms-2 text-muted" />
                   </div>
                 </div>
 
-                <div className="text-muted small fw-semibold mb-2">Team Subscribers List</div>
-                <div className="overflow-auto" style={{ maxHeight: '180px' }}>
-                  {subscribers.map((sub, idx) => (
-                    <div key={idx} className="d-flex align-items-center justify-content-between py-2 border-bottom">
-                      <div className="d-flex align-items-center gap-2" style={{ cursor: 'pointer' }} onClick={() => setSelectedLeadProfile({ name: sub.name, type: 'Project Subscriber' })}>
+                <div className="text-muted small fw-bold mb-2 text-uppercase" style={{ fontSize: '11px', letterSpacing: '0.04em' }}>Team Subscribers List</div>
+                <div className="overflow-auto pe-1" style={{ maxHeight: '200px' }}>
+                  {filteredSubscribers.map((sub, idx) => (
+                    <div key={idx} className="d-flex align-items-center justify-content-between py-2 border-bottom hover-bg-light rounded px-1">
+                      <div className="d-flex align-items-center gap-2 cursor-pointer" onClick={() => setSelectedLeadProfile({ name: sub.name, type: 'Project Subscriber' })}>
                         <img
                           src={sub.avatar}
                           alt={sub.name}
-                          className="rounded-circle"
-                          style={{ width: '28px', height: '28px', objectFit: 'cover' }}
+                          className="rounded-circle border shadow-xs"
+                          style={{ width: '32px', height: '32px', objectFit: 'cover' }}
                           onError={(e) => { e.target.src = '/icons/avatar1.svg'; }}
                         />
                         <div>
-                          <div className="fw-semibold text-dark small text-primary-hover">{sub.name}</div>
+                          <div className="fw-bold text-dark small text-primary-hover" style={{ fontSize: '13px' }}>{sub.name}</div>
                           <div className="text-muted" style={{ fontSize: '11px' }}>{sub.email}</div>
                         </div>
                       </div>
                       <button
                         type="button"
-                        className="btn btn-sm text-danger p-0 border-0 ms-2"
+                        className="btn btn-sm btn-outline-danger border-0 p-1 rounded-circle"
                         onClick={() => handleRemoveSubscriber(sub.email)}
                         title="Remove Subscriber"
                       >
@@ -721,6 +739,9 @@ export const ProjectDetailsDrawer = ({ task, onClose, onSave, defaultTab = 'UPDA
                       </button>
                     </div>
                   ))}
+                  {filteredSubscribers.length === 0 && (
+                    <div className="text-center text-muted small py-3">No subscriber matching "{subscriberSearch}"</div>
+                  )}
                 </div>
               </div>
             )}
@@ -730,8 +751,8 @@ export const ProjectDetailsDrawer = ({ task, onClose, onSave, defaultTab = 'UPDA
         {/* ============================================================ */}
         {/* PROJECT TITLE & DESCRIPTION HEADER */}
         {/* ============================================================ */}
-        <div className="mb-4">
-          <div className="d-flex align-items-center gap-2">
+        <div className="mb-4 pb-2">
+          <div className="d-flex align-items-center gap-3">
             {isEditingTitle ? (
               <input
                 type="text"
@@ -742,20 +763,31 @@ export const ProjectDetailsDrawer = ({ task, onClose, onSave, defaultTab = 'UPDA
                 autoFocus
               />
             ) : (
-              <h1 className="m-0 text-dark fw-bold" style={{ fontSize: '24px', letterSpacing: '-0.5px' }}>
+              <h1 className="m-0 text-dark fw-extrabold d-flex align-items-center gap-2" style={{ fontSize: '26px', letterSpacing: '-0.5px' }}>
                 {title}
               </h1>
             )}
             <button
               type="button"
-              className="btn btn-sm p-1 border-0 text-muted"
+              className="btn btn-sm btn-light rounded-circle p-1 border-0 text-muted shadow-xs hover-bg-light"
               onClick={() => setIsEditingTitle(!isEditingTitle)}
               title="Edit Title"
             >
               <Edit2 size={16} />
             </button>
+            <span
+              className="badge px-3 py-1.5 fw-bold rounded-pill text-uppercase ms-auto"
+              style={{
+                backgroundColor: status === 'On Track' ? '#e6f4ea' : status === 'At Risk' ? '#fce8e6' : '#e8f0fe',
+                color: status === 'On Track' ? '#137333' : status === 'At Risk' ? '#c5221f' : '#1a73e8',
+                fontSize: '11px',
+                letterSpacing: '0.04em'
+              }}
+            >
+              {status}
+            </span>
           </div>
-          <p className="text-secondary small mt-1 mb-0">{description}</p>
+          <p className="text-secondary small mt-2 mb-0" style={{ fontSize: '13.5px', lineHeight: '1.6' }}>{description}</p>
         </div>
 
         {/* ============================================================ */}
@@ -764,32 +796,44 @@ export const ProjectDetailsDrawer = ({ task, onClose, onSave, defaultTab = 'UPDA
         <div className="nav_div mb-4 border-bottom">
           <ul className="d-flex list-unstyled mb-0" style={{ gap: '32px' }}>
             <li
-              className={`pb-2.5 fw-semibold cursor-pointer ${activeTab === 'UPDATES' ? 'text-primary border-bottom border-primary border-2' : 'text-secondary'}`}
+              className={`pb-3 fw-bold cursor-pointer position-relative ${activeTab === 'UPDATES' ? 'text-primary' : 'text-muted hover-text-dark'}`}
               onClick={() => setActiveTab('UPDATES')}
-              style={{ cursor: 'pointer', fontSize: '14.5px', transition: 'color 0.15s ease' }}
+              style={{ cursor: 'pointer', fontSize: '14.5px', transition: 'all 0.15s ease' }}
             >
               Updates ...
+              {activeTab === 'UPDATES' && (
+                <div className="position-absolute bottom-0 start-0 w-100 bg-primary rounded-top" style={{ height: '3px' }} />
+              )}
             </li>
             <li
-              className={`pb-2.5 fw-semibold cursor-pointer ${activeTab === 'FILES' ? 'text-primary border-bottom border-primary border-2' : 'text-secondary'}`}
+              className={`pb-3 fw-bold cursor-pointer position-relative ${activeTab === 'FILES' ? 'text-primary' : 'text-muted hover-text-dark'}`}
               onClick={() => setActiveTab('FILES')}
-              style={{ cursor: 'pointer', fontSize: '14.5px', transition: 'color 0.15s ease' }}
+              style={{ cursor: 'pointer', fontSize: '14.5px', transition: 'all 0.15s ease' }}
             >
               Files
+              {activeTab === 'FILES' && (
+                <div className="position-absolute bottom-0 start-0 w-100 bg-primary rounded-top" style={{ height: '3px' }} />
+              )}
             </li>
             <li
-              className={`pb-2.5 fw-semibold cursor-pointer ${activeTab === 'LOG' ? 'text-primary border-bottom border-primary border-2' : 'text-secondary'}`}
+              className={`pb-3 fw-bold cursor-pointer position-relative ${activeTab === 'LOG' ? 'text-primary' : 'text-muted hover-text-dark'}`}
               onClick={() => setActiveTab('LOG')}
-              style={{ cursor: 'pointer', fontSize: '14.5px', transition: 'color 0.15s ease' }}
+              style={{ cursor: 'pointer', fontSize: '14.5px', transition: 'all 0.15s ease' }}
             >
               Active Log
+              {activeTab === 'LOG' && (
+                <div className="position-absolute bottom-0 start-0 w-100 bg-primary rounded-top" style={{ height: '3px' }} />
+              )}
             </li>
             <li
-              className={`pb-2.5 fw-semibold cursor-pointer ${activeTab === 'DETAILS' ? 'text-primary border-bottom border-primary border-2' : 'text-secondary'}`}
+              className={`pb-3 fw-bold cursor-pointer position-relative ${activeTab === 'DETAILS' ? 'text-primary' : 'text-muted hover-text-dark'}`}
               onClick={() => setActiveTab('DETAILS')}
-              style={{ cursor: 'pointer', fontSize: '14.5px', transition: 'color 0.15s ease' }}
+              style={{ cursor: 'pointer', fontSize: '14.5px', transition: 'all 0.15s ease' }}
             >
               Project Information
+              {activeTab === 'DETAILS' && (
+                <div className="position-absolute bottom-0 start-0 w-100 bg-primary rounded-top" style={{ height: '3px' }} />
+              )}
             </li>
           </ul>
         </div>
@@ -1245,14 +1289,14 @@ export const ProjectDetailsDrawer = ({ task, onClose, onSave, defaultTab = 'UPDA
         {/* ============================================================ */}
         {activeTab === 'FILES' && (
           <div className="tab_content">
-            <div className="row g-4">
+            <div className="row g-4 align-items-stretch">
               {/* LEFT COLUMN: Document History Stream */}
-              <div className="col-md-6">
+              <div className="col-md-6 d-flex flex-column">
                 <div className="fw-bold text-dark mb-3 fs-6 d-flex align-items-center gap-2">
                   <FileText size={18} color="#4868DD" /> Document History
                 </div>
 
-                <div className="d-flex flex-column gap-3">
+                <div className="bg-white rounded-3 p-3 border shadow-sm flex-grow-1 d-flex flex-column gap-3">
                   {filesList.map((file) => (
                     <div key={file.id} className="p-3 bg-white rounded-3 border shadow-sm position-relative">
                       <div className="d-flex align-items-start justify-content-between">
@@ -1327,7 +1371,7 @@ export const ProjectDetailsDrawer = ({ task, onClose, onSave, defaultTab = 'UPDA
               {/* RIGHT COLUMN: File Type, Final Version & Drag & Drop Area */}
               <div className="col-md-6">
                 {/* Choose File Type Dropdown */}
-                <div className="mb-3">
+                <div className="mb-4">
                   <label className="form-label fw-semibold text-dark small">Choose File Type</label>
                   <div className="position-relative">
                     <button
@@ -1614,114 +1658,210 @@ export const ProjectDetailsDrawer = ({ task, onClose, onSave, defaultTab = 'UPDA
         {activeTab === 'DETAILS' && (
           <div className="tab_content">
             <form onSubmit={handleSaveDetails}>
-              <div className="row g-3">
-                <div className="col-md-6">
-                  <label className="form-label fw-semibold text-dark small">Group Category</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={group}
-                    onChange={(e) => setGroup(e.target.value)}
-                  />
-                </div>
-                <div className="col-md-6">
-                  <label className="form-label fw-semibold text-dark small">Created Date</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={createdDate}
-                    onChange={(e) => setCreatedDate(e.target.value)}
-                  />
-                </div>
-                <div className="col-md-6">
-                  <label className="form-label fw-semibold text-dark small">Start Date</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                  />
-                </div>
-                <div className="col-md-6">
-                  <label className="form-label fw-semibold text-dark small">End Date</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                  />
-                </div>
-                <div className="col-md-6">
-                  <label className="form-label fw-semibold text-dark small">Estimated Hours</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={estHours}
-                    onChange={(e) => setEstHours(e.target.value)}
-                  />
-                </div>
-                <div className="col-md-6">
-                  <label className="form-label fw-semibold text-dark small">Status</label>
-                  <select
-                    className="form-select"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                  >
-                    <option value="On Track">On Track</option>
-                    <option value="At Risk">At Risk</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Planned">Planned</option>
-                    <option value="On Hold">On Hold</option>
-                    <option value="Stuck">Stuck</option>
-                    <option value="Done">Done</option>
-                  </select>
-                </div>
-                <div className="col-md-6">
-                  <label className="form-label fw-semibold text-dark small">Budget / Cost</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={cost}
-                    onChange={(e) => setCost(e.target.value)}
-                  />
-                </div>
+              <div className="d-flex flex-column gap-4">
+                {/* SECTION 1: TIMELINE & SCHEDULE CARD */}
+                <div className="bg-white border rounded-4 p-4 shadow-sm">
+                  <div className="d-flex align-items-center gap-2 pb-3 mb-4 border-bottom">
+                    <div className="p-2 bg-primary-subtle rounded-3 text-primary d-flex align-items-center justify-content-center" style={{ width: '38px', height: '38px' }}>
+                      <Calendar size={20} color="#4868DD" />
+                    </div>
+                    <div>
+                      <h6 className="m-0 fw-bold text-dark fs-6">Timeline & Duration</h6>
+                      <div className="text-muted small" style={{ fontSize: '12.5px' }}>Manage start date, target deadline, and allocated project hours</div>
+                    </div>
+                  </div>
 
-                {/* Assignees Selection */}
-                <div className="col-md-6">
-                  <label className="form-label fw-semibold text-dark small d-block">Project Assignees</label>
-                  <div className="d-flex align-items-center gap-2 flex-wrap">
-                    {assignees.map((a, idx) => (
-                      <img
-                        key={idx}
-                        src={a.avatarUrl || '/img/client1.jpg'}
-                        alt={a.name}
-                        className="rounded-circle border"
-                        style={{ width: '36px', height: '36px', objectFit: 'cover', cursor: 'pointer' }}
-                        title={`View ${a.name} profile`}
-                        onClick={() => setSelectedLeadProfile({ name: a.name, type: 'Project Assignee' })}
-                        onError={(e) => { e.target.src = '/icons/avatar1.svg'; }}
+                  <div className="row g-4">
+                    <div className="col-md-6">
+                      <MuiPremiumDatePicker
+                        label="Start Date"
+                        value={startDate}
+                        onChange={(val) => setStartDate(val)}
+                        fullWidth
                       />
-                    ))}
-                    <button
-                      type="button"
-                      className="btn btn-light border rounded-circle p-0 d-flex align-items-center justify-content-center"
-                      style={{ width: '36px', height: '36px' }}
-                      onClick={() => setShowAssigneeSearch(!showAssigneeSearch)}
-                    >
-                      <Plus size={16} />
-                    </button>
+                    </div>
+                    <div className="col-md-6">
+                      <MuiPremiumDatePicker
+                        label="End Date"
+                        value={endDate}
+                        onChange={(val) => setEndDate(val)}
+                        fullWidth
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <MuiPremiumDatePicker
+                        label="Created Date"
+                        value={createdDate}
+                        onChange={(val) => setCreatedDate(val)}
+                        fullWidth
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label className="form-label fw-bold text-dark small mb-1 d-flex align-items-center gap-1" style={{ fontSize: '13px' }}>
+                        <Clock size={14} className="text-primary" /> Estimated Hours
+                      </label>
+                      <div className="input-group">
+                        <input
+                          type="number"
+                          className="form-control rounded-3"
+                          value={estHours}
+                          onChange={(e) => setEstHours(e.target.value)}
+                          style={{ height: '42px', fontSize: '14px' }}
+                          placeholder="e.g. 40"
+                        />
+                        <span className="input-group-text bg-light text-muted small border-start-0 rounded-end-3">hrs</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Drawer Footer Actions */}
-              <div className="pt-4 mt-4 border-top d-flex justify-content-end gap-2">
-                <button type="button" className="btn btn-secondary px-4 text-uppercase" onClick={onClose}>
-                  Cancel
-                </button>
-                <button type="submit" className="btn btn-primary px-4 text-uppercase" style={{ backgroundColor: '#4868DD' }}>
-                  Save Changes
-                </button>
+                {/* SECTION 2: GOVERNANCE, STATUS & FINANCIALS CARD */}
+                <div className="bg-white border rounded-4 p-4 shadow-sm">
+                  <div className="d-flex align-items-center gap-2 pb-3 mb-4 border-bottom">
+                    <div className="p-2 bg-primary-subtle rounded-3 text-primary d-flex align-items-center justify-content-center" style={{ width: '38px', height: '38px' }}>
+                      <Briefcase size={20} color="#4868DD" />
+                    </div>
+                    <div>
+                      <h6 className="m-0 fw-bold text-dark fs-6">Governance & Financials</h6>
+                      <div className="text-muted small" style={{ fontSize: '12.5px' }}>Project categorization, execution status, and budget allocations</div>
+                    </div>
+                  </div>
+
+                  <div className="row g-4">
+                    <div className="col-md-6">
+                      <label className="form-label fw-bold text-dark small mb-1 d-flex align-items-center gap-1" style={{ fontSize: '13px' }}>
+                        <Tag size={14} className="text-primary" /> Group Category
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control rounded-3"
+                        value={group}
+                        onChange={(e) => setGroup(e.target.value)}
+                        style={{ height: '42px', fontSize: '14px' }}
+                        placeholder="e.g. Research"
+                      />
+                    </div>
+
+                    <div className="col-md-6">
+                      <label className="form-label fw-bold text-dark small mb-1 d-flex align-items-center gap-1" style={{ fontSize: '13px' }}>
+                        <CheckCircle2 size={14} className="text-primary" /> Execution Status
+                      </label>
+                      <select
+                        className="form-select rounded-3 fw-semibold"
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        style={{
+                          height: '42px',
+                          fontSize: '14px',
+                          backgroundColor: status === 'On Track' ? '#f0fdf4' : status === 'At Risk' ? '#fef2f2' : '#ffffff',
+                          color: status === 'On Track' ? '#166534' : status === 'At Risk' ? '#991b1b' : '#1e293b',
+                          borderColor: status === 'On Track' ? '#bbf7d0' : status === 'At Risk' ? '#fecaca' : '#cbd5e1',
+                        }}
+                      >
+                        <option value="On Track">On Track</option>
+                        <option value="At Risk">At Risk</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Planned">Planned</option>
+                        <option value="On Hold">On Hold</option>
+                        <option value="Stuck">Stuck</option>
+                        <option value="Done">Done</option>
+                      </select>
+                    </div>
+
+                    <div className="col-md-6">
+                      <label className="form-label fw-bold text-dark small mb-1 d-flex align-items-center gap-1" style={{ fontSize: '13px' }}>
+                        <DollarSign size={14} className="text-primary" /> Budget / Actual Cost
+                      </label>
+                      <div className="input-group">
+                        <input
+                          type="text"
+                          className="form-control rounded-start-3"
+                          value={cost}
+                          onChange={(e) => setCost(e.target.value)}
+                          style={{ height: '42px', fontSize: '14px' }}
+                          placeholder="e.g. 180000 AED"
+                        />
+                        <span className="input-group-text bg-light text-muted fw-bold small rounded-end-3">AED</span>
+                      </div>
+                    </div>
+
+                    {/* Assignees Selection */}
+                    <div className="col-md-6 position-relative">
+                      <label className="form-label fw-bold text-dark small mb-1 d-flex align-items-center gap-1" style={{ fontSize: '13px' }}>
+                        <User size={14} className="text-primary" /> Project Assignees
+                      </label>
+                      <div className="d-flex align-items-center gap-2 flex-wrap pt-1">
+                        {assignees.map((a, idx) => (
+                          <img
+                            key={idx}
+                            src={a.avatarUrl || '/img/client1.jpg'}
+                            alt={a.name}
+                            className="rounded-circle border border-2 border-white shadow-xs"
+                            style={{ width: '38px', height: '38px', objectFit: 'cover', cursor: 'pointer' }}
+                            title={`View ${a.name} profile`}
+                            onClick={() => setSelectedLeadProfile({ name: a.name, type: 'Project Assignee' })}
+                            onError={(e) => { e.target.src = '/icons/avatar1.svg'; }}
+                          />
+                        ))}
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-light border border-primary border-dashed rounded-circle d-flex align-items-center justify-content-center p-0"
+                          style={{ width: '38px', height: '38px', borderStyle: 'dashed' }}
+                          onClick={() => setShowAssigneeSearch(!showAssigneeSearch)}
+                          title="Add Assignee"
+                        >
+                          <Plus size={16} color="#4868DD" />
+                        </button>
+                      </div>
+
+                      {/* Assignee Search Popover */}
+                      {showAssigneeSearch && (
+                        <div
+                          className="position-absolute start-0 top-100 mt-2 bg-white border rounded-3 shadow-lg p-2"
+                          style={{ width: '260px', zIndex: 1080 }}
+                        >
+                          <div className="fw-bold small text-dark mb-2 px-1">Add Assignee</div>
+                          <div className="overflow-auto" style={{ maxHeight: '180px' }}>
+                            {availableMembers.map((m, idx) => (
+                              <div
+                                key={idx}
+                                className="d-flex align-items-center gap-2 p-2 hover-bg-light rounded cursor-pointer"
+                                onClick={() => {
+                                  if (!assignees.some((x) => x.email === m.email)) {
+                                    setAssignees([...assignees, m]);
+                                  }
+                                  setShowAssigneeSearch(false);
+                                }}
+                              >
+                                <img src={m.avatarUrl} alt={m.name} className="rounded-circle" style={{ width: '28px', height: '28px' }} />
+                                <span className="small text-dark fw-semibold">{m.name}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Drawer Footer Actions */}
+                <div className="p-3 bg-white border rounded-4 shadow-sm d-flex justify-content-end align-items-center gap-3 mt-2">
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary px-4 py-2 rounded-3 fw-semibold small text-uppercase"
+                    onClick={onClose}
+                    style={{ fontSize: '12.5px', letterSpacing: '0.04em' }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-primary px-4 py-2 rounded-3 fw-bold small text-uppercase d-flex align-items-center gap-2 shadow-sm"
+                    style={{ backgroundColor: '#4868DD', borderColor: '#4868DD', fontSize: '12.5px', letterSpacing: '0.04em' }}
+                  >
+                    <Save size={16} /> Save Changes
+                  </button>
+                </div>
               </div>
             </form>
           </div>

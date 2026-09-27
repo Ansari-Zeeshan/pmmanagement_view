@@ -235,8 +235,11 @@ export const MuiPremiumDatePicker: React.FC<MuiPremiumDatePickerProps> = ({
           vertical: 'top',
           horizontal: 'left',
         }}
+        sx={{ zIndex: 11000 }}
+        style={{ zIndex: 11000 }}
         PaperProps={{
           sx: {
+            zIndex: 11000,
             p: 2,
             mt: 1,
             borderRadius: '12px',
@@ -255,52 +258,52 @@ export const MuiPremiumDatePicker: React.FC<MuiPremiumDatePickerProps> = ({
           
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             {/* Month Select */}
-            <Select
-              size="small"
+            <select
               value={currentMonth}
               onChange={(e) => setViewDate(new Date(currentYear, Number(e.target.value), 1))}
-              sx={{
-                height: 32,
+              style={{
+                height: '32px',
                 fontSize: '13px',
-                fontWeight: 400,
+                fontWeight: 600,
                 color: '#0f172a',
                 borderRadius: '8px',
                 backgroundColor: '#f8fafc',
-                '& .MuiSelect-select': { py: 0.5, px: 1, fontWeight: 400 },
-                '& fieldset': { borderColor: '#e2e8f0' },
-                '&:hover fieldset': { borderColor: '#2563eb' },
+                border: '1px solid #cbd5e1',
+                padding: '2px 8px',
+                cursor: 'pointer',
+                outline: 'none',
               }}
             >
               {MONTH_NAMES.map((m, idx) => (
-                <MenuItem key={m} value={idx} sx={{ fontSize: '13px', fontWeight: 400 }}>
+                <option key={m} value={idx}>
                   {m}
-                </MenuItem>
+                </option>
               ))}
-            </Select>
+            </select>
 
             {/* Year Select */}
-            <Select
-              size="small"
+            <select
               value={YEARS.includes(currentYear) ? currentYear : YEARS[0]}
               onChange={(e) => setViewDate(new Date(Number(e.target.value), currentMonth, 1))}
-              sx={{
-                height: 32,
+              style={{
+                height: '32px',
                 fontSize: '13px',
-                fontWeight: 400,
+                fontWeight: 600,
                 color: '#0f172a',
                 borderRadius: '8px',
                 backgroundColor: '#f8fafc',
-                '& .MuiSelect-select': { py: 0.5, px: 1, fontWeight: 400 },
-                '& fieldset': { borderColor: '#e2e8f0' },
-                '&:hover fieldset': { borderColor: '#2563eb' },
+                border: '1px solid #cbd5e1',
+                padding: '2px 8px',
+                cursor: 'pointer',
+                outline: 'none',
               }}
             >
               {YEARS.map((yr) => (
-                <MenuItem key={yr} value={yr} sx={{ fontSize: '13px', fontWeight: 400 }}>
+                <option key={yr} value={yr}>
                   {yr}
-                </MenuItem>
+                </option>
               ))}
-            </Select>
+            </select>
           </Box>
 
           <IconButton size="small" onClick={handleNextMonth} sx={{ color: '#475569', p: 0.5, '&:hover': { backgroundColor: '#f1f5f9' } }}>

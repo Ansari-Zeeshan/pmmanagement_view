@@ -124,7 +124,7 @@ const TruncatedCellText = ({
           ...style,
         }}
       >
-        {textStr}
+        {isLongText ? `${textStr.slice(0, 100)}...` : textStr}
       </p>
 
       {showTooltip && (
@@ -650,9 +650,8 @@ export const ListView = ({ tasks: propsTasks, onTaskStatusChange, onTaskClick, o
                                   }}
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    setActiveTaskDetail(task);
-                                    setChatDrawerOpen(true);
                                     if (onChatClick) onChatClick(task);
+                                    setChatDrawerOpen(true, task);
                                   }}
                                   onMouseEnter={(e) => {
                                     e.currentTarget.style.opacity = '1';

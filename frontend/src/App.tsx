@@ -144,6 +144,24 @@ const ProtectedLayout: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Floating Live Chat Action Widget */}
+      <button
+        type="button"
+        className="btn btn-primary rounded-circle shadow-lg border-2 border-white d-flex align-items-center justify-content-center position-fixed bottom-0 end-0 m-4 p-0 hover-scale transition-all floating-chat-toggle-btn"
+        style={{
+          width: '56px',
+          height: '56px',
+          zIndex: 9999,
+          backgroundColor: '#2563eb',
+          boxShadow: '0 8px 28px rgba(37, 99, 235, 0.4)',
+        }}
+        onClick={() => useWorkspaceStore.getState().setChatDrawerOpen(true)}
+        title="Open Live Team Chat"
+      >
+        <span style={{ fontSize: '24px' }}>💬</span>
+      </button>
+
       <NotificationDrawer />
       <ChatDrawer />
       <HelpSupportModal />
